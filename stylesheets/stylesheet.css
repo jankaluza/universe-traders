@@ -1,5 +1,5 @@
 /*******************************************************************************
-Slate Theme for GitHub Pages
+Slate Theme for Github Pages
 by Jason Costello, @jsncostello
 *******************************************************************************/
 
@@ -39,9 +39,17 @@ ol, ul {
   list-style: none;
 }
 
+blockquote, q {
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  width:100%;
+}
+
+a:focus {
+  outline: none;
 }
 
 /*******************************************************************************
@@ -118,11 +126,19 @@ a {
   -ms-transition: text-shadow 0.5s ease;
 }
 
-a:hover, a:focus {text-decoration: underline;}
+#main_content a:hover {
+  color: #0069ba;
+  text-shadow: #0090ff 0px 0px 2px;
+}
 
-footer a {
-  color: #F2F2F2;
-  text-decoration: underline;
+footer a:hover {
+  color: #43adff;
+  text-shadow: #0090ff 0px 0px 2px;
+}
+
+#menu a:hover {
+  color: #212121;
+  text-shadow: #0090ff 0px 0px 2px;
 }
 
 em {
@@ -148,15 +164,6 @@ img {
   -ms-box-shadow: 0 0 5px #ebebeb;
 }
 
-p img {
-  display: inline;
-  margin: 0;
-  padding: 0;
-  vertical-align: middle;
-  text-align: center;
-  border: none;
-}
-
 pre, code {
   width: 100%;
   color: #222;
@@ -168,6 +175,9 @@ pre, code {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
+
+
+
 }
 
 pre {
@@ -195,20 +205,17 @@ blockquote {
   border-left: 3px solid #bbb;
 }
 
-
 ul, ol, dl {
   margin-bottom: 15px
 }
 
-ul {
-  list-style-position: inside;
-  list-style: disc;
+ul li {
+  list-style: inside;
   padding-left: 20px;
 }
 
-ol {
-  list-style-position: inside;
-  list-style: decimal;
+ol li {
+  list-style: decimal inside;
   padding-left: 20px;
 }
 
@@ -235,25 +242,30 @@ hr {
 
 table {
   border: 1px solid #373737;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: left;
  }
 
 th {
   font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  padding: 10px;
+  padding: 5px;
   background: #373737;
   color: #fff;
  }
 
 td {
-  padding: 10px;
+  padding: 3px;
   border: 1px solid #373737;
  }
 
 form {
   background: #f2f2f2;
   padding: 20px;
+}
+
+img {
+  width: 100%;
+  max-width: 100%;
 }
 
 /*******************************************************************************
@@ -323,6 +335,24 @@ Full-Width Styles
   right: 0;
   height: 70px;
   background: url('../images/icon_download.png') no-repeat 0% 90%;
+}
+
+#menu {
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+  bottom: -20px;
+  left: 0;
+  height: 35px;
+}
+
+.menuitem {
+	margin:0;
+	margin-right:7px;
+	color:white;
+	padding:10px;
+	height: 35px;
+	background: #0090FF;
 }
 
 .zip_download_link {
