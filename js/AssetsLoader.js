@@ -12,14 +12,14 @@ function AssetsLoader(renderer, stage) {
     this.progressBar.width = 1;
     this.stage.addChild(this.progressBar);
 
-//     this.onProgress = this.assetLoaded.bind(this, assetsToLoad.length);
+    this.onProgress = this.assetLoaded.bind(this, assetsToLoad.length);
 }
 
 AssetsLoader.constructor = AssetsLoader;
 AssetsLoader.prototype = Object.create(PIXI.AssetLoader.prototype);
 
 
-AssetsLoader.prototype.onProgress = function(count) {
+AssetsLoader.prototype.assetLoaded = function(count) {
     this.progressBar.width = (200 / count) * (count - this.loadCount)
     this.renderer.render(this.stage);
 }

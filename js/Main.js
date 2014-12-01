@@ -202,9 +202,9 @@ Main.prototype.gameLoaded = function() {
 }
 
 Main.prototype.loadAssets = function() {
-    var assetsLoader = new AssetsLoader(this.renderer, this.stage);
-    assetsLoader.onComplete = this.assetsLoaded.bind(this);
-    assetsLoader.load();
+    this.assetsLoader = new AssetsLoader(this.renderer, this.stage);
+    this.assetsLoader.onComplete = this.assetsLoaded.bind(this);
+    this.assetsLoader.load();
 }
 
 Main.prototype.assetsLoaded = function() {
@@ -236,5 +236,8 @@ Main.prototype.assetsLoaded = function() {
     this.universe.loadMap();
     this.itemManager.loadItems();
     this.universe.onGameLoaded = this.gameLoaded.bind(this);
+
+    this.stage.removeChild(this.assetsLoader.progressBar);
+    this.assetsLoader = null;
 };
 
