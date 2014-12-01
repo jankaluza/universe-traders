@@ -71,7 +71,7 @@ Main.prototype.showCenterMsg = function(msg) {
 
 Main.prototype.outOfFuel = function() {
     this.showCenterMsg("Captain, we are out of fuel!");
-    this.stop = true;
+    this.universe.stopMove = true;
 }
 
 Main.prototype.outOfFood = function() {
@@ -86,6 +86,7 @@ Main.prototype.outOfSanity = function() {
 
 Main.prototype.lowFuel = function() {
     this.showCenterMsg("Captain, we have almost no fuel!");
+    this.universe.stopMove = false;
 }
 
 Main.prototype.lowFood = function() {
@@ -99,6 +100,7 @@ Main.prototype.lowSanity = function() {
 Main.prototype.normalFuel = function() {
     this.stage.removeChild(this.msg);
     this.msg = null;
+    this.universe.stopMove = false;
 }
 
 Main.prototype.normalFood = function() {
