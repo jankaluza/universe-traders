@@ -1,0 +1,42 @@
+{"items": {
+
+"0":
+{
+    "name": "Basic Impulse Engine",
+    "type": 0,
+    "texture": "resources/0.png",
+    "price": 200,
+    "speed": 0.8,
+    "fuel": 0.9
+},
+"1":
+{
+    "name": "Basic Inertia Damper",
+    "type": 3,
+    "price": 100,
+    "texture": "resources/1.png",
+    "fuel" : 0.1,
+    "speed": 0.1
+},
+"2":
+{
+    "name": "Fuel tank",
+    "type": 1,
+    "price": 1,
+    "texture": "resources/2.png"
+},
+"3":
+{
+    "name": "Food box",
+    "type": 2,
+    "price": 2,
+    "texture": "resources/3.png"
+},
+"4":
+{
+    "name": "Mars sand worm",
+    "type": 4,
+    "price": 50,
+    "texture": "resources/4.png"
+}
+}}
