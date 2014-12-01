@@ -17,10 +17,11 @@ Ship.prototype = Object.create(PIXI.Sprite.prototype);
 Ship.prototype.timeout = function() {
     this.food -= this.foodPerPoint;
     this.sanity -= this.sanityPerPoint;
+    this.updateStats();
 }
 
 Ship.prototype.updateStats = function() {
-   if (this.fuel < 0) {
+    if (this.fuel < 0) {
         if (this.onOutOfFuel) this.onOutOfFuel();
         this.fuel = 0;
     }
@@ -62,8 +63,6 @@ Ship.prototype.updateStats = function() {
 
 Ship.prototype.moved = function() {
     this.fuel -= this.fuelPerPoint;
-
-    this.updateStats();
 }
 
 Ship.prototype.setNewRotation = function(rotation) {
@@ -142,9 +141,25 @@ Ship.prototype.save = function() {
 Ship.prototype.load = function() {
     this.rotation = parseFloat(localStorage.getItem("ship.rotation"));
     this.newRotation = parseFloat(localStorage.getItem("ship.newRotation"));
+
     this.fuel = parseFloat(localStorage.getItem("ship.fuel"));
+    if (this.fuel == 0) {
+        this.fuel = -1;
+        this.fuelState = 1;
+    }
+
     this.food = parseFloat(localStorage.getItem("ship.food"));
+    if (this.food == 0) {
+        this.food = -1;
+        this.foodState = 1;
+    }
+
     this.sanity = parseFloat(localStorage.getItem("ship.sanity"));
+    if (this.sanity == 0) {
+        this.sanity == -1;
+        this.sanityState = 1;
+    }
+
     this.credit = parseFloat(localStorage.getItem("ship.credit"));
 }
 
