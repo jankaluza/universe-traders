@@ -14,6 +14,7 @@ You can [start playing the game here](/play), but before doing so, read followin
 
 * You start with the ship in a universe.
 * Your ship has limited fuel. You have to buy it on the planets before it runs out!
+* When you are staying on planet, the fuel is not decreasing. Use it to reach distant planets!
 * Your crew needs a food and can't be in a deep space for long time, otherwise it gets crazy!
 * To get the money, you have to buy goods on planets where it's cheap and sell on planets where it's expensive! Be careful, the prices changes as you trade!
 
