@@ -8,7 +8,7 @@ title: Earth
 ### Prices
 | Category | Price coeficient |
 |----------|------------------|
-| <span style="color:red">Engines</span> | 1.000000 |
+| Engines | 1.000000 |
 | Fuel | 1.000000 |
 | Food | 1.000000 |
 | Ship improvements | 1.000000 |

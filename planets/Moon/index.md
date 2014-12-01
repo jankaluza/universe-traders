@@ -8,7 +8,7 @@ title: Moon
 ### Prices
 | Category | Price coeficient |
 |----------|------------------|
-| <span style="color:red">Engines</span> | 0.700000 |
+| Engines | 0.700000 |
 | Fuel | 0.900000 |
 | Food | 1.100000 |
 | Ship improvements | 0.700000 |
