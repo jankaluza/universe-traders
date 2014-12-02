@@ -194,15 +194,6 @@ Main.prototype.showMap = function() {
     this.map.showed = !this.map.showed;
 }
 
-Main.prototype.objectLeft = function() {
-    if (this.inventory.showed) {
-        this.showInventory();
-    }
-    if (this.planet.showed) {
-        this.visitObject();
-    }
-}
-
 Main.prototype.restartGame = function() {
     localStorage.clear();
     this.universe.reset();
@@ -237,7 +228,6 @@ Main.prototype.assetsLoaded = function() {
     this.universe.panel.onShowInventory = this.showInventory.bind(this);
     this.universe.panel.onShowMenu = this.showMenu.bind(this);
     this.universe.panel.onShowMap = this.showMap.bind(this);
-    this.universe.panel.onObjectLeft = this.objectLeft.bind(this);
     this.stage.addChild(this.universe);
 
     this.itemManager = new ItemManager();

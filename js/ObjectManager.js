@@ -70,7 +70,7 @@ ObjectManager.prototype.removeFromStage = function(obj) {
     this.staged.splice(this.staged.indexOf(obj), 1);
     obj.staged = false;
     this.universe.removeChild(obj);
-    console.log("Removed from stage: " + obj.name);
+//     console.log("Removed from stage: " + obj.name);
 
     // We are removing object which still has some stagged children, so
     // this object is bound to them. Movate it to boundToStaged.
@@ -111,7 +111,7 @@ ObjectManager.prototype.addToStage = function(obj) {
     this.staged[this.staged.length] = obj;
     this.universe.addChildAt(obj, 0);
 
-    console.log("Added to stage: " + obj.name);
+//     console.log("Added to stage: " + obj.name);
 
     // Increase the staggedChildren counter of all parents.
     while (obj.parentObject) {

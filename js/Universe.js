@@ -1,5 +1,6 @@
 function Universe(stage) {
     var texture = PIXI.Texture.fromImage("resources/universe.png");
+    PIXI.EventTarget
     PIXI.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
 
     // Create ship
@@ -18,6 +19,7 @@ function Universe(stage) {
     this.stopMove = false;
     this.orbitTimer = 0;
     this.statsTimer = 0;
+    this.currentObject = null;
 
     this.reset();
 }
@@ -44,7 +46,7 @@ Universe.prototype.reset = function() {
     this.ship.reset();
     this.objManager.reset();
     var visitedObject = this.objManager.updateObjects();
-    this.panel.setObject(visitedObject);
+    this.setCurrentObject(visitedObject);
     this.panel.updateCredit();
 }
 
@@ -80,7 +82,7 @@ Universe.prototype.load = function() {
     this.objManager.load();
 
     var visitedObject = this.objManager.updateObjects();
-    this.panel.setObject(visitedObject);
+    this.setCurrentObject(visitedObject);
     this.panel.updateCredit();
     if (this.onGameLoaded) this.onGameLoaded();
 }
@@ -112,6 +114,18 @@ Universe.prototype.click = function(data) {
     this.ship.setNewRotation(shipAngle);
 }
 
+Universe.prototype.setCurrentObject = function(object) {
+    if (this.currentObject == null && object != null) {
+        object.shipObject = this;
+        radio("objectTouched").broadcast(object);
+    }
+    else if (this.currentObject != null && object == null) {
+        radio("objectLeft").broadcast(object);
+        this.currentObject.shipObject = null;
+    }
+    this.currentObject = object;
+}
+
 Universe.prototype.update = function(dt) {
     this.orbitTimer += dt;
     if (this.orbitTimer > 25) {
@@ -120,7 +134,7 @@ Universe.prototype.update = function(dt) {
 
         var visitedObject = this.objManager.updateStaggedObjects();
         if (visitedObject) {
-            this.panel.setObject(visitedObject);
+            this.setCurrentObject(visitedObject);
         }
     }
 
@@ -184,7 +198,8 @@ Universe.prototype.update = function(dt) {
 //         console.log("ship: " + center_x + " " + center_y);
             this.panel.update();
             var visitedObject = this.objManager.updateObjects();
-            this.panel.setObject(visitedObject);
+//             this.panel.setObject(visitedObject);
+            this.setCurrentObject(visitedObject);
             if (visitedObject && visitedObject.type != MapObject.STAR) {
                 this.panel.coordinates.setText(center_x + " " + center_y + " | " + visitedObject.mapX + " " + visitedObject.mapY);
             }
@@ -204,6 +219,6 @@ Universe.prototype.update = function(dt) {
 
 Universe.prototype.objectsLoaded = function() {
     var visitedObject = this.objManager.updateObjects();
-    this.panel.setObject(visitedObject);
+    this.setCurrentObject(visitedObject);
     this.load();
 }
