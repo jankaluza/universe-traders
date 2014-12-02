@@ -64,6 +64,10 @@ Panel.prototype.update = function() {
 };
 
 Panel.prototype.setObject = function(object) {
+    if (object && object.type == MapObject.STAR) {
+        object = null;
+    }
+
     if (this.object == null && object != null) {
         this.visit.setText("Visit " + object.name);
         if (object) {
