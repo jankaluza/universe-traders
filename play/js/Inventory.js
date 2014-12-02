@@ -23,7 +23,7 @@ function Inventory(ship, itemManager) {
 Inventory.constructor = Inventory;
 Inventory.prototype = Object.create(PIXI.Sprite.prototype);
 
-Inventory.prototype.click = Inventory.prototype.tap = function(data) {
+Inventory.prototype.click = function(data) {
     var x = data.getLocalPosition(this).x / 64 >> 0;
     var y = data.getLocalPosition(this).y / 64 >> 0;
     var itemSprite = this.inventory[x][y];

@@ -109,7 +109,7 @@ ItemInfo.prototype.doAction = function() {
     if (this.onClose) this.onClose();
 }
 
-ItemInfo.prototype.click = ItemInfo.prototype.tap = function(data) {
+ItemInfo.prototype.click = function(data) {
     var x = data.getLocalPosition(this).x;
     var y = data.getLocalPosition(this).y;
 
