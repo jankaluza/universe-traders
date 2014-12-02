@@ -36,8 +36,6 @@ function Main() {
     window.addEventListener('resize', resize, false);
     resize();
 
-    this.menu = new Menu();
-    this.menu.onRestart = this.restartGame.bind(this);
     this.loadAssets();
 }
 
@@ -222,6 +220,9 @@ Main.prototype.loadAssets = function() {
 }
 
 Main.prototype.assetsLoaded = function() {
+    this.menu = new Menu();
+    this.menu.onRestart = this.restartGame.bind(this);
+
     this.universe = new Universe();
     this.universe.ship.onOutOfFuel = this.outOfFuel.bind(this);
     this.universe.ship.onOutOfFood = this.outOfFood.bind(this);
