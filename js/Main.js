@@ -36,6 +36,8 @@ function Main() {
     window.addEventListener('resize', resize, false);
     resize();
 
+    this.menu = new Menu();
+    this.menu.onRestart = this.restartGame.bind(this);
     this.loadAssets();
 }
 
@@ -174,9 +176,13 @@ Main.prototype.showItemInfo = function(fromInventory, item, ship) {
 }
 
 Main.prototype.showMenu = function() {
-    localStorage.clear();
-    this.universe.reset();
-    this.inventory.reset();
+    if (this.menu.showed) {
+        this.stage.removeChild(this.menu);
+    }
+    else {
+        this.stage.addChild(this.menu);
+    }
+    this.menu.showed = !this.menu.showed;
 }
 
 Main.prototype.showMap = function() {
@@ -197,6 +203,12 @@ Main.prototype.objectLeft = function() {
     if (this.planet.showed) {
         this.visitObject();
     }
+}
+
+Main.prototype.restartGame = function() {
+    localStorage.clear();
+    this.universe.reset();
+    this.inventory.reset();
 }
 
 Main.prototype.gameLoaded = function() {

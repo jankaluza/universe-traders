@@ -78,7 +78,7 @@ Panel.prototype.setObject = function(object) {
     this.object = object;
 };
 
-Panel.prototype.click = Panel.prototype.tap = function(data) {
+Panel.prototype.click = function(data) {
     if (data.global.x > 470 && data.global.x < 630) {
         if (this.onShowInventory) {
             this.onShowInventory()

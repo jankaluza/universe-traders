@@ -23,7 +23,7 @@ function Planet(ship, itemManager) {
 Planet.constructor = Planet;
 Planet.prototype = Object.create(PIXI.Sprite.prototype);
 
-Planet.prototype.click = Planet.prototype.tap = function(data) {
+Planet.prototype.click = function(data) {
     var x = data.getLocalPosition(this).x / 64 >> 0;
     var y = data.getLocalPosition(this).y / 64 >> 0;
     var itemSprite = this.inventory[x][y];

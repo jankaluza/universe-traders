@@ -89,7 +89,7 @@ Universe.prototype.loadMap = function() {
     this.objManager.loadObjects();
 }
 
-Universe.prototype.click = Universe.prototype.tap = function(data) {
+Universe.prototype.click = function(data) {
     if (this.stopMove) {
         return;
     }
