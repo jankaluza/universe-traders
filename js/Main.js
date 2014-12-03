@@ -238,8 +238,11 @@ Main.prototype.assetsLoaded = function() {
 
     this.map = new Map(this.universe);
 
+    this.dialogManager = new DialogManager(this.stage);
+
     this.universe.loadMap();
     this.itemManager.loadItems();
+    this.dialogManager.loadDialogs();
     this.universe.onGameLoaded = this.gameLoaded.bind(this);
 
     this.stage.removeChild(this.assetsLoader.progressBar);

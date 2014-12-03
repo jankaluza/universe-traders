@@ -1,0 +1,8 @@
+{"dialog":
+    {"0": 
+        {"events": ["Earth_touched"],
+         "once":false,
+         "dialog": {"What?": {"yes" : "That's all", "no" : "Don't worry"} }
+        }
+    }
+}

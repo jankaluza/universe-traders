@@ -120,7 +120,7 @@ Universe.prototype.setCurrentObject = function(object) {
         radio("objectTouched").broadcast(object);
     }
     else if (this.currentObject != null && object == null) {
-        radio("objectLeft").broadcast(object);
+        radio("objectLeft").broadcast(this.currentObject);
         this.currentObject.shipObject = null;
     }
     this.currentObject = object;
