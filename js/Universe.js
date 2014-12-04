@@ -21,6 +21,9 @@ function Universe(stage) {
     this.statsTimer = 0;
     this.currentObject = null;
 
+    radio("dialogStarted").subscribe(this.stopMovement.bind(this));
+    radio("dialogFinished").subscribe(this.continueMovement.bind(this));
+
     this.reset();
 }
 
@@ -29,6 +32,16 @@ Universe.prototype = Object.create(PIXI.TilingSprite.prototype);
 
 // Map is divided into 15x15 px squares
 Universe.MAP_POINT_SIZE = 15;
+
+Universe.prototype.stopMovement = function() {
+    this.stopMove = true;
+    this.moving_x = ((this.tilePosition.x + Main.WIDTH/2) / Universe.MAP_POINT_SIZE) >> 0;
+    this.moving_y = ((this.tilePosition.y + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE) >> 0;
+}
+
+Universe.prototype.continueMovement = function() {
+    this.stopMove = false;
+}
 
 Universe.prototype.reset = function() {
     // Start somewhere in the middle of the map

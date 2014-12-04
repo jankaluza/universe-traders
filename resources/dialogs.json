@@ -2,7 +2,8 @@
     {"0": 
         {"events": ["Earth_touched"],
          "once":false,
-         "dialog": {"What?": {"yes" : "That's all", "no" : "Don't worry"} }
+         "face":"resources/face0.png",
+         "dialog": {"How are you today?": {"Fine!" : "I'm glad to hear that!", "Bad :(." : "Oh, that's pitty..."} }
         }
     }
 }

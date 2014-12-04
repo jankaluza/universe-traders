@@ -1,5 +1,6 @@
-function DialogObject(once, dialog) {
+function DialogObject(face, once, dialog) {
     this.once = once;
+    this.face = face,
     this.dialog = dialog;
 }
 
@@ -22,15 +23,21 @@ DialogManager.prototype.loadDialogs = function() {
     var that = this;
     loader = new PIXI.JsonLoader("resources/dialogs.json");
     loader.on('loaded', function(evt) {
-        for (var key in evt.content.json.dialog) {
-            var dialog = evt.content.json.dialog[key];
+        for (var key in evt.content.content.json.dialog) {
+            var dialog = evt.content.content.json.dialog[key];
             for (var index = 0; index < dialog.events.length; index++) {
                 that.eventToDialog[dialog.events[index]] = key;
             }
-            that.dialogs[key] = new DialogObject(dialog.once, dialog.dialog);
+            that.dialogs[key] = new DialogObject(dialog.face, dialog.once, dialog.dialog);
         }
     });
     loader.load();
+}
+
+DialogManager.prototype.handleDialogFinished = function() {
+    this.stage.removeChild(this.currentDialog);
+    this.currentDialog = null;
+    radio("dialogFinished").broadcast();
 }
 
 DialogManager.prototype.executeDialog = function(name) {
@@ -46,8 +53,10 @@ DialogManager.prototype.executeDialog = function(name) {
         localStorage.setItem("dialog." + name, "1");
     }
 
-    this.currentDialog = new Dialog();
+    this.currentDialog = new Dialog(dialog.face, dialog.dialog);
+    this.currentDialog.onDialogFinished = this.handleDialogFinished.bind(this);
     this.stage.addChild(this.currentDialog);
+    radio("dialogStarted").broadcast();
 }
 
 DialogManager.prototype.handleObjectTouched = function(object) {

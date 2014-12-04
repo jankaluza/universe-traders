@@ -22,11 +22,12 @@ Main.CENTER_Y = Main.HEIGHT / 2;
 
 function Main() {
     this.stage = new PIXI.Stage(0x000000, true);
-    this.renderer = new PIXI.autoDetectRenderer(
-        Main.WIDTH,
-        Main.HEIGHT,
-        document.getElementById("game-canvas")
-    );
+    var rendererOptions = {
+        view:document.getElementById("game-canvas"),
+        resolution:1
+    }
+    this.renderer = new PIXI.autoDetectRenderer(Main.WIDTH, Main.HEIGHT,
+                                                rendererOptions);
     this.stop = false;
     this.itemInfo = null;
     this.msg = null;
