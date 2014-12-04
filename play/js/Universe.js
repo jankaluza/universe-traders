@@ -1,5 +1,6 @@
 function Universe(stage) {
     var texture = PIXI.Texture.fromImage("resources/universe.png");
+    PIXI.EventTarget
     PIXI.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
 
     // Create ship
@@ -18,6 +19,10 @@ function Universe(stage) {
     this.stopMove = false;
     this.orbitTimer = 0;
     this.statsTimer = 0;
+    this.currentObject = null;
+
+    radio("dialogStarted").subscribe(this.stopMovement.bind(this));
+    radio("dialogFinished").subscribe(this.continueMovement.bind(this));
 
     this.reset();
 }
@@ -27,6 +32,16 @@ Universe.prototype = Object.create(PIXI.TilingSprite.prototype);
 
 // Map is divided into 15x15 px squares
 Universe.MAP_POINT_SIZE = 15;
+
+Universe.prototype.stopMovement = function() {
+    this.stopMove = true;
+    this.moving_x = ((this.tilePosition.x + Main.WIDTH/2) / Universe.MAP_POINT_SIZE) >> 0;
+    this.moving_y = ((this.tilePosition.y + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE) >> 0;
+}
+
+Universe.prototype.continueMovement = function() {
+    this.stopMove = false;
+}
 
 Universe.prototype.reset = function() {
     // Start somewhere in the middle of the map
@@ -44,7 +59,7 @@ Universe.prototype.reset = function() {
     this.ship.reset();
     this.objManager.reset();
     var visitedObject = this.objManager.updateObjects();
-    this.panel.setObject(visitedObject);
+    this.setCurrentObject(visitedObject);
     this.panel.updateCredit();
 }
 
@@ -80,7 +95,7 @@ Universe.prototype.load = function() {
     this.objManager.load();
 
     var visitedObject = this.objManager.updateObjects();
-    this.panel.setObject(visitedObject);
+    this.setCurrentObject(visitedObject);
     this.panel.updateCredit();
     if (this.onGameLoaded) this.onGameLoaded();
 }
@@ -112,6 +127,18 @@ Universe.prototype.click = function(data) {
     this.ship.setNewRotation(shipAngle);
 }
 
+Universe.prototype.setCurrentObject = function(object) {
+    if (this.currentObject == null && object != null) {
+        object.shipObject = this;
+        radio("objectTouched").broadcast(object);
+    }
+    else if (this.currentObject != null && object == null) {
+        radio("objectLeft").broadcast(this.currentObject);
+        this.currentObject.shipObject = null;
+    }
+    this.currentObject = object;
+}
+
 Universe.prototype.update = function(dt) {
     this.orbitTimer += dt;
     if (this.orbitTimer > 25) {
@@ -120,7 +147,7 @@ Universe.prototype.update = function(dt) {
 
         var visitedObject = this.objManager.updateStaggedObjects();
         if (visitedObject) {
-            this.panel.setObject(visitedObject);
+            this.setCurrentObject(visitedObject);
         }
     }
 
@@ -184,8 +211,9 @@ Universe.prototype.update = function(dt) {
 //         console.log("ship: " + center_x + " " + center_y);
             this.panel.update();
             var visitedObject = this.objManager.updateObjects();
-            this.panel.setObject(visitedObject);
-            if (visitedObject) {
+//             this.panel.setObject(visitedObject);
+            this.setCurrentObject(visitedObject);
+            if (visitedObject && visitedObject.type != MapObject.STAR) {
                 this.panel.coordinates.setText(center_x + " " + center_y + " | " + visitedObject.mapX + " " + visitedObject.mapY);
             }
             else {
@@ -204,6 +232,6 @@ Universe.prototype.update = function(dt) {
 
 Universe.prototype.objectsLoaded = function() {
     var visitedObject = this.objManager.updateObjects();
-    this.panel.setObject(visitedObject);
+    this.setCurrentObject(visitedObject);
     this.load();
 }

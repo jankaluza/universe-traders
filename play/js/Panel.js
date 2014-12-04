@@ -45,6 +45,9 @@ function Panel(universe, ship) {
     this.addChild(this.coordinates);
 
     this.object = null;
+
+    radio("objectTouched").subscribe(this.handleObjectTouched.bind(this));
+    radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
 }
 
 Panel.constructor = Panel;
@@ -63,20 +66,20 @@ Panel.prototype.update = function() {
     this.sanity.width = 0.8 * this.ship.sanity;
 };
 
-Panel.prototype.setObject = function(object) {
-    if (this.object == null && object != null) {
-        this.visit.setText("Visit " + object.name);
-        if (object) {
-            object.shipObject = this.universe;
-        }
+Panel.prototype.handleObjectTouched = function(object) {
+    if (object.type == MapObject.STAR) {
+        this.handleObjectLeft(object);
+        return;
     }
-    else if (this.object != null && object == null) {
-        this.visit.setText("");
-        if (this.onObjectLeft) this.onObjectLeft();
-        this.object.shipObject = null;
-    }
+
     this.object = object;
-};
+    this.visit.setText("Visit " + object.name);
+}
+
+Panel.prototype.handleObjectLeft = function(object) {
+    this.visit.setText("");
+    this.object = null;
+}
 
 Panel.prototype.click = function(data) {
     if (data.global.x > 470 && data.global.x < 630) {

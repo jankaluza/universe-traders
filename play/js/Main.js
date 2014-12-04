@@ -22,11 +22,12 @@ Main.CENTER_Y = Main.HEIGHT / 2;
 
 function Main() {
     this.stage = new PIXI.Stage(0x000000, true);
-    this.renderer = new PIXI.autoDetectRenderer(
-        Main.WIDTH,
-        Main.HEIGHT,
-        document.getElementById("game-canvas")
-    );
+    var rendererOptions = {
+        view:document.getElementById("game-canvas"),
+        resolution:1
+    }
+    this.renderer = new PIXI.autoDetectRenderer(Main.WIDTH, Main.HEIGHT,
+                                                rendererOptions);
     this.stop = false;
     this.itemInfo = null;
     this.msg = null;
@@ -194,15 +195,6 @@ Main.prototype.showMap = function() {
     this.map.showed = !this.map.showed;
 }
 
-Main.prototype.objectLeft = function() {
-    if (this.inventory.showed) {
-        this.showInventory();
-    }
-    if (this.planet.showed) {
-        this.visitObject();
-    }
-}
-
 Main.prototype.restartGame = function() {
     localStorage.clear();
     this.universe.reset();
@@ -237,7 +229,6 @@ Main.prototype.assetsLoaded = function() {
     this.universe.panel.onShowInventory = this.showInventory.bind(this);
     this.universe.panel.onShowMenu = this.showMenu.bind(this);
     this.universe.panel.onShowMap = this.showMap.bind(this);
-    this.universe.panel.onObjectLeft = this.objectLeft.bind(this);
     this.stage.addChild(this.universe);
 
     this.itemManager = new ItemManager();
@@ -248,8 +239,11 @@ Main.prototype.assetsLoaded = function() {
 
     this.map = new Map(this.universe);
 
+    this.dialogManager = new DialogManager(this.stage);
+
     this.universe.loadMap();
     this.itemManager.loadItems();
+    this.dialogManager.loadDialogs();
     this.universe.onGameLoaded = this.gameLoaded.bind(this);
 
     this.stage.removeChild(this.assetsLoader.progressBar);

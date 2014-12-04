@@ -6,8 +6,8 @@ ItemManager.prototype.loadItems = function() {
     var that = this;
     var loader = new PIXI.JsonLoader("resources/items.json");
     loader.on('loaded', function(evt) {
-        for (var key in evt.content.json.items) {
-            var item = evt.content.json.items[key];
+        for (var key in evt.content.content.json.items) {
+            var item = evt.content.content.json.items[key];
             var it = new Item(that.items.length, item.name, item.type, item.texture, item.price, item.speed, item.fuel, item.sanity, item.food);
             that.items[that.items.length] = it;
         }
