@@ -35,8 +35,10 @@ Universe.MAP_POINT_SIZE = 15;
 
 Universe.prototype.stopMovement = function() {
     this.stopMove = true;
-    this.moving_x = ((this.tilePosition.x + Main.WIDTH/2) / Universe.MAP_POINT_SIZE) >> 0;
-    this.moving_y = ((this.tilePosition.y + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE) >> 0;
+    if (this.xVel || this.yVel) {
+        this.moving_x = ((this.tilePosition.x + Main.WIDTH/2) / Universe.MAP_POINT_SIZE) >> 0;
+        this.moving_y = ((this.tilePosition.y + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE) >> 0;
+    }
 }
 
 Universe.prototype.continueMovement = function() {
@@ -45,8 +47,8 @@ Universe.prototype.continueMovement = function() {
 
 Universe.prototype.reset = function() {
     // Start somewhere in the middle of the map
-    this.tilePosition.x = 1000 * Universe.MAP_POINT_SIZE;
-    this.tilePosition.y = 1000 * Universe.MAP_POINT_SIZE;
+    this.tilePosition.x = 990 * Universe.MAP_POINT_SIZE;
+    this.tilePosition.y = 990 * Universe.MAP_POINT_SIZE;
 
     // Coordinates to which the ship is moving when user clicks
     this.moving_x = 0;
@@ -55,6 +57,7 @@ Universe.prototype.reset = function() {
     // X and Y velocity (step) by which the ship moves
     this.xVel = 0;
     this.yVel = 0;
+    this.currentObject = null;
 
     this.ship.reset();
     this.objManager.reset();

@@ -38,20 +38,25 @@ Dialog.prototype.generate = function(root) {
     }
 
     if (typeof root == "string") {
-        var npcSentence = new PIXI.Text(root, {font: "20px Snippet", fill: "white"});
+        var npcSentence = new PIXI.Text(root, {font: "20px Snippet", fill: "white", wordWrap: true, wordWrapWidth:950});
         npcSentence.position.x = 70;
         npcSentence.position.y = 10;
         this.addChild(npcSentence);
 
-        var response = new PIXI.Text("Leave the conversation.", {font: "20px Snippet", fill: "lightgreen"});
+        var response = new PIXI.Text("Ask something else.", {font: "20px Snippet", fill: "lightgreen"});
         response.position.x = 70;
         response.position.y = 70;
         this.addChild(response);
+
+        var response2 = new PIXI.Text("Leave the conversation.", {font: "20px Snippet", fill: "lightgreen"});
+        response2.position.x = 70;
+        response2.position.y = 105;
+        this.addChild(response2);
         return;
     }
 
     for (var key in root) {
-        var npcSentence = new PIXI.Text(key, {font: "20px Snippet", fill: "white"});
+        var npcSentence = new PIXI.Text(key, {font: "20px Snippet", fill: "white", wordWrap: true, wordWrapWidth:950});
         npcSentence.position.x = 70;
         npcSentence.position.y = 10;
         this.addChild(npcSentence);
@@ -85,6 +90,9 @@ Dialog.prototype.click = function(data) {
 
     if (this.rootKeys.length == 0) {
         if (choice == 0) {
+            this.generate(this.dialog);
+        }
+        else {
             this.onDialogFinished();
         }
         return;
