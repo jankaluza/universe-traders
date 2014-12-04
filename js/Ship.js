@@ -127,6 +127,10 @@ Ship.prototype.reset = function() {
     this.sanityState = 0;
     this.credit = 500;
     this.speed = 0.9;
+
+    if (this.onNormalFuel) this.onNormalFuel();
+    if (this.onNormalFood) this.onNormalFood();
+    if (this.onNormalSanity) this.onNormalSanity();
 }
 
 Ship.prototype.save = function() {

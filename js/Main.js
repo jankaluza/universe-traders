@@ -77,12 +77,12 @@ Main.prototype.outOfFuel = function() {
 
 Main.prototype.outOfFood = function() {
     this.showCenterMsg("Captain, we are out of food!");
-    this.stop = true;
+    this.universe.stopMove = true;
 }
 
 Main.prototype.outOfSanity = function() {
     this.showCenterMsg("Captain, we are crazy!");
-    this.stop = true;
+    this.universe.stopMove = true;
 }
 
 Main.prototype.lowFuel = function() {
