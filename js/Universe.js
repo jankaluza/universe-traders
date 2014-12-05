@@ -131,14 +131,21 @@ Universe.prototype.click = function(data) {
 }
 
 Universe.prototype.setCurrentObject = function(object) {
-    if (this.currentObject == null && object != null) {
+    // This means object == this.currentObject
+    if (object && object.shipObject) {
+        return;
+    }
+    
+    if (this.currentObject) {
+        this.currentObject.shipObject = null;
+        radio("objectLeft").broadcast(this.currentObject);
+    }
+
+    if (object) {
         object.shipObject = this;
         radio("objectTouched").broadcast(object);
     }
-    else if (this.currentObject != null && object == null) {
-        radio("objectLeft").broadcast(this.currentObject);
-        this.currentObject.shipObject = null;
-    }
+
     this.currentObject = object;
 }
 
@@ -211,10 +218,8 @@ Universe.prototype.update = function(dt) {
         this.objManager.moveObjects(xVel, yVel);
 
         if (oldX != center_x || oldY != center_y) {
-//         console.log("ship: " + center_x + " " + center_y);
             this.panel.update();
             var visitedObject = this.objManager.updateObjects();
-//             this.panel.setObject(visitedObject);
             this.setCurrentObject(visitedObject);
             if (visitedObject && visitedObject.type != MapObject.STAR) {
                 this.panel.coordinates.setText(center_x + " " + center_y + " | " + visitedObject.mapX + " " + visitedObject.mapY);
