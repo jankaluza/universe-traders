@@ -1,4 +1,4 @@
-function Dialog(face, dialog) {
+function Dialog(face, dialog, inventory) {
     var texture = PIXI.Texture.fromImage("resources/dialog.png");
     PIXI.Sprite.call(this, texture);
 
@@ -20,6 +20,7 @@ function Dialog(face, dialog) {
         this.face = null;
     }
 
+    this.inventory = inventory;
     this.root = null;
     this.rootKeys = [];
     this.dialog = dialog;
@@ -43,12 +44,57 @@ Dialog.prototype.showSentence = function(i, sentence) {
     this.addChild(response);
 }
 
+Dialog.prototype.executeCommands = function(root) {
+    for (var i = 1; i < root.length; i++) {
+        var args = root[i].split(" ");
+        if (args[0] == "add_item") {
+            this.inventory.addItem(parseInt(args[1]))
+        }
+        else if (args[0] == "add_token") {
+            localStorage.setItem("dialog." + args[1], 1);
+        }
+    }
+
+    return root[0];
+}
+
+Dialog.prototype.executeFilter = function(root) {
+    if (typeof root == "string" || Array.isArray(root)) {
+        return true;
+    }
+
+    if (!("filter" in root)) {
+        return true;
+    }
+
+    for (var i = 0; i < root["filter"].length; i++) {
+        var args = root["filter"][i].split(" ");
+        var neg = args[0].charAt(0) == "!";
+        if (neg) {
+            args[0] = args[0].substring(1);
+        }
+
+        if (args[0] == "has_token") {
+            if (localStorage.getItem("dialog." + args[1]) == "1" || neg) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 Dialog.prototype.generate = function(root) {
     this.root = root;
     this.rootKeys = [];
     this.removeChildren();
     if (this.face) {
         this.addChild(this.face);
+    }
+
+    if (Array.isArray(root)) {
+        this.root = this.executeCommands(root);
+        root = this.root;
     }
 
     if (typeof root == "string") {
@@ -62,8 +108,10 @@ Dialog.prototype.generate = function(root) {
         this.showNPCSentence(key);
         var i = 0;
         for (var answer in root[key]) {
-            this.showSentence(i++, answer)
-            this.rootKeys[this.rootKeys.length] = answer;
+            if (this.executeFilter(root[key][answer])) {
+                this.showSentence(i++, answer)
+                this.rootKeys[this.rootKeys.length] = answer;
+            }
         }
         this.root = root[key];
         break;

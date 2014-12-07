@@ -239,7 +239,7 @@ Main.prototype.assetsLoaded = function() {
 
     this.map = new Map(this.universe);
 
-    this.dialogManager = new DialogManager(this.stage);
+    this.dialogManager = new DialogManager(this.stage, this.inventory);
 
     this.universe.loadMap();
     this.itemManager.loadItems();

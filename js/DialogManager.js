@@ -4,8 +4,9 @@ function DialogObject(face, once, dialog) {
     this.dialog = dialog;
 }
 
-function DialogManager(stage) {
+function DialogManager(stage, inventory) {
     this.stage = stage;
+    this.inventory = inventory;
     this.currentDialog = null;
     this.dialogs = {};
     this.eventToDialog = {}
@@ -53,7 +54,7 @@ DialogManager.prototype.executeDialog = function(name) {
         localStorage.setItem("dialog." + name, "1");
     }
 
-    this.currentDialog = new Dialog(dialog.face, dialog.dialog);
+    this.currentDialog = new Dialog(dialog.face, dialog.dialog, this.inventory);
     this.currentDialog.onDialogFinished = this.handleDialogFinished.bind(this);
     this.stage.addChild(this.currentDialog);
     radio("dialogStarted").broadcast();
