@@ -221,12 +221,8 @@ Universe.prototype.update = function(dt) {
             this.panel.update();
             var visitedObject = this.objManager.updateObjects();
             this.setCurrentObject(visitedObject);
-            if (visitedObject && visitedObject.type != MapObject.STAR) {
-                this.panel.coordinates.setText(center_x + " " + center_y + " | " + visitedObject.mapX + " " + visitedObject.mapY);
-            }
-            else {
+            if (!visitedObject || visitedObject.type == MapObject.STAR) {
                 this.ship.moved();
-                this.panel.coordinates.setText(center_x + " " + center_y);
             }
         }
 

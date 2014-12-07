@@ -29,6 +29,20 @@ function Dialog(face, dialog) {
 Dialog.constructor = Dialog;
 Dialog.prototype = Object.create(PIXI.Sprite.prototype);
 
+Dialog.prototype.showNPCSentence = function(sentence) {
+    var npcSentence = new PIXI.Text(sentence, {font: "20px Snippet", fill: "white", wordWrap: true, wordWrapWidth:950});
+    npcSentence.position.x = 70;
+    npcSentence.position.y = 10;
+    this.addChild(npcSentence);
+}
+
+Dialog.prototype.showSentence = function(i, sentence) {
+    var response = new PIXI.Text(sentence, {font: "20px Snippet", fill: "lightgreen", wordWrap: true, wordWrapWidth:950});
+    response.position.x = 70;
+    response.position.y = 70 + i * 35;
+    this.addChild(response);
+}
+
 Dialog.prototype.generate = function(root) {
     this.root = root;
     this.rootKeys = [];
@@ -38,36 +52,18 @@ Dialog.prototype.generate = function(root) {
     }
 
     if (typeof root == "string") {
-        var npcSentence = new PIXI.Text(root, {font: "20px Snippet", fill: "white", wordWrap: true, wordWrapWidth:950});
-        npcSentence.position.x = 70;
-        npcSentence.position.y = 10;
-        this.addChild(npcSentence);
-
-        var response = new PIXI.Text("Ask something else.", {font: "20px Snippet", fill: "lightgreen"});
-        response.position.x = 70;
-        response.position.y = 70;
-        this.addChild(response);
-
-        var response2 = new PIXI.Text("Leave the conversation.", {font: "20px Snippet", fill: "lightgreen"});
-        response2.position.x = 70;
-        response2.position.y = 105;
-        this.addChild(response2);
+        this.showNPCSentence(root);
+        this.showSentence(0, "Ask something else.");
+        this.showSentence(1, "Leave the conversation.");
         return;
     }
 
     for (var key in root) {
-        var npcSentence = new PIXI.Text(key, {font: "20px Snippet", fill: "white", wordWrap: true, wordWrapWidth:950});
-        npcSentence.position.x = 70;
-        npcSentence.position.y = 10;
-        this.addChild(npcSentence);
-        y = 70;
+        this.showNPCSentence(key);
+        var i = 0;
         for (var answer in root[key]) {
-            var response = new PIXI.Text(answer, {font: "20px Snippet", fill: "lightgreen"});
-            response.position.x = 70;
-            response.position.y = y;
-            this.addChild(response);
+            this.showSentence(i++, answer)
             this.rootKeys[this.rootKeys.length] = answer;
-            y += 35;
         }
         this.root = root[key];
         break;
