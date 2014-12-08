@@ -27,8 +27,8 @@ Map.prototype.update = function() {
     this.endFill();
     this.moveTo(this.position.x, this.position.y);
 
-    Map.LEFT = (this.universe.tilePosition.x + Main.WIDTH/2) / Universe.MAP_POINT_SIZE + (448 + 32) / Map.PIXELS_PER_POINT
-    Map.TOP = (this.universe.tilePosition.y + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE + (224 + 32) / Map.PIXELS_PER_POINT
+    Map.LEFT = (this.universe.tilePositionX + Main.WIDTH/2) / Universe.MAP_POINT_SIZE + (448 + 32) / Map.PIXELS_PER_POINT
+    Map.TOP = (this.universe.tilePositionY + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE + (224 + 32) / Map.PIXELS_PER_POINT
     objects = this.universe.objManager.objects;
     for (var index = 0; index < objects.length; index++) {
         var obj = objects[index];
@@ -50,8 +50,8 @@ Map.prototype.update = function() {
         obj.mapText.position.y = y - 6;
     }
 
-    var x = -(((this.universe.tilePosition.x + Main.WIDTH/2) / Universe.MAP_POINT_SIZE - Map.LEFT) * Map.PIXELS_PER_POINT) >> 0;
-    var y = -(((this.universe.tilePosition.y + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE - Map.TOP) * Map.PIXELS_PER_POINT) >> 0;
+    var x = -(((this.universe.tilePositionX + Main.WIDTH/2) / Universe.MAP_POINT_SIZE - Map.LEFT) * Map.PIXELS_PER_POINT) >> 0;
+    var y = -(((this.universe.tilePositionY + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE - Map.TOP) * Map.PIXELS_PER_POINT) >> 0;
     this.lineStyle(2, 0x00FF00, 1);
     this.drawRect(x - 5, y - 5, 10, 10);
 

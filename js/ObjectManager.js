@@ -144,10 +144,10 @@ ObjectManager.prototype.getObject = function(x, y) {
 
 ObjectManager.prototype.updateObjects = function() {
     // Get the current screen borders
-    this.left = ((this.universe.tilePosition.x + Main.WIDTH) / Universe.MAP_POINT_SIZE) >> 0;
-    this.right = ((this.universe.tilePosition.x) / Universe.MAP_POINT_SIZE) >> 0;
-    this.top = ((this.universe.tilePosition.y + Main.HEIGHT) / Universe.MAP_POINT_SIZE) >> 0;
-    this.bottom = ((this.universe.tilePosition.y) / Universe.MAP_POINT_SIZE) >> 0;
+    this.left = ((this.universe.tilePositionX + Main.WIDTH) / Universe.MAP_POINT_SIZE) >> 0;
+    this.right = ((this.universe.tilePositionX) / Universe.MAP_POINT_SIZE) >> 0;
+    this.top = ((this.universe.tilePositionY + Main.HEIGHT) / Universe.MAP_POINT_SIZE) >> 0;
+    this.bottom = ((this.universe.tilePositionY) / Universe.MAP_POINT_SIZE) >> 0;
     var visitedObject = null;
 
     for (var index = 0; index < this.objects.length; index++) {
