@@ -1,0 +1,9 @@
+{
+  "name": "universe-traders",
+  "version": "0.1.0",
+  "dependencies": {
+    "pixi.js": "~2.0.0",
+    "radio": "~0.2.0"
+  }
+}
+
