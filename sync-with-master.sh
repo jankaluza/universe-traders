@@ -1,11 +1,12 @@
 rm -rf ./play
-mkdir play
+#mkdir play
 
-git archive master > ./play/master.tar
-cd play
-tar -xf master.tar
-rm -f master.tar
-cd ..
+#git archive master > ./play/master.tar
+#cd play
+#tar -xf master.tar
+#rm -f master.tar
+#cd ..
+cp -R release play
 git add play
 
 cd items
