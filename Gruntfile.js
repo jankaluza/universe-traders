@@ -21,6 +21,9 @@ module.exports = function(grunt) {
             {src:'index_release.html', dest:'release/index.html'}
             ]
         }
+    },
+    nodeunit: {
+        all: ['test/*_test.js']
     }
   });
 
