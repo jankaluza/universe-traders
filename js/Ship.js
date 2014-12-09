@@ -11,7 +11,6 @@ function Ship() {
     this.reset();
 }
 
-Ship.constructor = Ship;
 Ship.prototype = Object.create(PIXI.Sprite.prototype);
 
 Ship.prototype.timeout = function() {
@@ -167,4 +166,8 @@ Ship.prototype.load = function() {
     this.credit = parseFloat(localStorage.getItem("ship.credit"));
 }
 
-
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = Ship;
+    }
+}

@@ -23,3 +23,9 @@ ItemManager.prototype.createSprite = function(id) {
 ItemManager.prototype.getItem = function(id) {
     return this.items[id];
 }
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = ItemManager;
+    }
+}
