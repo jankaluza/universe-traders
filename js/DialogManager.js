@@ -20,17 +20,21 @@ DialogManager.prototype.click = function(data) {
     var y = data.getLocalPosition(this).y;
 }
 
+DialogManager.prototype.parseDialogs = function(dialogs) {
+    for (var key in dialogs) {
+        var dialog = dialogs[key];
+        for (var index = 0; index < dialog.events.length; index++) {
+            this.eventToDialog[dialog.events[index]] = key;
+        }
+        this.dialogs[key] = new DialogObject(dialog.face, dialog.once, dialog.dialog);
+    }
+}
+
 DialogManager.prototype.loadDialogs = function() {
     var that = this;
     loader = new PIXI.JsonLoader("resources/dialogs.json");
     loader.on('loaded', function(evt) {
-        for (var key in evt.content.content.json.dialog) {
-            var dialog = evt.content.content.json.dialog[key];
-            for (var index = 0; index < dialog.events.length; index++) {
-                that.eventToDialog[dialog.events[index]] = key;
-            }
-            that.dialogs[key] = new DialogObject(dialog.face, dialog.once, dialog.dialog);
-        }
+        that.parseDialogs(evt.content.content.json.dialog);
     });
     loader.load();
 }
@@ -66,4 +70,10 @@ DialogManager.prototype.handleObjectTouched = function(object) {
 
 DialogManager.prototype.handleObjectLeft = function(object) {
     this.executeDialog(object.name + "_left");
+}
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = DialogManager;
+    }
 }

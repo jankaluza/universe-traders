@@ -71,11 +71,12 @@ Dialog.prototype.executeFilter = function(root) {
         var args = root["filter"][i].split(" ");
         var neg = args[0].charAt(0) == "!";
         if (neg) {
+            
             args[0] = args[0].substring(1);
         }
 
         if (args[0] == "has_token") {
-            if (localStorage.getItem("dialog." + args[1]) != "1" || neg) {
+            if ((localStorage.getItem("dialog." + args[1]) != "1") == !neg) {
                 return false;
             }
         }

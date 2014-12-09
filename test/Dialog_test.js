@@ -105,5 +105,26 @@ exports['Dialog'] = {
         test.ok(!hasText(dialog, "Leave the conversation."));
 
         test.done();
+    },
+    hasNotToken: function(test) {
+        var data = {"How are you?":
+                        {"Fine!" : {"That's great!" : null, "filter": ["!has_token xyz"]}}
+                   };
+        var dialog = new Dialog(null, data, this.inventory);
+
+        test.ok(hasText(dialog, "How are you?"));
+        test.ok(hasText(dialog, "Fine!"));
+        test.ok(!hasText(dialog, "Ask something else."));
+        test.ok(!hasText(dialog, "Leave the conversation."));
+
+        localStorage.setItem("dialog.xyz", "1");
+        dialog.choose(0);
+        dialog.choose(0);
+        test.ok(hasText(dialog, "How are you?"));
+        test.ok(!hasText(dialog, "Fine!"));
+        test.ok(hasText(dialog, "Ask something else."));
+        test.ok(hasText(dialog, "Leave the conversation."));
+
+        test.done();
     }
 };

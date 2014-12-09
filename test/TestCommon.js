@@ -18,10 +18,12 @@ exports.prepareTest = function() {
     global.document = window.document;
 
     global.PIXI = require("../bower_components/pixi.js/bin/pixi.js")
+    global.radio = require("../bower_components/radio/radio.min.js")
     global.Ship = require("../js/Ship.js");
     global.Item = require("../js/Item.js");
     global.ItemSprite = require("../js/ItemSprite.js");
     global.ItemManager = require("../js/ItemManager.js");
     global.Inventory = require("../js/Inventory.js");
     global.Dialog = require("../js/Dialog.js");
+    global.DialogManager = require("../js/DialogManager.js");
 }
