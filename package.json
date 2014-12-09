@@ -10,7 +10,8 @@
     "grunt-contrib-nodeunit": "~0.4.1",
     "matchdep": "~0.3.0",
     "jsdom": "~1.4.1",
-    "canvas": "~1.1.6"
+    "canvas": "~1.1.6",
+    "node-localstorage": "latest"
   },
   "scripts" : { "test" : "grunt nodeunit"}
 }

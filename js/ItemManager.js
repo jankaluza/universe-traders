@@ -16,6 +16,10 @@ ItemManager.prototype.loadItems = function() {
     loader.load();
 }
 
+ItemManager.prototype.addItem = function(item) {
+    this.items[this.items.length] = item;
+}
+
 ItemManager.prototype.createSprite = function(id) {
     return new ItemSprite(this.items[id]);
 }

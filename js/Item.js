@@ -18,3 +18,9 @@ Item.SPECIAL_FOOD = 4;
 
 Item.constructor = Item;
 // Item.prototype = Object.create(PIXI.Sprite.prototype);
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = Item;
+    }
+}

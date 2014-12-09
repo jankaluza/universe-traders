@@ -9,3 +9,8 @@ function ItemSprite(item) {
 ItemSprite.constructor = ItemSprite;
 ItemSprite.prototype = Object.create(PIXI.Sprite.prototype);
 
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = ItemSprite;
+    }
+}

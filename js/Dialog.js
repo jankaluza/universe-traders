@@ -75,13 +75,18 @@ Dialog.prototype.executeFilter = function(root) {
         }
 
         if (args[0] == "has_token") {
-            if (localStorage.getItem("dialog." + args[1]) == "1" || neg) {
+            if (localStorage.getItem("dialog." + args[1]) != "1" || neg) {
                 return false;
             }
         }
     }
 
     return true;
+}
+
+Dialog.prototype.showDefaultSentences = function() {
+    this.showSentence(0, "Ask something else.");
+    this.showSentence(1, "Leave the conversation.");
 }
 
 Dialog.prototype.generate = function(root) {
@@ -99,8 +104,7 @@ Dialog.prototype.generate = function(root) {
 
     if (typeof root == "string") {
         this.showNPCSentence(root);
-        this.showSentence(0, "Ask something else.");
-        this.showSentence(1, "Leave the conversation.");
+        this.showDefaultSentences();
         return;
     }
 
@@ -116,6 +120,23 @@ Dialog.prototype.generate = function(root) {
         this.root = root[key];
         break;
     }
+
+    if (this.rootKeys.length == 0) {
+        this.showDefaultSentences();
+    }
+}
+
+Dialog.prototype.choose = function(choice) {
+    if (this.rootKeys.length == 0) {
+        if (choice == 0) {
+            this.generate(this.dialog);
+        }
+        else {
+            this.onDialogFinished();
+        }
+        return;
+    }
+    this.generate(this.root[this.rootKeys[choice]]);
 }
 
 Dialog.prototype.click = function(data) {
@@ -132,14 +153,11 @@ Dialog.prototype.click = function(data) {
         return;
     }
 
-    if (this.rootKeys.length == 0) {
-        if (choice == 0) {
-            this.generate(this.dialog);
-        }
-        else {
-            this.onDialogFinished();
-        }
-        return;
+    this.choose(choice);
+}
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = Dialog;
     }
-    this.generate(this.root[this.rootKeys[choice]]);
 }
