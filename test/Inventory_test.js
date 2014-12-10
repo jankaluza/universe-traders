@@ -11,5 +11,6 @@ exports['Inventory'] = {
         done();
     },
     simpleDialog: function(test) {
+        test.done();
     }
 };
