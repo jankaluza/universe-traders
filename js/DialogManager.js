@@ -15,11 +15,6 @@ function DialogManager(stage, inventory) {
     radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
 }
 
-DialogManager.prototype.click = function(data) {
-    var x = data.getLocalPosition(this).x;
-    var y = data.getLocalPosition(this).y;
-}
-
 DialogManager.prototype.parseDialogs = function(dialogs) {
     for (var key in dialogs) {
         var dialog = dialogs[key];
@@ -61,6 +56,7 @@ DialogManager.prototype.executeDialog = function(name) {
     this.currentDialog = new Dialog(dialog.face, dialog.dialog, this.inventory);
     this.currentDialog.onDialogFinished = this.handleDialogFinished.bind(this);
     this.stage.addChild(this.currentDialog);
+
     radio("dialogStarted").broadcast();
 }
 

@@ -17,8 +17,7 @@ ObjectManager.prototype.loadObjects = function() {
         objects = {} // tmp variable to map name:MapObject
         for (var key in evt.content.content.json.map) {
             var object = evt.content.content.json.map[key];
-            var texture = PIXI.Texture.fromImage(object.texture);
-            var obj = new MapObject(key, object.type, texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed);
+            var obj = new MapObject(key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed);
             that.objects[that.objects.length] = obj;
             objects[key] = obj;
         }

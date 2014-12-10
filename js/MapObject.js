@@ -1,5 +1,6 @@
 function MapObject(name, type, texture, x, y, items, prices, a, b, speed) {
-    PIXI.Sprite.call(this, texture);
+    var t = PIXI.Texture.fromImage(texture);
+    PIXI.Sprite.call(this, t);
 
     this.pivot.x = this.width / 2;
     this.pivot.y = this.height / 2;
@@ -154,5 +155,11 @@ MapObject.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, addY) {
     for (var index = 0; index < this.childrenObjects.length; index++) {
         var obj = this.childrenObjects[index];
         obj.doOrbitalMovement(addMapX, addMapY, addX, addY);
+    }
+}
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = MapObject;
     }
 }

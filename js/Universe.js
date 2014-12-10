@@ -241,3 +241,9 @@ Universe.prototype.objectsLoaded = function() {
     this.setCurrentObject(visitedObject);
     this.load();
 }
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = Universe;
+    }
+}

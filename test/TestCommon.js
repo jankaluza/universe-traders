@@ -26,4 +26,6 @@ exports.prepareTest = function() {
     global.Inventory = require("../js/Inventory.js");
     global.Dialog = require("../js/Dialog.js");
     global.DialogManager = require("../js/DialogManager.js");
+    global.MapObject = require("../js/MapObject.js");
+    global.Universe = require("../js/Universe.js");
 }
