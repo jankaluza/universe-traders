@@ -196,6 +196,9 @@ Main.prototype.showMap = function() {
 }
 
 Main.prototype.restartGame = function() {
+    if (this.menu.showed) {
+        this.stage.removeChild(this.menu);
+    }
     localStorage.clear();
     this.universe.reset();
     this.inventory.reset();
