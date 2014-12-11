@@ -13,6 +13,9 @@ function Ship() {
 
 Ship.prototype = Object.create(PIXI.Sprite.prototype);
 
+Ship.SANITY_PER_POINT = 0.1;
+Ship.FOOD_PER_POINT = 0.2;
+
 Ship.prototype.timeout = function() {
     this.food -= this.foodPerPoint;
     this.sanity -= this.sanityPerPoint;

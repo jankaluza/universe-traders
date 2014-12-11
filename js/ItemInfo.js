@@ -25,7 +25,7 @@ function ItemInfo(itemManager, ship, item, action, from, to) {
     var y = 50;
 
     if (item.speed) {
-        var speed = new PIXI.Text("Speed: " + (item.speed > 0 ? "+" : "") + item.speed,
+        var speed = new PIXI.Text("Speed: " + (item.speed > 0 ? "+" : "-") + item.speed,
                                   {font: "20px Snippet", fill: item.speed > 0 ? "lightgreen" : "red"});
         speed.position.x = 70;
         speed.position.y = y;
@@ -33,7 +33,7 @@ function ItemInfo(itemManager, ship, item, action, from, to) {
         this.addChild(speed);
     }
     if (item.fuel) {
-        var fuel = new PIXI.Text("Fuel consumption: " + (item.fuel > 0 ? "+" : "") + item.fuel,
+        var fuel = new PIXI.Text("Fuel consumption: " + (item.fuel > 0 ? "+" : "-") + item.fuel,
                                  {font: "20px Snippet", fill: item.fuel > 0 ? "red" : "lightgreen"});
         fuel.position.x = 70;
         fuel.position.y = y;
@@ -41,7 +41,7 @@ function ItemInfo(itemManager, ship, item, action, from, to) {
         this.addChild(fuel);
     }
     if (item.sanity) {
-        var sanity = new PIXI.Text("Sanity: " + (item.sanity > 0 ? "+" : "") + item.sanity,
+        var sanity = new PIXI.Text("Sanity: " + (item.sanity > 0 ? "+" : "-") + item.sanity,
                                   {font: "20px Snippet", fill: item.sanity < 0 ? "lightgreen" : "red"});
         sanity.position.x = 70;
         sanity.position.y = y;
@@ -49,7 +49,7 @@ function ItemInfo(itemManager, ship, item, action, from, to) {
         this.addChild(sanity);
     }
     if (item.food) {
-        var food = new PIXI.Text("Food: " + (item.food > 0 ? "+" : "") + item.food,
+        var food = new PIXI.Text("Food: " + (item.food > 0 ? "+" : "-") + item.food,
                                   {font: "20px Snippet", fill: item.food < 0 ? "lightgreen" : "red"});
         food.position.x = 70;
         food.position.y = y;
@@ -122,6 +122,12 @@ ItemInfo.prototype.click = function(data) {
     }
     else {
         this.doAction();
+    }
+}
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = ItemInfo;
     }
 }
 

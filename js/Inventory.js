@@ -50,8 +50,8 @@ Inventory.prototype.recountStats = function() {
         return;
     }
     this.ship.fuelPerPoint = 0;
-    this.ship.sanityPerPoint = 0.1;
-    this.ship.foodPerPoint = 0.2;
+    this.ship.sanityPerPoint = Ship.SANITY_PER_POINT;
+    this.ship.foodPerPoint = Ship.FOOD_PER_POINT;
     this.ship.speed = 0;
     var gotEngine = false;
 
@@ -113,9 +113,14 @@ Inventory.prototype.removeAll = function() {
 }
 
 Inventory.prototype.removeItem = function(item) {
+    var id = item;
+    if (typeof id == "object") {
+        id = item.id;
+    }
+
     for (var x = 0; x < 7; x++) {
         for (var y = 0; y < 7; y++) {
-            if (this.inventory[x][y] && this.inventory[x][y].item.id == item.id) {
+            if (this.inventory[x][y] && this.inventory[x][y].item.id == id) {
                 this.removeChild(this.inventory[x][y]);
                 this.inventory[x][y] = null;
                 this.recountStats();

@@ -13,8 +13,9 @@ function Item(id, name, type, texture, price, speed, fuel, sanity, food) {
 Item.ENGINE = 0;
 Item.FUEL = 1;
 Item.FOOD = 2;
-Item.SHIP_IMPROVEMENTS = 3;
+Item.SHIP_IMPROVEMENT = 3;
 Item.SPECIAL_FOOD = 4;
+Item.LAST_CATEGORY = 5;
 
 Item.constructor = Item;
 // Item.prototype = Object.create(PIXI.Sprite.prototype);

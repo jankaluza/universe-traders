@@ -27,6 +27,11 @@ function MapObject(name, type, texture, x, y, items, prices, a, b, speed) {
     this.prevY = this.b * Math.sin(this.posParam); // Internal, previous Y increase.
     this.cycles = 0;    // Internal counter.
     this.mapText = null;
+
+    while (this.prices.length != Item.LAST_CATEGORY) {
+        this.prices[this.prices.length] = 1;
+    }
+
     this.reset();
 }
 

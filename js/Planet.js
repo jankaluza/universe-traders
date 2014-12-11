@@ -76,6 +76,17 @@ Planet.prototype.clear = function() {
     }
 }
 
+Planet.prototype.hasItem = function(id) {
+    for (var x = 0; x < 7; x++) {
+        for (var y = 0; y < 7; y++) {
+            if (this.inventory[x][y] && this.inventory[x][y].item.id == id) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 Planet.prototype.removeItem = function(item) {
     if (item.type == Item.FOOD || item.type == Item.FUEL) {
         return;
@@ -138,3 +149,10 @@ Planet.prototype.setPlanet = function(planet) {
         this.clear();
     }
 }
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = Planet;
+    }
+}
+

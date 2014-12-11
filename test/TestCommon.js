@@ -8,6 +8,10 @@ exports.prepareTest = function() {
     function Main() {}
     global.Main = Main;
 
+    navigator.isCocoonJS = false;
+    function navigator() {}
+    global.navigator = navigator;
+
     if (typeof localStorage === "undefined" || localStorage === null) {
     var LocalStorage = require('node-localstorage').LocalStorage;
     localStorage = new LocalStorage('./scratch');
@@ -28,4 +32,6 @@ exports.prepareTest = function() {
     global.DialogManager = require("../js/DialogManager.js");
     global.MapObject = require("../js/MapObject.js");
     global.Universe = require("../js/Universe.js");
+    global.Planet = require("../js/Planet.js");
+    global.ItemInfo = require("../js/ItemInfo.js");
 }
