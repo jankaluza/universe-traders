@@ -110,6 +110,9 @@ Dialog.prototype.generate = function(root) {
     }
 
     for (var key in root) {
+        if (key == "filter") {
+            continue;
+        }
         this.showNPCSentence(key);
         var i = 0;
         for (var answer in root[key]) {

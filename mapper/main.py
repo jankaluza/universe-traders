@@ -3,6 +3,131 @@ from PyQt4 import QtGui, QtCore
 import json
 import ui_ObjectEditor
 import ui_ItemEditor
+import ui_DialogEditor
+
+class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
+	def __init__(self, main, parent):
+		super(DialogEditor, self).__init__(parent)
+		self.setupUi(self)
+		self.main = main
+		self.dialog.itemChanged.connect(self.itemChanged)
+		self.loadDialogs()
+		self.refresh();
+		self.key = ""
+		self.dialogs.itemClicked.connect(self.itemClicked)
+		QtCore.QObject.connect(self.dialogs, QtCore.SIGNAL("currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)"), self.currentItemChanged)
+		#self.itemClicked("Earth_touched")
+		#self.itemChanged(None)
+
+	def currentItemChanged(self, old, item):
+		self.item = item;
+
+	def refresh(self):
+		self.dialog.itemChanged.disconnect(self.itemChanged)
+		self.dialogs.clear();
+		self.dialog.clear();
+
+		for k, dialog in self.data["dialog"].iteritems():
+			it = QtGui.QListWidgetItem(k)
+			self.dialogs.addItem(it)
+		self.dialog.itemChanged.connect(self.itemChanged)
+
+	def addItem(self, rootItem, dialog):
+		if isinstance(dialog, unicode):
+			it = QtGui.QTreeWidgetItem(rootItem)
+			it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+			it.setExpanded(True);
+			it.setText(0, dialog)
+			return;
+		elif isinstance(dialog, list):
+			it = QtGui.QTreeWidgetItem(rootItem)
+			it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+			it.setExpanded(True);
+			it.setText(0, dialog[0])
+			it.setText(2, '; '.join(dialog[1:]))
+			return;
+
+		for key, value in dialog.iteritems():
+			if key == "filter":
+				rootItem.setText(1, '; '.join(value))
+				continue
+			it = QtGui.QTreeWidgetItem(rootItem)
+			it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+			it.setText(0, key)
+			it.setExpanded(True);
+			self.addItem(it, value)
+
+	def itemClicked(self, item):
+		self.dialog.itemChanged.disconnect(self.itemChanged)
+		key = unicode(item.text())
+		self.key = key;
+		self.dialog.clear();
+
+		it = QtGui.QTreeWidgetItem(self.dialog)
+		it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+		it.setText(0, self.data["dialog"][key]['dialog'].keys()[0])
+		it.setExpanded(True);
+		self.addItem(it, self.data["dialog"][key]['dialog'][self.data["dialog"][key]['dialog'].keys()[0]])
+		self.dialog.resizeColumnToContents(0)
+		self.dialog.itemChanged.connect(self.itemChanged)
+
+	def dumpItem(self, parent):
+		# A
+		#  - B
+		#    -D
+		#  - C
+		#    - E
+		# {A : {B : D, C : E}}
+		data = {}
+		key = unicode(parent.text(0))
+		filters = unicode(parent.text(1))
+		actions = unicode(parent.text(2))
+
+		if parent.childCount() == 0:
+			if actions != "":
+				ret = [key] + actions.split(";")
+				return [x.strip(' ') for x in ret]
+			return key
+		else:
+			data[key] = {}
+			for i in range(parent.childCount()):
+				child = parent.child(i)
+				ret = self.dumpItem(child)
+				if isinstance(ret, dict):
+					data[key].update(ret)
+				else:
+					data[key] = ret
+			if isinstance(data[key], dict) and filters != "":
+				data[key]["filter"] = [x.strip(' ') for x in filters.split(";")]
+			return data
+            
+		#data[unicode(parent.text(0))] = {}
+
+		#if filters != "":
+			#data[unicode(parent.text(0))]["filter"] = filters.split(" ")
+		#if actions != "":
+			#data[unicode(parent.text(0))] = []
+		#if ()
+
+
+	def itemChanged(self, item):
+		dialog = {}
+
+		item = self.dialog.topLevelItem(0)
+		dialog = self.dumpItem(item)
+
+		self.data["dialog"][self.key]['dialog'] = dialog
+		self.saveDialogs()
+
+	def loadDialogs(self):
+		f = open("../resources/dialogs.json")
+		self.data = json.load(f)
+		f.close()
+
+	def saveDialogs(self):
+		f = open("../resources/dialogs.json", "w")
+		f.write(json.dumps(self.data))
+		f.close()
 
 class ItemEditor(QtGui.QDialog, ui_ItemEditor.Ui_ItemEditor):
 	def __init__(self, main, parent):
@@ -140,6 +265,7 @@ class ObjectEditor(QtGui.QWidget, ui_ObjectEditor.Ui_ObjectEditor):
 		QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.save)
 		QtCore.QObject.connect(self.removeItem, QtCore.SIGNAL('clicked()'), self.removeIt)
 		QtCore.QObject.connect(self.addItem, QtCore.SIGNAL('clicked()'), self.addIt)
+		QtCore.QObject.connect(self.editDialogs, QtCore.SIGNAL('clicked()'), self.editDialog)
 		QtCore.QObject.connect(self.name, QtCore.SIGNAL("textEdited(const QString &)"), self.nameChanged)
 		QtCore.QObject.connect(self.texture, QtCore.SIGNAL("textEdited(const QString &)"), self.textureChanged)
 		QtCore.QObject.connect(self.center, QtCore.SIGNAL("textEdited(const QString &)"), self.centerChanged)
@@ -208,6 +334,10 @@ class ObjectEditor(QtGui.QWidget, ui_ObjectEditor.Ui_ObjectEditor):
 			self.main.m.data["map"][unicode(name)] = {"items":[], "type":0, "texture":"", "x":self.x.value(), "y":self.y.value(), "prices":[1,1,1,1,1], "desc":""}
 		self.n = unicode(name)
 		self.main.m.reloadTextures()
+
+	def editDialog(self):
+		it = DialogEditor(self.main, self)
+		it.exec_()
 
 	def addIt(self):
 		it = ItemEditor(self.main, self)

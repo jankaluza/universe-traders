@@ -86,9 +86,17 @@ exports['Dialog'] = {
         test.ok(localStorage.getItem("dialog.xyz") == "1");
         test.done();
     },
+    filterNotIgnored: function(test) {
+        var data = {"X":{"Y": {"filter": ["!has_token wine_moon"], "Z": "X"}}};
+        var dialog = new Dialog(null, data, this.inventory);
+        dialog.choose(0);
+
+        test.ok(!hasText(dialog, "filter"));
+        test.done();
+    },
     hasToken: function(test) {
         var data = {"How are you?":
-                        {"Fine!" : {"That's great!" : "xxx", "filter": ["has_token xyz"]}}
+                        {"Fine!" : {"filter": ["has_token xyz"], "That's great!" : "xxx"}}
                    };
         var dialog = new Dialog(null, data, this.inventory);
 
@@ -96,6 +104,7 @@ exports['Dialog'] = {
         test.ok(!hasText(dialog, "Fine!"));
         test.ok(hasText(dialog, "Ask something else."));
         test.ok(hasText(dialog, "Leave the conversation."));
+        test.ok(!hasText(dialog, "filter"));
 
         localStorage.setItem("dialog.xyz", "1");
         dialog.choose(0);
@@ -103,6 +112,7 @@ exports['Dialog'] = {
         test.ok(hasText(dialog, "Fine!"));
         test.ok(!hasText(dialog, "Ask something else."));
         test.ok(!hasText(dialog, "Leave the conversation."));
+        test.ok(!hasText(dialog, "filter"));
 
         test.done();
     },
