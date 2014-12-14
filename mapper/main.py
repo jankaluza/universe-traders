@@ -6,128 +6,167 @@ import ui_ItemEditor
 import ui_DialogEditor
 
 class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
-	def __init__(self, main, parent):
-		super(DialogEditor, self).__init__(parent)
-		self.setupUi(self)
-		self.main = main
-		self.dialog.itemChanged.connect(self.itemChanged)
-		self.loadDialogs()
-		self.refresh();
-		self.key = ""
-		self.dialogs.itemClicked.connect(self.itemClicked)
-		QtCore.QObject.connect(self.dialogs, QtCore.SIGNAL("currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)"), self.currentItemChanged)
-		#self.itemClicked("Earth_touched")
-		#self.itemChanged(None)
+    def __init__(self, main, parent):
+        super(DialogEditor, self).__init__(parent)
+        self.setupUi(self)
+        self.main = main
+        self.dialog.itemChanged.connect(self.itemChanged)
+        self.loadDialogs()
+        self.refresh();
+        self.key = ""
+        self.dialogs.itemClicked.connect(self.itemClicked)
+        self.dialogs.itemChanged.connect(self.dialogItemChanged)
+        QtCore.QObject.connect(self.dialog, QtCore.SIGNAL("currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)"), self.currentItemChanged)
+        QtCore.QObject.connect(self.events, QtCore.SIGNAL("textEdited(const QString &)"), self.eventsChanged)
+        QtCore.QObject.connect(self.avatar, QtCore.SIGNAL("textEdited(const QString &)"), self.avatarChanged)
+        QtCore.QObject.connect(self.once, QtCore.SIGNAL("stateChanged ( int )"), self.onceChanged)
 
-	def currentItemChanged(self, old, item):
-		self.item = item;
+        self.dialog.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
 
-	def refresh(self):
-		self.dialog.itemChanged.disconnect(self.itemChanged)
-		self.dialogs.clear();
-		self.dialog.clear();
+        quitAction = QtGui.QAction("Add item", self, triggered=self.itemAdded)
+        self.dialog.addAction(quitAction)
+        quitAction = QtGui.QAction("Remove item", self, triggered=self.itemRemoved)
+        self.dialog.addAction(quitAction)
 
-		for k, dialog in self.data["dialog"].iteritems():
-			it = QtGui.QListWidgetItem(k)
-			self.dialogs.addItem(it)
-		self.dialog.itemChanged.connect(self.itemChanged)
+    def itemAdded(self):
+        it = QtGui.QTreeWidgetItem(self.item)
+        it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+        it.setExpanded(True);
+        it.setText(0, "Text")
 
-	def addItem(self, rootItem, dialog):
-		if isinstance(dialog, unicode):
-			it = QtGui.QTreeWidgetItem(rootItem)
-			it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-			it.setExpanded(True);
-			it.setText(0, dialog)
-			return;
-		elif isinstance(dialog, list):
-			it = QtGui.QTreeWidgetItem(rootItem)
-			it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-			it.setExpanded(True);
-			it.setText(0, dialog[0])
-			it.setText(2, '; '.join(dialog[1:]))
-			return;
+    def itemRemoved(self):
+        self.item.parent().takeChild(self.item.parent().indexOfChild(self.item))
+        self.itemChanged(None)
 
-		for key, value in dialog.iteritems():
-			if key == "filter":
-				rootItem.setText(1, '; '.join(value))
-				continue
-			it = QtGui.QTreeWidgetItem(rootItem)
-			it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-			it.setText(0, key)
-			it.setExpanded(True);
-			self.addItem(it, value)
+    def currentItemChanged(self, item, old):
+        self.item = item;
 
-	def itemClicked(self, item):
-		self.dialog.itemChanged.disconnect(self.itemChanged)
-		key = unicode(item.text())
-		self.key = key;
-		self.dialog.clear();
+    def refresh(self):
+        self.dialog.itemChanged.disconnect(self.itemChanged)
+        self.dialogs.clear();
+        self.dialog.clear();
 
-		it = QtGui.QTreeWidgetItem(self.dialog)
-		it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-		it.setText(0, self.data["dialog"][key]['dialog'].keys()[0])
-		it.setExpanded(True);
-		self.addItem(it, self.data["dialog"][key]['dialog'][self.data["dialog"][key]['dialog'].keys()[0]])
-		self.dialog.resizeColumnToContents(0)
-		self.dialog.itemChanged.connect(self.itemChanged)
+        for k, dialog in self.data["dialog"].iteritems():
+            it = QtGui.QListWidgetItem(k)
+            it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+            self.dialogs.addItem(it)
+        self.dialog.itemChanged.connect(self.itemChanged)
 
-	def dumpItem(self, parent):
-		# A
-		#  - B
-		#    -D
-		#  - C
-		#    - E
-		# {A : {B : D, C : E}}
-		data = {}
-		key = unicode(parent.text(0))
-		filters = unicode(parent.text(1))
-		actions = unicode(parent.text(2))
+    def addItem(self, rootItem, dialog):
+        if isinstance(dialog, unicode):
+            it = QtGui.QTreeWidgetItem(rootItem)
+            it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+            it.setExpanded(True);
+            it.setText(0, dialog)
+            return;
+        elif isinstance(dialog, list):
+            it = QtGui.QTreeWidgetItem(rootItem)
+            it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+            it.setExpanded(True);
+            it.setText(0, dialog[0])
+            it.setText(2, '; '.join(dialog[1:]))
+            return;
 
-		if parent.childCount() == 0:
-			if actions != "":
-				ret = [key] + actions.split(";")
-				return [x.strip(' ') for x in ret]
-			return key
-		else:
-			data[key] = {}
-			for i in range(parent.childCount()):
-				child = parent.child(i)
-				ret = self.dumpItem(child)
-				if isinstance(ret, dict):
-					data[key].update(ret)
-				else:
-					data[key] = ret
-			if isinstance(data[key], dict) and filters != "":
-				data[key]["filter"] = [x.strip(' ') for x in filters.split(";")]
-			return data
-            
-		#data[unicode(parent.text(0))] = {}
+        for key, value in dialog.iteritems():
+            if key == "filter":
+                rootItem.setText(1, '; '.join(value))
+                continue
+            it = QtGui.QTreeWidgetItem(rootItem)
+            it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+            it.setText(0, key)
+            it.setExpanded(True);
+            self.addItem(it, value)
 
-		#if filters != "":
-			#data[unicode(parent.text(0))]["filter"] = filters.split(" ")
-		#if actions != "":
-			#data[unicode(parent.text(0))] = []
-		#if ()
+    def eventsChanged(self, text):
+        if len(self.key) == 0:
+            return
+        t = unicode(text);
+        self.data["dialog"][self.key]["events"] = t.split(";")
 
+    def avatarChanged(self, text):
+        if len(self.key) == 0:
+            return
+        t = unicode(text);
+        self.data["dialog"][self.key]["face"] = t
 
-	def itemChanged(self, item):
-		dialog = {}
+    def onceChanged(self, state):
+        if len(self.key) == 0:
+            return
+        self.data["dialog"][self.key]["once"] = state == QtCore.Qt.Checked
 
-		item = self.dialog.topLevelItem(0)
-		dialog = self.dumpItem(item)
+    def itemClicked(self, item):
+        self.dialog.itemChanged.disconnect(self.itemChanged)
+        key = unicode(item.text())
+        self.key = key;
+        self.dialog.clear();
 
-		self.data["dialog"][self.key]['dialog'] = dialog
-		self.saveDialogs()
+        it = QtGui.QTreeWidgetItem(self.dialog)
+        it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+        it.setText(0, self.data["dialog"][key]['dialog'].keys()[0])
+        it.setExpanded(True);
+        self.addItem(it, self.data["dialog"][key]['dialog'][self.data["dialog"][key]['dialog'].keys()[0]])
+        self.dialog.resizeColumnToContents(0)
+        self.dialog.itemChanged.connect(self.itemChanged)
 
-	def loadDialogs(self):
-		f = open("../resources/dialogs.json")
-		self.data = json.load(f)
-		f.close()
+        self.events.setText(";".join(self.data["dialog"][key]["events"]))
+        self.avatar.setText(self.data["dialog"][key]["face"])
+        self.once.setChecked(self.data["dialog"][key]["once"])
 
-	def saveDialogs(self):
-		f = open("../resources/dialogs.json", "w")
-		f.write(json.dumps(self.data))
-		f.close()
+    def dumpItem(self, parent):
+        # A
+        #  - B
+        #    -D
+        #  - C
+        #    - E
+        # {A : {B : D, C : E}}
+        data = {}
+        key = unicode(parent.text(0))
+        filters = unicode(parent.text(1))
+        actions = unicode(parent.text(2))
+
+        if parent.childCount() == 0:
+            if actions != "":
+                ret = [key] + actions.split(";")
+                return [x.strip(' ') for x in ret]
+            return key
+        else:
+            data[key] = {}
+            for i in range(parent.childCount()):
+                child = parent.child(i)
+                ret = self.dumpItem(child)
+                if isinstance(ret, dict):
+                    data[key].update(ret)
+                else:
+                    data[key] = ret
+            if isinstance(data[key], dict) and filters != "":
+                data[key]["filter"] = [x.strip(' ') for x in filters.split(";")]
+            return data
+
+    def itemChanged(self, item):
+        dialog = {}
+
+        item = self.dialog.topLevelItem(0)
+        dialog = self.dumpItem(item)
+
+        self.data["dialog"][self.key]['dialog'] = dialog
+        self.saveDialogs()
+
+    def dialogItemChanged(self, item):
+        key = unicode(item.text())
+        self.data["dialog"][key] = self.data["dialog"][self.key]
+        del self.data["dialog"][self.key]
+        self.key = key
+        self.saveDialogs()
+
+    def loadDialogs(self):
+        f = open("../resources/dialogs.json")
+        self.data = json.load(f)
+        f.close()
+
+    def saveDialogs(self):
+        f = open("../resources/dialogs.json", "w")
+        f.write(json.dumps(self.data))
+        f.close()
 
 class ItemEditor(QtGui.QDialog, ui_ItemEditor.Ui_ItemEditor):
 	def __init__(self, main, parent):

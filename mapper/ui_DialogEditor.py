@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'DialogEditor.ui'
 #
-# Created: Thu Dec 11 18:55:41 2014
+# Created: Sat Dec 13 14:23:06 2014
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -39,6 +39,12 @@ class Ui_dialogEditor(object):
         self.gridLayout.addWidget(self.buttonBox, 6, 1, 1, 1)
         self.dialog = QtGui.QTreeWidget(dialogEditor)
         self.dialog.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.dialog.setDragEnabled(True)
+        self.dialog.setDragDropMode(QtGui.QAbstractItemView.InternalMove)
+        self.dialog.setDefaultDropAction(QtCore.Qt.MoveAction)
+        self.dialog.setAlternatingRowColors(False)
+        self.dialog.setAllColumnsShowFocus(True)
+        self.dialog.setWordWrap(True)
         self.dialog.setObjectName(_fromUtf8("dialog"))
         self.gridLayout.addWidget(self.dialog, 0, 1, 6, 1)
         self.dialogs = QtGui.QListWidget(dialogEditor)
