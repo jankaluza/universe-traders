@@ -4,6 +4,8 @@ function MapObject(name, type, texture, x, y, items, prices, a, b, speed) {
 
     this.pivot.x = this.width / 2;
     this.pivot.y = this.height / 2;
+    this.collideWidth = this.width * 0.8;
+    this.collideHeight = this.height * 0.8;
     this.mapX = x;        // X coordinate on the map.
     this.mapY = y;        // Y coordinate on the map.
     this.staged = false;  // True when Object is showed on screen.
@@ -161,6 +163,13 @@ MapObject.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, addY) {
         var obj = this.childrenObjects[index];
         obj.doOrbitalMovement(addMapX, addMapY, addX, addY);
     }
+}
+
+MapObject.prototype.collides = function(x, y) {
+    return (x > (this.position.x - (this.collideWidth >> 1))
+            && x < (this.position.x + (this.collideWidth >> 1))
+            && y > (this.position.y - (this.collideHeight >> 1))
+            && y < (this.position.y + (this.collideHeight >> 1)));
 }
 
 if (typeof exports !== 'undefined') {

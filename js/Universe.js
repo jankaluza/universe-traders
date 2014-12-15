@@ -20,6 +20,7 @@ function Universe(stage) {
     this.orbitTimer = 0;
     this.statsTimer = 0;
     this.currentObject = null;
+    this.objectToMove = null;
 
     radio("dialogStarted").subscribe(this.stopMovement.bind(this));
     radio("dialogFinished").subscribe(this.continueMovement.bind(this));
@@ -107,6 +108,41 @@ Universe.prototype.loadMap = function() {
     this.objManager.loadObjects();
 }
 
+Universe.prototype.moveToMapPoint = function(mapX, mapY) {
+    this.moving_x = mapX;
+    this.moving_y = mapY;
+    var visitedObject = this.objManager.updateObjects();
+
+    // compute global point where we want to end up
+    var x = mapX * Universe.MAP_POINT_SIZE - this.tilePositionX;
+    var y = mapY * Universe.MAP_POINT_SIZE - this.tilePositionY;
+    var shipAngle = Math.atan2(y - Main.HEIGHT/2, x - Main.WIDTH/2);
+    this.xVel = this.ship.speed * Math.cos(shipAngle);
+    this.yVel = this.ship.speed * Math.sin(shipAngle);
+
+    this.ship.setNewRotation(shipAngle);
+}
+
+Universe.prototype.moveToGlobalPoint = function(x, y) {
+    // compute map point where we want to end up
+    this.moving_x = ((this.tilePositionX + x) / Universe.MAP_POINT_SIZE) >> 0;
+    this.moving_y = ((this.tilePositionY + y) / Universe.MAP_POINT_SIZE) >> 0;
+    var visitedObject = this.objManager.updateObjects();
+
+    var shipAngle = Math.atan2(y - Main.HEIGHT/2, x - Main.WIDTH/2);
+    this.xVel = this.ship.speed * Math.cos(shipAngle);
+    this.yVel = this.ship.speed * Math.sin(shipAngle);
+
+    this.ship.setNewRotation(shipAngle);
+}
+
+Universe.prototype.moveToObject = function(object) {
+    this.objectToMove = object;
+    if (object) {
+        this.moveToMapPoint(object.mapX, object.mapY);
+    }
+}
+
 Universe.prototype.click = function(data) {
     if (this.stopMove) {
         return;
@@ -118,16 +154,7 @@ Universe.prototype.click = function(data) {
     var x = Main.WIDTH - data.global.x;
     var y = Main.HEIGHT - data.global.y;
 
-    // compute global point where we want to end up
-    this.moving_x = ((this.tilePositionX + x) / Universe.MAP_POINT_SIZE) >> 0;
-    this.moving_y = ((this.tilePositionY + y) / Universe.MAP_POINT_SIZE) >> 0;
-    var visitedObject = this.objManager.updateObjects();
-
-    var shipAngle = Math.atan2(y - Main.HEIGHT/2, x - Main.WIDTH/2);
-    this.xVel = this.ship.speed * Math.cos(shipAngle);
-    this.yVel = this.ship.speed * Math.sin(shipAngle);
-
-    this.ship.setNewRotation(shipAngle);
+    this.moveToGlobalPoint(x, y);
 }
 
 Universe.prototype.setCurrentObject = function(object) {
@@ -141,12 +168,13 @@ Universe.prototype.setCurrentObject = function(object) {
         radio("objectLeft").broadcast(this.currentObject);
     }
 
+    this.currentObject = object;
+
     if (object) {
         object.shipObject = this;
         radio("objectTouched").broadcast(object);
     }
 
-    this.currentObject = object;
 }
 
 Universe.prototype.update = function(dt) {
@@ -230,6 +258,15 @@ Universe.prototype.update = function(dt) {
 
         if (this.xVel == 0 && this.yVel == 0) {
             this.ship.setTexture(this.ship.stayingTexture);
+        }
+
+        if (this.objectToMove) {
+            if (center_x != this.objectToMove.mapX && center_y != this.objectToMove.mapY) {
+                this.moveToObject(this.objectToMove);
+            }
+            else {
+                this.moveToObject(null);
+            }
         }
     }
 

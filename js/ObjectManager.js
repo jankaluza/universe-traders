@@ -162,11 +162,7 @@ ObjectManager.prototype.updateObjects = function() {
             this.removeFromStage(obj);
         }
         // If the ship is above the object, mark object as visited.
-        else if (obj.staged
-            && Main.CENTER_X > (obj.position.x - (obj.width >> 1))
-            && Main.CENTER_X < (obj.position.x - (obj.width >> 1)) + obj.width
-            && Main.CENTER_Y > (obj.position.y - (obj.height >> 1))
-            && Main.CENTER_Y < (obj.position.y - (obj.height >> 1)) + obj.height) {
+        else if (obj.staged && obj.collides(Main.CENTER_X, Main.CENTER_Y)) {
             visitedObject = obj;
         }
     }
@@ -190,11 +186,7 @@ ObjectManager.prototype.updateStaggedObjects = function() {
             this.removeFromStage(obj);
         }
         // If the ship is above the object, mark object as visited.
-        else if (obj.staged
-            && Main.CENTER_X > (obj.position.x - (obj.width >> 1))
-            && Main.CENTER_X < (obj.position.x - (obj.width >> 1)) + obj.width
-            && Main.CENTER_Y > (obj.position.y - (obj.height >> 1))
-            && Main.CENTER_Y < (obj.position.y - (obj.height >> 1)) + obj.height) {
+        else if (obj.staged && obj.collides(Main.CENTER_X, Main.CENTER_Y)) {
             visitedObject = obj;
         }
     }
