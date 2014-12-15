@@ -44,20 +44,25 @@ DialogManager.prototype.executeDialog = function(name) {
     if (!(name in this.eventToDialog)) {
         return;
     }
-
+    
     var dialog = this.dialogs[this.eventToDialog[name]];
-    if (dialog.once) {
-        if (localStorage.getItem("dialog." + name) == "1") {
-            return;
-        }
-        localStorage.setItem("dialog." + name, "1");
-    }
 
     this.currentDialog = new Dialog(dialog.face, dialog.dialog, this.inventory);
     this.currentDialog.onDialogFinished = this.handleDialogFinished.bind(this);
-    this.stage.addChild(this.currentDialog);
+    if (this.currentDialog.start()) {
+        if (dialog.once) {
+            if (localStorage.getItem("dialog." + name) == "1") {
+                return;
+            }
+            localStorage.setItem("dialog." + name, "1");
+        }
 
-    radio("dialogStarted").broadcast();
+        this.stage.addChild(this.currentDialog);
+        radio("dialogStarted").broadcast();
+    }
+    else {
+        this.currentDialog = null;
+    }
 }
 
 DialogManager.prototype.handleObjectTouched = function(object) {

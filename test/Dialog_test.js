@@ -27,6 +27,7 @@ exports['Dialog'] = {
                    };
         var dialog = new Dialog(null, data, this.inventory);
         dialog.onDialogFinished = function () { this.dialogFinished = true; }.bind(this);
+        dialog.start();
 
         for (var i = 0; i < 2; i++) {
             test.ok(hasText(dialog, "How are you?"));
@@ -64,6 +65,7 @@ exports['Dialog'] = {
                         {"Fine!" : ["That's great!", "add_item 0"]}
                    };
         var dialog = new Dialog(null, data, this.inventory);
+        dialog.start();
 
         test.ok(!this.inventory.hasItem(0));
 
@@ -80,18 +82,82 @@ exports['Dialog'] = {
                         {"Fine!" : ["That's great!", "add_token xyz"]}
                    };
         var dialog = new Dialog(null, data, this.inventory);
+        dialog.start();
 
         test.ok(localStorage.getItem("dialog.xyz") != "1");
         dialog.choose(0);
         test.ok(localStorage.getItem("dialog.xyz") == "1");
         test.done();
     },
-    filterNotIgnored: function(test) {
+    filterNotIgnoredInQuestion: function(test) {
         var data = {"X":{"Y": {"filter": ["!has_token wine_moon"], "Z": "X"}}};
         var dialog = new Dialog(null, data, this.inventory);
+        dialog.start();
         dialog.choose(0);
 
         test.ok(!hasText(dialog, "filter"));
+        test.done();
+    },
+    filterWholeDialog: function(test) {
+        var data = {"Question": {"Answer": "Text", "filter": ["has_token xyz"]}}
+        var dialog = new Dialog(null, data, this.inventory);
+        var ret = dialog.start();
+
+        test.ok(!hasText(dialog, "Question"));
+        test.ok(!ret);
+        test.done();
+    },
+    filterNotIgnoredInAnswer: function(test) {
+        var data = {"Question": {"Answer": "Text", "filter": ["!has_token xyz"]}}
+        var dialog = new Dialog(null, data, this.inventory);
+        var ret = dialog.start();
+
+        test.ok(hasText(dialog, "Question"));
+        test.ok(!hasText(dialog, "filter"));
+        test.ok(ret);
+        test.done();
+    },
+    hasItem: function(test) {
+        var data = {"How are you?":
+                        {"Fine!" : {"filter": ["has_item 0"], "That's great!" : "xxx"}}
+                   };
+        var dialog = new Dialog(null, data, this.inventory);
+        dialog.start();
+
+        test.ok(hasText(dialog, "How are you?"));
+        test.ok(!hasText(dialog, "Fine!"));
+        test.ok(hasText(dialog, "Ask something else."));
+        test.ok(hasText(dialog, "Leave the conversation."));
+
+        this.inventory.addItem(0);
+        dialog.choose(0);
+        test.ok(hasText(dialog, "How are you?"));
+        test.ok(hasText(dialog, "Fine!"));
+        test.ok(!hasText(dialog, "Ask something else."));
+        test.ok(!hasText(dialog, "Leave the conversation."));
+
+        test.done();
+    },
+    hasNotItem: function(test) {
+        var data = {"How are you?":
+                        {"Fine!" : {"That's great!" : null, "filter": ["!has_item 0"]}}
+                   };
+        var dialog = new Dialog(null, data, this.inventory);
+        dialog.start();
+
+        test.ok(hasText(dialog, "How are you?"));
+        test.ok(hasText(dialog, "Fine!"));
+        test.ok(!hasText(dialog, "Ask something else."));
+        test.ok(!hasText(dialog, "Leave the conversation."));
+
+        this.inventory.addItem(0);
+        dialog.choose(0);
+        dialog.choose(0);
+        test.ok(hasText(dialog, "How are you?"));
+        test.ok(!hasText(dialog, "Fine!"));
+        test.ok(hasText(dialog, "Ask something else."));
+        test.ok(hasText(dialog, "Leave the conversation."));
+
         test.done();
     },
     hasToken: function(test) {
@@ -99,6 +165,7 @@ exports['Dialog'] = {
                         {"Fine!" : {"filter": ["has_token xyz"], "That's great!" : "xxx"}}
                    };
         var dialog = new Dialog(null, data, this.inventory);
+        dialog.start();
 
         test.ok(hasText(dialog, "How are you?"));
         test.ok(!hasText(dialog, "Fine!"));
@@ -121,6 +188,7 @@ exports['Dialog'] = {
                         {"Fine!" : {"That's great!" : null, "filter": ["!has_token xyz"]}}
                    };
         var dialog = new Dialog(null, data, this.inventory);
+        dialog.start();
 
         test.ok(hasText(dialog, "How are you?"));
         test.ok(hasText(dialog, "Fine!"));

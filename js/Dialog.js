@@ -24,11 +24,14 @@ function Dialog(face, dialog, inventory) {
     this.root = null;
     this.rootKeys = [];
     this.dialog = dialog;
-    this.generate(this.dialog);
 }
 
 Dialog.constructor = Dialog;
 Dialog.prototype = Object.create(PIXI.Sprite.prototype);
+
+Dialog.prototype.start = function() {
+    return this.generate(this.dialog);
+}
 
 Dialog.prototype.showNPCSentence = function(sentence) {
     var npcSentence = new PIXI.Text(sentence, {font: "20px Snippet", fill: "white", wordWrap: true, wordWrapWidth:950});
@@ -50,8 +53,19 @@ Dialog.prototype.executeCommands = function(root) {
         if (args[0] == "add_item") {
             this.inventory.addItem(parseInt(args[1]))
         }
+        else if (args[0] == "remove_item") {
+            this.inventory.removeItem(args[1]);
+        }
         else if (args[0] == "add_token") {
             localStorage.setItem("dialog." + args[1], 1);
+        }
+        else if (args[0] == "add_credit") {
+            this.inventory.ship.credit += parseInt(args[1]);
+            radio("creditChanged").broadcast();
+        }
+        else if (args[0] == "remove_credit") {
+            this.inventory.ship.credit -= parseInt(args[1]);
+            radio("creditChanged").broadcast();
         }
     }
 
@@ -77,6 +91,11 @@ Dialog.prototype.executeFilter = function(root) {
 
         if (args[0] == "has_token") {
             if ((localStorage.getItem("dialog." + args[1]) != "1") == !neg) {
+                return false;
+            }
+        }
+        else if (args[0] == "has_item") {
+            if (this.inventory.hasItem(args[1]) != !neg) {
                 return false;
             }
         }
@@ -109,13 +128,23 @@ Dialog.prototype.generate = function(root) {
         return;
     }
 
+    var NPCShowed = false;
     for (var key in root) {
         if (key == "filter") {
             continue;
         }
+
+        if (root[key] && !this.executeFilter(root[key])) {
+            continue;
+        }
+
         this.showNPCSentence(key);
+        NPCShowed = true;
         var i = 0;
         for (var answer in root[key]) {
+            if (answer == "filter") {
+                continue;
+            }
             if (this.executeFilter(root[key][answer])) {
                 this.showSentence(i++, answer)
                 this.rootKeys[this.rootKeys.length] = answer;
@@ -125,15 +154,21 @@ Dialog.prototype.generate = function(root) {
         break;
     }
 
+    if (!NPCShowed) {
+        return false;
+    }
+
     if (this.rootKeys.length == 0) {
         this.showDefaultSentences();
     }
+
+    return true;
 }
 
 Dialog.prototype.choose = function(choice) {
     if (this.rootKeys.length == 0) {
         if (choice == 0) {
-            this.generate(this.dialog);
+            this.start();
         }
         else {
             this.onDialogFinished();

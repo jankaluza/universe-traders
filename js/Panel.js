@@ -48,13 +48,14 @@ function Panel(universe, ship) {
 
     radio("objectTouched").subscribe(this.handleObjectTouched.bind(this));
     radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
+    radio("creditChanged").subscribe(this.updateCredit.bind(this));
 }
 
 Panel.constructor = Panel;
 Panel.prototype = Object.create(PIXI.Sprite.prototype);
 
 Panel.prototype.updateCredit = function() {
-    this.credit.setText(this.ship.credit);   
+    this.credit.setText(this.ship.credit);
     this.fuel.width = 0.8 * this.ship.fuel;
     this.food.width = 0.8 * this.ship.food;
     this.sanity.width = 0.8 * this.ship.sanity;

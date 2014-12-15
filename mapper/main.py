@@ -20,6 +20,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         QtCore.QObject.connect(self.events, QtCore.SIGNAL("textEdited(const QString &)"), self.eventsChanged)
         QtCore.QObject.connect(self.avatar, QtCore.SIGNAL("textEdited(const QString &)"), self.avatarChanged)
         QtCore.QObject.connect(self.once, QtCore.SIGNAL("stateChanged ( int )"), self.onceChanged)
+        QtCore.QObject.connect(self.add, QtCore.SIGNAL('clicked()'), self.addDialog)
 
         self.dialog.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
 
@@ -28,6 +29,16 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         quitAction = QtGui.QAction("Remove item", self, triggered=self.itemRemoved)
         self.dialog.addAction(quitAction)
 
+    def addDialog(self):
+        it = QtGui.QListWidgetItem("New dialog")
+        it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+        self.dialogs.addItem(it)
+        self.data["dialog"]["New dialog"] = {}
+        self.data["dialog"]["New dialog"]["events"] = []
+        self.data["dialog"]["New dialog"]["face"] = "resources/face0.png"
+        self.data["dialog"]["New dialog"]["once"] = False
+        self.data["dialog"]["New dialog"]["dialog"] = {"Question" : "Answer"}
+
     def itemAdded(self):
         it = QtGui.QTreeWidgetItem(self.item)
         it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
@@ -35,7 +46,10 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         it.setText(0, "Text")
 
     def itemRemoved(self):
-        self.item.parent().takeChild(self.item.parent().indexOfChild(self.item))
+        if self.item.parent() == None:
+            self.dialog.takeTopLevelItem(self.dialog.indexOfTopLevelItem(self.item))
+        else:
+            self.item.parent().takeChild(self.item.parent().indexOfChild(self.item))
         self.itemChanged(None)
 
     def currentItemChanged(self, item, old):
@@ -53,7 +67,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.dialog.itemChanged.connect(self.itemChanged)
 
     def addItem(self, rootItem, dialog):
-        if isinstance(dialog, unicode):
+        if isinstance(dialog, unicode) or isinstance(dialog, str):
             it = QtGui.QTreeWidgetItem(rootItem)
             it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
             it.setExpanded(True);
@@ -65,6 +79,8 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
             it.setExpanded(True);
             it.setText(0, dialog[0])
             it.setText(2, '; '.join(dialog[1:]))
+            return;
+        elif dialog == None:
             return;
 
         for key, value in dialog.iteritems():
@@ -100,11 +116,13 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.key = key;
         self.dialog.clear();
 
-        it = QtGui.QTreeWidgetItem(self.dialog)
-        it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-        it.setText(0, self.data["dialog"][key]['dialog'].keys()[0])
-        it.setExpanded(True);
-        self.addItem(it, self.data["dialog"][key]['dialog'][self.data["dialog"][key]['dialog'].keys()[0]])
+        for key2 in self.data["dialog"][key]['dialog'].keys():
+            it = QtGui.QTreeWidgetItem(self.dialog)
+            it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+            it.setText(0, key2)
+            it.setExpanded(True);
+            self.addItem(it, self.data["dialog"][key]['dialog'][key2])
+
         self.dialog.resizeColumnToContents(0)
         self.dialog.itemChanged.connect(self.itemChanged)
 
@@ -124,7 +142,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         filters = unicode(parent.text(1))
         actions = unicode(parent.text(2))
 
-        if parent.childCount() == 0:
+        if parent.childCount() == 0 and parent.parent() != None:
             if actions != "":
                 ret = [key] + actions.split(";")
                 return [x.strip(' ') for x in ret]
@@ -145,8 +163,9 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
     def itemChanged(self, item):
         dialog = {}
 
-        item = self.dialog.topLevelItem(0)
-        dialog = self.dumpItem(item)
+        for i in range(self.dialog.topLevelItemCount()):
+            item = self.dialog.topLevelItem(i)
+            dialog.update(self.dumpItem(item))
 
         self.data["dialog"][self.key]['dialog'] = dialog
         self.saveDialogs()
