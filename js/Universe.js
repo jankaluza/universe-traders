@@ -142,7 +142,7 @@ Universe.prototype.load = function() {
 };
 
 /**
-* Loads the map of the Universe.
+* Loads the map of the Universe. Also calls this.load() when map is loaded.
 *
 * @method loadMap
 */
@@ -150,6 +150,13 @@ Universe.prototype.loadMap = function() {
     this.objManager.loadObjects();
 };
 
+/**
+* Moves the Ship (center of the screen) to the defined coordinates.
+*
+* @param {Number} mapX X coordinate.
+* @param {Number} mapY Y coordinate.
+* @method moveToMapPoint
+*/
 Universe.prototype.moveToMapPoint = function(mapX, mapY) {
     this.moving_x = mapX;
     this.moving_y = mapY;
@@ -165,6 +172,13 @@ Universe.prototype.moveToMapPoint = function(mapX, mapY) {
     this.ship.setNewRotation(shipAngle);
 };
 
+/**
+* Moves the Ship (center of the screen) to the global coordinates (pixels).
+*
+* @param {Number} x X coordinate.
+* @param {Number} x Y coordinate.
+* @method moveToGlobalPoint
+*/
 Universe.prototype.moveToGlobalPoint = function(x, y) {
     // compute map point where we want to end up
     this.moving_x = ((this.tilePositionX + x) / Universe.MAP_POINT_SIZE) >> 0;
@@ -178,6 +192,12 @@ Universe.prototype.moveToGlobalPoint = function(x, y) {
     this.ship.setNewRotation(shipAngle);
 };
 
+/**
+* Moves the Ship (center of the screen) to the MapObject.
+*
+* @param {MapObject} object MapObject to move to.
+* @method moveToObject
+*/
 Universe.prototype.moveToObject = function(object) {
     this.objectToMove = object;
     if (object) {
@@ -185,6 +205,13 @@ Universe.prototype.moveToObject = function(object) {
     }
 };
 
+/**
+* Handles 'click' event. Moves the ship (center of the screen) to coordinates
+* defined by click.
+*
+* @method click
+* @private
+*/
 Universe.prototype.click = function(data) {
     if (this.stopMove) {
         return;
@@ -199,6 +226,13 @@ Universe.prototype.click = function(data) {
     this.moveToGlobalPoint(x, y);
 };
 
+/**
+* Sets the current object which is under the Ship.
+*
+* @param {MapObject} object MapObject under the ship or null.
+* @method setCurrentObject
+* @private
+*/
 Universe.prototype.setCurrentObject = function(object) {
     // This means object == this.currentObject
     if (object && object.shipObject) {
@@ -219,6 +253,13 @@ Universe.prototype.setCurrentObject = function(object) {
 
 };
 
+/**
+* Updates the universe. This is the main looping method of the game called
+* on every tick.
+*
+* @param {Number} dt Time elapsed since the previous execution of this method.
+* @method update
+*/
 Universe.prototype.update = function(dt) {
     var visitedObject;
 
@@ -317,6 +358,12 @@ Universe.prototype.update = function(dt) {
     this.ship.update();
 };
 
+/**
+* Called when all the objects on the map are loaded.
+*
+* @method objectsLoaded
+* @private
+*/
 Universe.prototype.objectsLoaded = function() {
     var visitedObject = this.objManager.updateObjects();
     this.setCurrentObject(visitedObject);
