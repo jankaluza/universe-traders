@@ -192,6 +192,7 @@ Dialog.prototype.click = function(data) {
     var x = data.getLocalPosition(this).x;
     var y = data.getLocalPosition(this).y;
     var choice = -1;
+    console.log(x + " " + y);
     if (y > 70 && y < 105) {
         choice = 0;
     }

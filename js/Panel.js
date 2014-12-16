@@ -6,6 +6,7 @@ function Panel(universe, ship) {
 
     this.ship = ship;
     this.universe = universe;
+    this.disableVisit = false;
     var dot = PIXI.Texture.fromImage("resources/dot.png");
 
     this.fuel = new PIXI.Sprite(dot);
@@ -49,10 +50,20 @@ function Panel(universe, ship) {
     radio("objectTouched").subscribe(this.handleObjectTouched.bind(this));
     radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
     radio("creditChanged").subscribe(this.updateCredit.bind(this));
+    radio("dialogStarted").subscribe(this.disableVisiting.bind(this));
+    radio("dialogFinished").subscribe(this.enableVisiting.bind(this));
 }
 
 Panel.constructor = Panel;
 Panel.prototype = Object.create(PIXI.Sprite.prototype);
+
+Panel.prototype.disableVisiting = function() {
+    this.disableVisit = true;
+};
+
+Panel.prototype.enableVisiting = function() {
+    this.disableVisit = false;
+};
 
 Panel.prototype.updateCredit = function() {
     this.credit.setText(this.ship.credit);
@@ -99,7 +110,7 @@ Panel.prototype.click = function(data) {
         }
     }
     else {
-        if (this.object && this.onVisitObject) {
+        if (this.object && this.onVisitObject && !this.disableVisit) {
             this.onVisitObject(this.object);
         }
     }

@@ -30,6 +30,8 @@ function Universe() {
 
     radio("dialogStarted").subscribe(this.stopMovement.bind(this));
     radio("dialogFinished").subscribe(this.continueMovement.bind(this));
+    radio("objectVisited").subscribe(this.stopMovement.bind(this));
+    radio("objectVisitFinished").subscribe(this.continueMovement.bind(this));
 
     this.reset();
 }

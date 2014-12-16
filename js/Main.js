@@ -123,7 +123,7 @@ Main.prototype.visitObject = function(obj) {
         if (this.inventory.showed) {
             this.showInventory();
         }
-        this.universe.stopMove = false;
+        radio("objectVisitFinished").broadcast();
     }
     else {
         this.planet.setPlanet(obj);
@@ -131,7 +131,7 @@ Main.prototype.visitObject = function(obj) {
         if (!this.inventory.showed) {
             this.showInventory();
         }
-        this.universe.stopMove = true;
+        radio("objectVisited").broadcast();
     }
     this.planet.showed = !this.planet.showed;
 };
