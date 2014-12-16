@@ -1,6 +1,6 @@
 function DialogObject(face, once, dialog) {
     this.once = once;
-    this.face = face,
+    this.face = face;
     this.dialog = dialog;
 }
 
@@ -9,7 +9,7 @@ function DialogManager(stage, inventory) {
     this.inventory = inventory;
     this.currentDialog = null;
     this.dialogs = {};
-    this.eventToDialog = {}
+    this.eventToDialog = {};
 
     radio("objectTouched").subscribe(this.handleObjectTouched.bind(this));
     radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
@@ -23,7 +23,7 @@ DialogManager.prototype.parseDialogs = function(dialogs) {
         }
         this.dialogs[key] = new DialogObject(dialog.face, dialog.once, dialog.dialog);
     }
-}
+};
 
 DialogManager.prototype.loadDialogs = function() {
     var that = this;
@@ -32,13 +32,13 @@ DialogManager.prototype.loadDialogs = function() {
         that.parseDialogs(evt.content.content.json.dialog);
     });
     loader.load();
-}
+};
 
 DialogManager.prototype.handleDialogFinished = function() {
     this.stage.removeChild(this.currentDialog);
     this.currentDialog = null;
     radio("dialogFinished").broadcast();
-}
+};
 
 DialogManager.prototype.executeDialog = function(name) {
     if (!(name in this.eventToDialog)) {
@@ -63,15 +63,15 @@ DialogManager.prototype.executeDialog = function(name) {
     else {
         this.currentDialog = null;
     }
-}
+};
 
 DialogManager.prototype.handleObjectTouched = function(object) {
     this.executeDialog(object.name + "_touched");
-}
+};
 
 DialogManager.prototype.handleObjectLeft = function(object) {
     this.executeDialog(object.name + "_left");
-}
+};
 
 if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {

@@ -13,8 +13,8 @@ function Map(universe) {
 }
 
 Map.PIXELS_PER_POINT = 0.7;
-Map.LEFT = 400 + (448*2) / Map.PIXELS_PER_POINT
-Map.TOP = 600 + (448) / Map.PIXELS_PER_POINT
+Map.LEFT = 400 + (448*2) / Map.PIXELS_PER_POINT;
+Map.TOP = 600 + (448) / Map.PIXELS_PER_POINT;
 
 Map.constructor = Map;
 Map.prototype = Object.create(PIXI.Graphics.prototype);
@@ -27,8 +27,10 @@ Map.prototype.update = function() {
     this.endFill();
     this.moveTo(this.position.x, this.position.y);
 
-    Map.LEFT = (this.universe.tilePositionX + Main.WIDTH/2) / Universe.MAP_POINT_SIZE + (448 + 32) / Map.PIXELS_PER_POINT
-    Map.TOP = (this.universe.tilePositionY + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE + (224 + 32) / Map.PIXELS_PER_POINT
+    var x, y;
+
+    Map.LEFT = (this.universe.tilePositionX + Main.WIDTH/2) / Universe.MAP_POINT_SIZE + (448 + 32) / Map.PIXELS_PER_POINT;
+    Map.TOP = (this.universe.tilePositionY + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE + (224 + 32) / Map.PIXELS_PER_POINT;
     objects = this.universe.objManager.objects;
     for (var index = 0; index < objects.length; index++) {
         var obj = objects[index];
@@ -38,11 +40,11 @@ Map.prototype.update = function() {
         else {
             this.lineStyle(2, 0xFFFF00, 1);
         }
-        var x = -(obj.mapX - Map.LEFT) * Map.PIXELS_PER_POINT;
-        var y = -(obj.mapY - Map.TOP) * Map.PIXELS_PER_POINT;
+        x = -(obj.mapX - Map.LEFT) * Map.PIXELS_PER_POINT;
+        y = -(obj.mapY - Map.TOP) * Map.PIXELS_PER_POINT;
         this.drawRect(x - 5, y - 5, 10, 10);
 
-        if (obj.mapText == null) {
+        if (obj.mapText === null) {
             obj.mapText = new PIXI.Text(obj.name, {font: "14px Snippet", fill: "white", align: "center"});
             this.addChild(obj.mapText);
         }
@@ -50,11 +52,11 @@ Map.prototype.update = function() {
         obj.mapText.position.y = y - 6;
     }
 
-    var x = -(((this.universe.tilePositionX + Main.WIDTH/2) / Universe.MAP_POINT_SIZE - Map.LEFT) * Map.PIXELS_PER_POINT) >> 0;
-    var y = -(((this.universe.tilePositionY + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE - Map.TOP) * Map.PIXELS_PER_POINT) >> 0;
+    x = -(((this.universe.tilePositionX + Main.WIDTH/2) / Universe.MAP_POINT_SIZE - Map.LEFT) * Map.PIXELS_PER_POINT) >> 0;
+    y = -(((this.universe.tilePositionY + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE - Map.TOP) * Map.PIXELS_PER_POINT) >> 0;
     this.lineStyle(2, 0x00FF00, 1);
     this.drawRect(x - 5, y - 5, 10, 10);
 
     this.drawCircle(x, y, (this.universe.ship.fuel/this.universe.ship.fuelPerPoint) * Map.PIXELS_PER_POINT);
     
-}
+};

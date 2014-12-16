@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: pkgFile,
-    clean: ['release'],
+    clean: ['release', "docs"],
     uglify: {
       production: {
         files: {
@@ -22,13 +22,34 @@ module.exports = function(grunt) {
             ]
         }
     },
+    yuidoc: {
+        compile: {
+            name: 'Universe Traders',
+            description: 'Trade across the whole universe in your browser!',
+            version: '0.1',
+            url: 'http://universe-traders.org',
+            options: {
+                paths: 'js',
+                themedir: 'docs_theme',
+                outdir: 'docs'
+            }
+        }
+    },
     nodeunit: {
         all: ['test/*_test.js']
+    },
+    jshint: {
+        uses_defaults: ["js/*.js"],
+        options: {
+            browser: true,
+            laxbreak: true
+        }
     }
   });
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  grunt.registerTask('default', 'Default task', ['clean', 'uglify', 'copy']);
+  grunt.registerTask('default', 'Default task', ['clean', 'uglify', 'copy', 'yuidoc']);
+  grunt.registerTask('test', 'Test', ['nodeunit', 'jshint']);
 
 };

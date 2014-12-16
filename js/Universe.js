@@ -1,6 +1,12 @@
-function Universe(stage) {
+/**
+* Represents the universe as seen by the player. Controls the ship
+* and planets movement.
+*
+* @class Universe
+* @constructor
+*/
+function Universe() {
     var texture = PIXI.Texture.fromImage("resources/universe.png");
-    PIXI.EventTarget
     PIXI.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
 
     // Create ship
@@ -10,7 +16,7 @@ function Universe(stage) {
     this.panel = new Panel(this, this.ship);
     this.addChild(this.panel);
 
-    this.interactive=true;
+    this.interactive = true;
     this.hitArea = new PIXI.Rectangle(0, this.panel.height, Main.WIDTH, Main.HEIGHT - this.panel.height);
 
     this.objManager = new ObjectManager(this);
@@ -34,18 +40,34 @@ Universe.prototype = Object.create(PIXI.TilingSprite.prototype);
 // Map is divided into 15x15 px squares
 Universe.MAP_POINT_SIZE = 15;
 
+/**
+* Stops the movement of the Ship. After calling this method, user can't move
+* the Ship anymore. Used for example when Dialog is showed.
+*
+* @method stopMovement
+*/
 Universe.prototype.stopMovement = function() {
     this.stopMove = true;
     if (this.xVel || this.yVel) {
-        this.moving_x = ((this.tilePositionX + Main.WIDTH/2) / Universe.MAP_POINT_SIZE) >> 0;
-        this.moving_y = ((this.tilePositionY + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE) >> 0;
+        this.moving_x = ((this.tilePositionX + Main.WIDTH / 2) / Universe.MAP_POINT_SIZE) >> 0;
+        this.moving_y = ((this.tilePositionY + Main.HEIGHT / 2) / Universe.MAP_POINT_SIZE) >> 0;
     }
-}
+};
 
+/**
+* Starts handling the Ship movement again.
+*
+* @method continueMovement
+*/
 Universe.prototype.continueMovement = function() {
     this.stopMove = false;
-}
+};
 
+/**
+* Resets (reinitializes) the universe. Used when restarting the game.
+*
+* @method reset
+*/
 Universe.prototype.reset = function() {
     // Start somewhere in the middle of the map
     this.tilePosition.x = this.tilePositionX = 990 * Universe.MAP_POINT_SIZE;
@@ -65,8 +87,13 @@ Universe.prototype.reset = function() {
     var visitedObject = this.objManager.updateObjects();
     this.setCurrentObject(visitedObject);
     this.panel.updateCredit();
-}
+};
 
+/**
+* Saves the Universe (including the Ship and Objects) to localStorage.
+*
+* @method save
+*/
 Universe.prototype.save = function() {
     localStorage.setItem("universe.moving_x", this.moving_x);
     localStorage.setItem("universe.moving_y", this.moving_y);
@@ -78,11 +105,19 @@ Universe.prototype.save = function() {
 
     this.ship.save();
     this.objManager.save();
-}
+};
 
+/**
+* Loads the Universe (including the Ship and Objects) from localStorage.
+* Calls this.onGameLoaded() when finished.
+*
+* @method load
+*/
 Universe.prototype.load = function() {
-    if (localStorage.getItem("universe.running") != "true") {
-        if (this.onGameLoaded) this.onGameLoaded();
+    if (localStorage.getItem("universe.running") !== "true") {
+        if (this.onGameLoaded) {
+            this.onGameLoaded();
+        }
         return;
     }
 
@@ -92,8 +127,8 @@ Universe.prototype.load = function() {
     this.moving_y = parseFloat(localStorage.getItem("universe.moving_y"));
     this.xVel = parseFloat(localStorage.getItem("universe.xVel"));
     this.yVel = parseFloat(localStorage.getItem("universe.yVel"));
-    this.tilePositionX = this.tilePosition.x = parseInt(localStorage.getItem("universe.x"));
-    this.tilePositionY = this.tilePosition.y = parseInt(localStorage.getItem("universe.y"));
+    this.tilePositionX = this.tilePosition.x = parseInt(localStorage.getItem("universe.x"), 10);
+    this.tilePositionY = this.tilePosition.y = parseInt(localStorage.getItem("universe.y"), 10);
 
     this.ship.load();
     this.objManager.load();
@@ -101,12 +136,19 @@ Universe.prototype.load = function() {
     var visitedObject = this.objManager.updateObjects();
     this.setCurrentObject(visitedObject);
     this.panel.updateCredit();
-    if (this.onGameLoaded) this.onGameLoaded();
-}
+    if (this.onGameLoaded) {
+        this.onGameLoaded();
+    }
+};
 
+/**
+* Loads the map of the Universe.
+*
+* @method loadMap
+*/
 Universe.prototype.loadMap = function() {
     this.objManager.loadObjects();
-}
+};
 
 Universe.prototype.moveToMapPoint = function(mapX, mapY) {
     this.moving_x = mapX;
@@ -121,7 +163,7 @@ Universe.prototype.moveToMapPoint = function(mapX, mapY) {
     this.yVel = this.ship.speed * Math.sin(shipAngle);
 
     this.ship.setNewRotation(shipAngle);
-}
+};
 
 Universe.prototype.moveToGlobalPoint = function(x, y) {
     // compute map point where we want to end up
@@ -134,14 +176,14 @@ Universe.prototype.moveToGlobalPoint = function(x, y) {
     this.yVel = this.ship.speed * Math.sin(shipAngle);
 
     this.ship.setNewRotation(shipAngle);
-}
+};
 
 Universe.prototype.moveToObject = function(object) {
     this.objectToMove = object;
     if (object) {
         this.moveToMapPoint(object.mapX, object.mapY);
     }
-}
+};
 
 Universe.prototype.click = function(data) {
     if (this.stopMove) {
@@ -155,7 +197,7 @@ Universe.prototype.click = function(data) {
     var y = Main.HEIGHT - data.global.y;
 
     this.moveToGlobalPoint(x, y);
-}
+};
 
 Universe.prototype.setCurrentObject = function(object) {
     // This means object == this.currentObject
@@ -175,15 +217,17 @@ Universe.prototype.setCurrentObject = function(object) {
         radio("objectTouched").broadcast(object);
     }
 
-}
+};
 
 Universe.prototype.update = function(dt) {
+    var visitedObject;
+
     this.orbitTimer += dt;
     if (this.orbitTimer > 25) {
         this.orbitTimer = 0;
         this.objManager.doOrbitalMovement();
 
-        var visitedObject = this.objManager.updateStaggedObjects();
+        visitedObject = this.objManager.updateStaggedObjects();
         if (visitedObject) {
             this.setCurrentObject(visitedObject);
         }
@@ -197,7 +241,7 @@ Universe.prototype.update = function(dt) {
     }
 
     // Move the background if user clicked somewhere (so we have xVel and yVel)
-    if (this.xVel != 0 || this.yVel !=0) {
+    if (this.xVel !== 0 || this.yVel !== 0) {
         var center_x = ((this.tilePositionX + Main.WIDTH/2) / Universe.MAP_POINT_SIZE) >> 0;
         var center_y = ((this.tilePositionY + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE) >> 0;
         var oldX = center_x;
@@ -206,11 +250,11 @@ Universe.prototype.update = function(dt) {
         var yVel = this.yVel;
 
         if (center_x != this.moving_x) {
-            if (this.xVel != 0) {
+            if (this.xVel !== 0) {
                 this.tilePosition.x += xVel;
                 this.tilePositionX += xVel;
                 center_x = ((this.tilePositionX + Main.WIDTH/2) / Universe.MAP_POINT_SIZE) >> 0;
-                if (this.moving_x == 0) {
+                if (this.moving_x === 0) {
                     this.xVel = 0;
                 }
                 else if (oldX > this.moving_x && center_x < this.moving_x || oldX < this.moving_x && center_x > this.moving_x) {
@@ -226,11 +270,11 @@ Universe.prototype.update = function(dt) {
         }
 
         if (center_y != this.moving_y) {
-            if (this.yVel != 0) {
+            if (this.yVel !== 0) {
                 this.tilePosition.y += yVel;
                 this.tilePositionY += yVel;
                 center_y = ((this.tilePositionY + Main.HEIGHT/2) / Universe.MAP_POINT_SIZE) >> 0;
-                if (this.moving_y == 0) {
+                if (this.moving_y === 0) {
                     this.yVel = 0;
                 }
                 else if (oldY > this.moving_y && center_y < this.moving_y || oldY < this.moving_y && center_y > this.moving_y) {
@@ -249,14 +293,14 @@ Universe.prototype.update = function(dt) {
 
         if (oldX != center_x || oldY != center_y) {
             this.panel.update();
-            var visitedObject = this.objManager.updateObjects();
+            visitedObject = this.objManager.updateObjects();
             this.setCurrentObject(visitedObject);
             if (!visitedObject || visitedObject.type == MapObject.STAR) {
                 this.ship.moved();
             }
         }
 
-        if (this.xVel == 0 && this.yVel == 0) {
+        if (this.xVel === 0 && this.yVel === 0) {
             this.ship.setTexture(this.ship.stayingTexture);
         }
 
@@ -277,7 +321,7 @@ Universe.prototype.objectsLoaded = function() {
     var visitedObject = this.objManager.updateObjects();
     this.setCurrentObject(visitedObject);
     this.load();
-}
+};
 
 if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {

@@ -5,11 +5,11 @@ function Dialog(face, dialog, inventory) {
     this.interactive = true;
     this.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
 
-    this.position.x = 0
+    this.position.x = 0;
     this.position.y = Main.HEIGHT - this.height;
 
     if (face) {
-        var texture = PIXI.Texture.fromImage(face);
+        texture = PIXI.Texture.fromImage(face);
         this.face = new PIXI.Sprite(texture);
         this.face.position.x = 0;
         this.face.position.y = 0;
@@ -31,27 +31,27 @@ Dialog.prototype = Object.create(PIXI.Sprite.prototype);
 
 Dialog.prototype.start = function() {
     return this.generate(this.dialog);
-}
+};
 
 Dialog.prototype.showNPCSentence = function(sentence) {
     var npcSentence = new PIXI.Text(sentence, {font: "20px Snippet", fill: "white", wordWrap: true, wordWrapWidth:950});
     npcSentence.position.x = 70;
     npcSentence.position.y = 10;
     this.addChild(npcSentence);
-}
+};
 
 Dialog.prototype.showSentence = function(i, sentence) {
     var response = new PIXI.Text(sentence, {font: "20px Snippet", fill: "lightgreen", wordWrap: true, wordWrapWidth:950});
     response.position.x = 70;
     response.position.y = 70 + i * 35;
     this.addChild(response);
-}
+};
 
 Dialog.prototype.executeCommands = function(root) {
     for (var i = 1; i < root.length; i++) {
         var args = root[i].split(" ");
         if (args[0] == "add_item") {
-            this.inventory.addItem(parseInt(args[1]))
+            this.inventory.addItem(parseInt(args[1]));
         }
         else if (args[0] == "remove_item") {
             this.inventory.removeItem(args[1]);
@@ -70,7 +70,7 @@ Dialog.prototype.executeCommands = function(root) {
     }
 
     return root[0];
-}
+};
 
 Dialog.prototype.executeFilter = function(root) {
     if (typeof root == "string" || Array.isArray(root)) {
@@ -81,33 +81,32 @@ Dialog.prototype.executeFilter = function(root) {
         return true;
     }
 
-    for (var i = 0; i < root["filter"].length; i++) {
-        var args = root["filter"][i].split(" ");
+    for (var i = 0; i < root.filter.length; i++) {
+        var args = root.filter[i].split(" ");
         var neg = args[0].charAt(0) == "!";
         if (neg) {
-            
             args[0] = args[0].substring(1);
         }
 
         if (args[0] == "has_token") {
-            if ((localStorage.getItem("dialog." + args[1]) != "1") == !neg) {
+            if ((localStorage.getItem("dialog." + args[1]) == "1") == neg) {
                 return false;
             }
         }
         else if (args[0] == "has_item") {
-            if (this.inventory.hasItem(args[1]) != !neg) {
+            if (this.inventory.hasItem(args[1]) == neg) {
                 return false;
             }
         }
     }
 
     return true;
-}
+};
 
 Dialog.prototype.showDefaultSentences = function() {
     this.showSentence(0, "Ask something else.");
     this.showSentence(1, "Leave the conversation.");
-}
+};
 
 Dialog.prototype.generate = function(root) {
     this.root = root;
@@ -146,7 +145,7 @@ Dialog.prototype.generate = function(root) {
                 continue;
             }
             if (this.executeFilter(root[key][answer])) {
-                this.showSentence(i++, answer)
+                this.showSentence(i++, answer);
                 this.rootKeys[this.rootKeys.length] = answer;
             }
         }
@@ -158,16 +157,16 @@ Dialog.prototype.generate = function(root) {
         return false;
     }
 
-    if (this.rootKeys.length == 0) {
+    if (this.rootKeys.length === 0) {
         this.showDefaultSentences();
     }
 
     return true;
-}
+};
 
 Dialog.prototype.choose = function(choice) {
-    if (this.rootKeys.length == 0) {
-        if (choice == 0) {
+    if (this.rootKeys.length === 0) {
+        if (choice === 0) {
             this.start();
         }
         else {
@@ -176,7 +175,7 @@ Dialog.prototype.choose = function(choice) {
         return;
     }
     this.generate(this.root[this.rootKeys[choice]]);
-}
+};
 
 Dialog.prototype.click = function(data) {
     var x = data.getLocalPosition(this).x;
@@ -193,7 +192,7 @@ Dialog.prototype.click = function(data) {
     }
 
     this.choose(choice);
-}
+};
 
 if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {

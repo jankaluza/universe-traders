@@ -35,7 +35,7 @@ Planet.prototype.click = function(data) {
     if (this.onItemClicked) {
         this.onItemClicked(item, this.ship);
     }
-}
+};
 
 Planet.prototype.correctPrice = function(item, price, buy) {
     // For fuel and food, the price depends on the current state of fuel/food
@@ -63,7 +63,7 @@ Planet.prototype.correctPrice = function(item, price, buy) {
     }
 
     return price >> 0;
-}
+};
 
 Planet.prototype.clear = function() {
     for (var x = 0; x < 7; x++) {
@@ -74,7 +74,7 @@ Planet.prototype.clear = function() {
             }
         }
     }
-}
+};
 
 Planet.prototype.hasItem = function(id) {
     for (var x = 0; x < 7; x++) {
@@ -85,7 +85,7 @@ Planet.prototype.hasItem = function(id) {
         }
     }
     return false;
-}
+};
 
 Planet.prototype.removeItem = function(item) {
     if (item.type == Item.FOOD || item.type == Item.FUEL) {
@@ -97,7 +97,7 @@ Planet.prototype.removeItem = function(item) {
         this.planet.demand[item.id] = 0.0;
     }
     this.planet.demand[item.id] += 0.05;
-}
+};
 
 Planet.prototype.addItem = function(id, x, y) {
     // Item added to planet, so decrease the demand
@@ -105,15 +105,15 @@ Planet.prototype.addItem = function(id, x, y) {
         this.planet.demand[id] = 0;
     }
     this.planet.demand[id] -= 0.05;
-}
+};
 
 Planet.prototype._addItem = function(id, x, y) {
     // Find free space in inventory.
-    if (x == null || y == null) {
+    if (!x || !y) {
         var found = false;
         for (x = 0; x < 7; x++) {
             for (y = 0; y < 7; y++) {
-                if (this.inventory[x][y] == null) {
+                if (!this.inventory[x][y]) {
                     found = true;
                     break;
                 }
@@ -134,7 +134,7 @@ Planet.prototype._addItem = function(id, x, y) {
     this.addChild(itemSprite);
     this.inventory[x][y] = itemSprite;
     return true;
-}
+};
 
 Planet.prototype.setPlanet = function(planet) {
     this.planet = planet;
@@ -148,7 +148,7 @@ Planet.prototype.setPlanet = function(planet) {
     else {
         this.clear();
     }
-}
+};
 
 if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {

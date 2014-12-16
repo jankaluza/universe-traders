@@ -4,12 +4,13 @@ function resize() {
     var screen_width = window.innerWidth;
     var width = screen_width - 20;
     var height = screen_height - 20;
+    var ratio;
     if(screen_height > screen_width){
-        var ratio = canvas.height/canvas.width;
+        ratio = canvas.height/canvas.width;
         height = ratio * screen_width;
     }else{
-        var ratio = canvas.width/canvas.height;
-        var width = screen_height * ratio;
+        ratio = canvas.width/canvas.height;
+        width = screen_height * ratio;
     }            
     canvas.style.width = width+'px';
     canvas.style.height = height+'px'; 
@@ -25,7 +26,7 @@ function Main() {
     var rendererOptions = {
         view:document.getElementById("game-canvas"),
         resolution:1
-    }
+    };
     this.renderer = new PIXI.autoDetectRenderer(Main.WIDTH, Main.HEIGHT,
                                                 rendererOptions);
     this.stop = false;
@@ -68,51 +69,51 @@ Main.prototype.showCenterMsg = function(msg) {
     this.msg.position.x = Main.CENTER_X - this.msg.width/2;
     this.msg.position.y = Main.CENTER_Y - this.msg.height/2;
     this.stage.addChild(this.msg);
-}
+};
 
 Main.prototype.outOfFuel = function() {
     this.showCenterMsg("Captain, we are out of fuel!");
     this.universe.stopMove = true;
-}
+};
 
 Main.prototype.outOfFood = function() {
     this.showCenterMsg("Captain, we are out of food!");
     this.universe.stopMove = true;
-}
+};
 
 Main.prototype.outOfSanity = function() {
     this.showCenterMsg("Captain, we are crazy!");
     this.universe.stopMove = true;
-}
+};
 
 Main.prototype.lowFuel = function() {
     this.showCenterMsg("Captain, we have almost no fuel!");
     this.universe.stopMove = false;
-}
+};
 
 Main.prototype.lowFood = function() {
     this.showCenterMsg("Captain, we have almost no food!");
-}
+};
 
 Main.prototype.lowSanity = function() {
     this.showCenterMsg("Captain, we are starting to be crazy!");
-}
+};
 
 Main.prototype.normalFuel = function() {
     this.stage.removeChild(this.msg);
     this.msg = null;
     this.universe.stopMove = false;
-}
+};
 
 Main.prototype.normalFood = function() {
     this.stage.removeChild(this.msg);
     this.msg = null;
-}
+};
 
 Main.prototype.normalSanity = function() {
     this.stage.removeChild(this.msg);
     this.msg = null;
-}
+};
 
 Main.prototype.visitObject = function(obj) {
     this.universe.ship.sanity = 100;
@@ -133,7 +134,7 @@ Main.prototype.visitObject = function(obj) {
         this.universe.stopMove = true;
     }
     this.planet.showed = !this.planet.showed;
-}
+};
 
 Main.prototype.showInventory = function() {
     if (this.inventory.showed) {
@@ -144,7 +145,7 @@ Main.prototype.showInventory = function() {
         this.stage.addChild(this.inventory);
     }
     this.inventory.showed = !this.inventory.showed;
-}
+};
 
 Main.prototype.closeItemInfo = function() {
     if (this.itemInfo) {
@@ -153,7 +154,7 @@ Main.prototype.closeItemInfo = function() {
         this.universe.panel.updateCredit();
         this.universe.ship.updateStats();
     }
-}
+};
 
 Main.prototype.showItemInfo = function(fromInventory, item, ship) {
     this.closeItemInfo();
@@ -172,7 +173,7 @@ Main.prototype.showItemInfo = function(fromInventory, item, ship) {
     }
     this.itemInfo.onClose = this.closeItemInfo.bind(this);
     this.stage.addChild(this.itemInfo);
-}
+};
 
 Main.prototype.showMenu = function() {
     if (this.menu.showed) {
@@ -182,7 +183,7 @@ Main.prototype.showMenu = function() {
         this.stage.addChild(this.menu);
     }
     this.menu.showed = !this.menu.showed;
-}
+};
 
 Main.prototype.showMap = function() {
     if (this.map.showed) {
@@ -193,7 +194,7 @@ Main.prototype.showMap = function() {
         this.stage.addChild(this.map);
     }
     this.map.showed = !this.map.showed;
-}
+};
 
 Main.prototype.restartGame = function() {
     if (this.menu.showed) {
@@ -202,17 +203,17 @@ Main.prototype.restartGame = function() {
     localStorage.clear();
     this.universe.reset();
     this.inventory.reset();
-}
+};
 
 Main.prototype.gameLoaded = function() {
     requestAnimFrame(this.update.bind(this));
-}
+};
 
 Main.prototype.loadAssets = function() {
     this.assetsLoader = new AssetsLoader(this.renderer, this.stage);
     this.assetsLoader.onComplete = this.assetsLoaded.bind(this);
     this.assetsLoader.load();
-}
+};
 
 Main.prototype.assetsLoaded = function() {
     this.menu = new Menu();

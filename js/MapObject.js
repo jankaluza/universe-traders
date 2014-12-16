@@ -13,13 +13,13 @@ function MapObject(name, type, texture, x, y, items, prices, a, b, speed) {
     this.type = type;     // Type of the Object.
     this.items = items;   // List of IDs of items sold on this Object,
     this.prices = prices; // List of floats - prices on this planet per ItemType.
-    this.demand = {}      // ItemType:demand. Increasee == buy, decrease == sell.
+    this.demand = {};      // ItemType:demand. Increasee == buy, decrease == sell.
     this.a = a * Universe.MAP_POINT_SIZE;   // Width of orbit.
     this.b = b * Universe.MAP_POINT_SIZE;   // Height of the orbit.
     this.speed = speed;   // Speed of the Object.
     this.posParam = 0;    // Position on the Orbit.
     this.parentObject = null;   // Parent object. Used as center of orbit.
-    this.childrenObjects = []   // Objects orbiting this object.
+    this.childrenObjects = [];   // Objects orbiting this object.
     this.staggedChildren = 0;   // Number of children showed on screen.
     this.shipObject = null;
 
@@ -58,10 +58,10 @@ MapObject.prototype.recountPosition = function() {
         var obj = this.childrenObjects[index];
         obj.recountPosition();
     }
-}
+};
 
 MapObject.prototype.reset = function() {
-    this.demand = {}
+    this.demand = {};
     this.staged = false;
     this.staggedChildren = 0;
     if (this.name == "Earth") {
@@ -76,10 +76,10 @@ MapObject.prototype.reset = function() {
     this.prevY = this.b * Math.sin(this.posParam);
     this.cycles = 0;
     this.shipObject = null;
-}
+};
 
 MapObject.prototype.save = function() {
-    if (this.demand.length != 0) {
+    if (this.demand.length !== 0) {
         localStorage.setItem(this.name + ".demand", JSON.stringify(this.demand));
     }
 
@@ -88,7 +88,7 @@ MapObject.prototype.save = function() {
     localStorage.setItem(this.name + ".posParam", this.posParam);
     localStorage.setItem(this.name + ".addX", this.addX);
     localStorage.setItem(this.name + ".addY", this.addY);
-}
+};
 
 MapObject.prototype.load = function() {
     if (localStorage.getItem("universe.running") != "true") {
@@ -108,10 +108,10 @@ MapObject.prototype.load = function() {
 
     this.prevX = this.a * Math.cos(this.posParam); // Internal, previous X increase.
     this.prevY = this.b * Math.sin(this.posParam); // Internal, previous Y increase.
-}
+};
 
 MapObject.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, addY) {
-    if (this.speed != 0 && this.parentObject) {
+    if (this.speed !== 0 && this.parentObject) {
         // For stagged objects, we have to computer exact coordinates. For
         // objects which are not showed on the screen, we can computer the exact
         // coordinates just from time to time.
@@ -131,8 +131,8 @@ MapObject.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, addY) {
             this.position.y = y + this.parentObject.position.y;
 
             // If the ship is on this MapObject, move the ship with this object.
-            if (this.shipObject && this.shipObject.moving_x == 0
-                && this.shipObject.moving_y == 0) {
+            if (this.shipObject && this.shipObject.moving_x === 0
+                && this.shipObject.moving_y === 0) {
                 this.shipObject.xVel += addX;
                 this.shipObject.yVel += addY;
             }
@@ -163,14 +163,14 @@ MapObject.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, addY) {
         var obj = this.childrenObjects[index];
         obj.doOrbitalMovement(addMapX, addMapY, addX, addY);
     }
-}
+};
 
 MapObject.prototype.collides = function(x, y) {
     return (x > (this.position.x - (this.collideWidth >> 1))
             && x < (this.position.x + (this.collideWidth >> 1))
             && y > (this.position.y - (this.collideHeight >> 1))
             && y < (this.position.y + (this.collideHeight >> 1)));
-}
+};
 
 if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {

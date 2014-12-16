@@ -4,7 +4,7 @@ function Panel(universe, ship) {
     this.interactive = true;
     this.hitArea = new PIXI.Rectangle(0, 0, 730, this.height);
 
-    this.ship = ship
+    this.ship = ship;
     this.universe = universe;
     var dot = PIXI.Texture.fromImage("resources/dot.png");
 
@@ -59,7 +59,7 @@ Panel.prototype.updateCredit = function() {
     this.fuel.width = 0.8 * this.ship.fuel;
     this.food.width = 0.8 * this.ship.food;
     this.sanity.width = 0.8 * this.ship.sanity;
-}
+};
 
 Panel.prototype.update = function() {
     this.fuel.width = 0.8 * this.ship.fuel;
@@ -75,27 +75,27 @@ Panel.prototype.handleObjectTouched = function(object) {
 
     this.object = object;
     this.visit.setText("Visit " + object.name);
-}
+};
 
 Panel.prototype.handleObjectLeft = function(object) {
     this.visit.setText("");
     this.object = null;
-}
+};
 
 Panel.prototype.click = function(data) {
     if (data.global.x > 470 && data.global.x < 630) {
         if (this.onShowInventory) {
-            this.onShowInventory()
+            this.onShowInventory();
         }
     }
     else if (data.global.x > 382 && data.global.x < 470) {
         if (this.onShowMap) {
-            this.onShowMap()
+            this.onShowMap();
         }
     }
     else if (data.global.x > 272 && data.global.x < 382) {
         if (this.onShowMenu) {
-            this.onShowMenu()
+            this.onShowMenu();
         }
     }
     else {
@@ -103,4 +103,4 @@ Panel.prototype.click = function(data) {
             this.onVisitObject(this.object);
         }
     }
-}
+};

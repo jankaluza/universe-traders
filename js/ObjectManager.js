@@ -14,19 +14,20 @@ ObjectManager.prototype.loadObjects = function() {
     var that = this;
     var loader = new PIXI.JsonLoader("resources/map.json");
     loader.on('loaded', function(evt) {
-        objects = {} // tmp variable to map name:MapObject
-        for (var key in evt.content.content.json.map) {
-            var object = evt.content.content.json.map[key];
+        objects = {}; // tmp variable to map name:MapObject
+        var key, object;
+        for (key in evt.content.content.json.map) {
+            object = evt.content.content.json.map[key];
             var obj = new MapObject(key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed);
             that.objects[that.objects.length] = obj;
             objects[key] = obj;
         }
 
         // Add parent->child relationship between objects to computer orbits
-        for (var key in evt.content.content.json.map) {
-            var object = evt.content.content.json.map[key];
+        for (key in evt.content.content.json.map) {
+            object = evt.content.content.json.map[key];
             var center = object.orbit_center;
-            if (center != "") {
+            if (center !== "") {
                 objects[key].parentObject = objects[center];
                 objects[center].childrenObjects[objects[center].childrenObjects.length] = objects[key];
             }
@@ -39,7 +40,7 @@ ObjectManager.prototype.loadObjects = function() {
         if (that.onObjectsLoaded) that.onObjectsLoaded();
     });
     loader.load();
-}
+};
 
 ObjectManager.prototype.doOrbitalMovement = function() {
     if (this.centralObject) {
@@ -47,19 +48,21 @@ ObjectManager.prototype.doOrbitalMovement = function() {
 //         this.centralObject.position.y = -(this.centralObject.mapY - this.top) * Universe.MAP_POINT_SIZE;
         this.centralObject.doOrbitalMovement(0, 0, 0, 0);
     }
-}
+};
 
 ObjectManager.prototype.moveObjects = function(diffX, diffY) {
+    var index, obj;
+
     // Move the objects bound to staged objects.
-    for (var index = 0; index < this.boundToStaged.length; index++) {
-        var obj = this.boundToStaged[index];
+    for (index = 0; index < this.boundToStaged.length; index++) {
+        obj = this.boundToStaged[index];
         obj.position.x += diffX;
         obj.position.y += diffY;
     }
 
     // Move staged objects with the background
-    for (var index = 0; index < this.staged.length; index++) {
-        var obj = this.staged[index];
+    for (index = 0; index < this.staged.length; index++) {
+        obj = this.staged[index];
         obj.position.x += diffX;
         obj.position.y += diffY;
     }
@@ -73,7 +76,7 @@ ObjectManager.prototype.removeFromStage = function(obj) {
 
     // We are removing object which still has some stagged children, so
     // this object is bound to them. Movate it to boundToStaged.
-    if (obj.staggedChildren != 0) {
+    if (obj.staggedChildren !== 0) {
         this.boundToStaged[this.boundToStaged.length] = obj;
 //         console.log("Added to boundToStaged: " + obj.name);
     }
@@ -85,19 +88,19 @@ ObjectManager.prototype.removeFromStage = function(obj) {
         // If this parent does not have any stagged children and is not
         // stagged, we can remove it from boundToStaged, because there's
         // no reason to keep it there.
-        if (obj.staggedChildren == 0 && !obj.staged) {
+        if (obj.staggedChildren === 0 && !obj.staged) {
 //             console.log("Removed from boundToStaged: " + obj.name);
             this.boundToStaged.splice(this.boundToStaged.indexOf(obj), 1);
         }
     }
 
     
-}
+};
 
 ObjectManager.prototype.addToStage = function(obj) {
     // We are adding object which has been in boundToStagged before, so we have
     // to remove it from boundToStagged.
-    if (obj.staggedChildren != 0) {
+    if (obj.staggedChildren !== 0) {
         this.boundToStaged.splice(this.boundToStaged.indexOf(obj), 1);
     }
     // If we are adding object which has not been bound to any object yet,
@@ -126,7 +129,7 @@ ObjectManager.prototype.addToStage = function(obj) {
     }
 
     
-}
+};
 
 ObjectManager.prototype.getObject = function(x, y) {
     for (var index = 0; index < this.staged.length; index++) {
@@ -139,7 +142,7 @@ ObjectManager.prototype.getObject = function(x, y) {
         }
     }
     return null;
-}
+};
 
 ObjectManager.prototype.updateObjects = function() {
     // Get the current screen borders
@@ -168,7 +171,7 @@ ObjectManager.prototype.updateObjects = function() {
     }
 
     return visitedObject;
-}
+};
 
 ObjectManager.prototype.updateStaggedObjects = function() {
     var visitedObject = null;
@@ -192,7 +195,7 @@ ObjectManager.prototype.updateStaggedObjects = function() {
     }
 
     return visitedObject;
-}
+};
 
 ObjectManager.prototype.reset = function() {
     for (var index = 0; index < this.objects.length; index++) {
@@ -210,14 +213,14 @@ ObjectManager.prototype.reset = function() {
     this.staged.length = 0;
     this.boundToStaged.length = 0;
     console.log("reset");
-}
+};
 
 ObjectManager.prototype.save = function() {
     for (var index = 0; index < this.objects.length; index++) {
         var obj = this.objects[index];
         obj.save();
     }
-}
+};
 
 ObjectManager.prototype.load = function() {
     // Reset everything before loading, otherwise we would
@@ -229,9 +232,9 @@ ObjectManager.prototype.load = function() {
         obj.load();
     }
     // And now update them, so we have proper coordinates of the objects.
-    this.updateObjects()
+    this.updateObjects();
     if (this.centralObject) {
         this.centralObject.recountPosition();
     }
-}
+};
 

@@ -17,7 +17,7 @@ Menu.prototype.click = function(data) {
 
     if (y > 0 && y < 64) {
         if (this.onRestart) {
-            this.onRestart()
+            this.onRestart();
         }
     }
-}
+};

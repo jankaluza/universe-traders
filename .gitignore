@@ -4,3 +4,4 @@ release
 *.pyc
 *.kate-swp
 scratch
+docs/

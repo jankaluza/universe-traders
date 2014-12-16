@@ -20,14 +20,14 @@ Ship.prototype.timeout = function() {
     this.food -= this.foodPerPoint;
     this.sanity -= this.sanityPerPoint;
     this.updateStats();
-}
+};
 
 Ship.prototype.updateStats = function() {
     if (this.fuel < 0) {
         if (this.onOutOfFuel) this.onOutOfFuel();
         this.fuel = 0;
     }
-    else if (this.fuelState == 0 && this.fuel < 25) {
+    else if (this.fuelState === 0 && this.fuel < 25) {
         if (this.onLowFuel) this.onLowFuel();
         this.fuelState = 1;
     }
@@ -40,7 +40,7 @@ Ship.prototype.updateStats = function() {
         if (this.onOutOfFood) this.onOutOfFood();
         this.food = 0;
     }
-    else if (this.foodState == 0 && this.food < 25) {
+    else if (this.foodState === 0 && this.food < 25) {
         if (this.onLowFood) this.onLowFood();
         this.foodState = 1;
     }
@@ -53,7 +53,7 @@ Ship.prototype.updateStats = function() {
         if (this.onOutOfSanity) this.onOutOfSanity();
         this.sanity = 0;
     }
-    else if (this.sanityState == 0 && this.sanity < 25) {
+    else if (this.sanityState === 0 && this.sanity < 25) {
         if (this.onLowSanity) this.onLowSanity();
         this.sanityState = 1;
     }
@@ -61,11 +61,11 @@ Ship.prototype.updateStats = function() {
         if (this.onNormalSanity) this.onNormalSanity();
         this.sanityState = 0;
     }
-}
+};
 
 Ship.prototype.moved = function() {
     this.fuel -= this.fuelPerPoint;
-}
+};
 
 Ship.prototype.setNewRotation = function(rotation) {
     this.newRotation = -3.14/2 + rotation;
@@ -80,7 +80,7 @@ Ship.prototype.setNewRotation = function(rotation) {
 //     }
 
     this.setTexture(this.flyingTexture);
-}
+};
 
 Ship.prototype.update = function() {
     if (this.newRotation > 0 && this.rotation < 0 && 3.14 - this.newRotation + 3.14 + this.rotation < this.newRotation - this.rotation) {
@@ -133,7 +133,7 @@ Ship.prototype.reset = function() {
     if (this.onNormalFuel) this.onNormalFuel();
     if (this.onNormalFood) this.onNormalFood();
     if (this.onNormalSanity) this.onNormalSanity();
-}
+};
 
 Ship.prototype.save = function() {
     localStorage.setItem("ship.rotation", this.rotation);
@@ -142,32 +142,32 @@ Ship.prototype.save = function() {
     localStorage.setItem("ship.food", this.food);
     localStorage.setItem("ship.sanity", this.sanity);
     localStorage.setItem("ship.credit", this.credit);
-}
+};
 
 Ship.prototype.load = function() {
     this.rotation = parseFloat(localStorage.getItem("ship.rotation"));
     this.newRotation = parseFloat(localStorage.getItem("ship.newRotation"));
 
     this.fuel = parseFloat(localStorage.getItem("ship.fuel"));
-    if (this.fuel == 0) {
+    if (this.fuel === 0) {
         this.fuel = -1;
         this.fuelState = 1;
     }
 
     this.food = parseFloat(localStorage.getItem("ship.food"));
-    if (this.food == 0) {
+    if (this.food === 0) {
         this.food = -1;
         this.foodState = 1;
     }
 
     this.sanity = parseFloat(localStorage.getItem("ship.sanity"));
-    if (this.sanity == 0) {
-        this.sanity == -1;
+    if (this.sanity === 0) {
+        this.sanity = -1;
         this.sanityState = 1;
     }
 
     this.credit = parseFloat(localStorage.getItem("ship.credit"));
-}
+};
 
 if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {

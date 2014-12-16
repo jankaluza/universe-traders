@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{htmlTitle}}</title>
+    <link rel="stylesheet" href="{{yuiGridsUrl}}">
+    <link rel="stylesheet" href="{{projectAssets}}/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="{{projectAssets}}/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="{{projectAssets}}/favicon.png">
+    <script src="{{yuiSeedUrl}}"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="http://universe-traders.org/stylesheets/stylesheet.css">
+</head>
+<body style="width: 100%">
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/hanzz/libtransport">View on GitHub</a>
+
+          <h1 id="project_title">Universe Traders</h1>
+          <h2 id="project_tagline">Trade across the whole universe in your browser!</h2>
+
+            <section id="menu">
+            <a class="menuitem" href="/">About</a>
+            <a class="menuitem" href="/play">Play</a>
+            <a class="menuitem" href="/develop">Develop</a>
+            <a class="menuitem" href="/planets">Planets</a>
+            <a class="menuitem" href="/items">Items</a>
+            </section>
+        </header>
+    </div>
+<div id="main_content_wrap" class="outer" style="width:100%">
+<!--     <section id="main_content" class="inner" style="width:100%"> -->
+        <div id="bd" class="yui3-g">
+
+            <div class="yui3-u-1-4">
+                <div id="docs-sidebar" class="sidebar apidocs">
+                    {{>sidebar}}
+                </div>
+            </div>
+            <div class="yui3-u-3-4">
+                {{>options}}
+                <div class="apidocs">
+                    <div id="docs-main">
+                        <div class="content">
+                            {{>layout_content}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--     </section> -->
+</div>
+<script src="{{projectAssets}}/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="{{projectAssets}}/js/yui-prettify.js"></script>
+<script src="{{projectAssets}}/../api.js"></script>
+<script src="{{projectAssets}}/js/api-filter.js"></script>
+<script src="{{projectAssets}}/js/api-list.js"></script>
+<script src="{{projectAssets}}/js/api-search.js"></script>
+<script src="{{projectAssets}}/js/apidocs.js"></script>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Universe Traders maintained by <a href="https://github.com/hanzz">Jan Kaluza - HanzZ</a></p>
+      </footer>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-57191511-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script> 
+
+  </body>
+</html>
+

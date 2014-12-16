@@ -20,6 +20,6 @@ AssetsLoader.prototype = Object.create(PIXI.AssetLoader.prototype);
 
 
 AssetsLoader.prototype.assetLoaded = function(count) {
-    this.progressBar.width = (200 / count) * (count - this.loadCount)
+    this.progressBar.width = (200 / count) * (count - this.loadCount);
     this.renderer.render(this.stage);
-}
+};

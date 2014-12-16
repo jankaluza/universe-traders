@@ -74,7 +74,7 @@ function ItemInfo(itemManager, ship, item, action, from, to) {
     this.addChild(close);
 
     if (!this.to || this.ship.credit + _price >= 0) {
-        var action = new PIXI.Text(action, {font: "25px Snippet", fill: "white"});
+        action = new PIXI.Text(action, {font: "25px Snippet", fill: "white"});
         action.position.x = 87 - action.width / 2;
         action.position.y = 230;
         this.addChild(action);
@@ -107,7 +107,7 @@ ItemInfo.prototype.doAction = function() {
     }
 
     if (this.onClose) this.onClose();
-}
+};
 
 ItemInfo.prototype.click = function(data) {
     var x = data.getLocalPosition(this).x;
@@ -123,7 +123,7 @@ ItemInfo.prototype.click = function(data) {
     else {
         this.doAction();
     }
-}
+};
 
 if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {

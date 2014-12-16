@@ -14,19 +14,19 @@ ItemManager.prototype.loadItems = function() {
         if (that.onItemsLoaded) that.onItemsLoaded();
     });
     loader.load();
-}
+};
 
 ItemManager.prototype.addItem = function(item) {
     this.items[this.items.length] = item;
-}
+};
 
 ItemManager.prototype.createSprite = function(id) {
     return new ItemSprite(this.items[id]);
-}
+};
 
 ItemManager.prototype.getItem = function(id) {
     return this.items[id];
-}
+};
 
 if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {

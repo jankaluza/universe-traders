@@ -35,11 +35,11 @@ Inventory.prototype.click = function(data) {
     if (this.onItemClicked) {
         this.onItemClicked(item, this.ship);
     }
-}
+};
 
 Inventory.prototype.correctPrice = function(item, price, buy) {
     return price;
-}
+};
 
 Inventory.prototype.recountStats = function() {
     if (0) {
@@ -88,7 +88,7 @@ Inventory.prototype.recountStats = function() {
     if (this.ship.speed < 0) {
         this.ship.speed = 0;
     }
-}
+};
 
 Inventory.prototype.hasItem = function(id) {
     for (var x = 0; x < 7; x++) {
@@ -99,7 +99,7 @@ Inventory.prototype.hasItem = function(id) {
         }
     }
     return false;
-}
+};
 
 Inventory.prototype.removeAll = function() {
     for (var x = 0; x < 7; x++) {
@@ -110,7 +110,7 @@ Inventory.prototype.removeAll = function() {
             }
         }
     }
-}
+};
 
 Inventory.prototype.removeItem = function(item) {
     var id = item;
@@ -128,7 +128,7 @@ Inventory.prototype.removeItem = function(item) {
             }
         }
     }
-}
+};
 
 Inventory.prototype.addItem = function(id, x, y) {
     if (this.itemManager.getItem(id).type == Item.FOOD) {
@@ -142,11 +142,11 @@ Inventory.prototype.addItem = function(id, x, y) {
     }
 
     // Find free space in inventory.
-    if (x == null || y == null) {
+    if (!x || !y) {
         var found = false;
         for (x = 0; x < 7; x++) {
             for (y = 0; y < 7; y++) {
-                if (this.inventory[x][y] == null) {
+                if (!this.inventory[x][y]) {
                     found = true;
                     break;
                 }
@@ -168,18 +168,18 @@ Inventory.prototype.addItem = function(id, x, y) {
     this.inventory[x][y] = item;
     this.recountStats();
     return true;
-}
+};
 
 Inventory.prototype.itemsLoaded = function() {
     this.reset();
     this.load();
-}
+};
 
 Inventory.prototype.reset = function() {
     this.removeAll();
     this.addItem(0);
     this.addItem(1);
-}
+};
 
 Inventory.prototype.save = function() {
     for (var x = 0; x < 7; x++) {
@@ -192,7 +192,7 @@ Inventory.prototype.save = function() {
             }
         }
     }
-}
+};
 
 Inventory.prototype.load = function() {
     if (localStorage.getItem("universe.running") != "true") {
@@ -215,7 +215,7 @@ Inventory.prototype.load = function() {
     }
 
     this.recountStats();
-}
+};
 
 if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
