@@ -9,6 +9,10 @@ rm -rf ./play
 cp -R release play
 git add play
 
+rm -rf ./develop/api
+cp -R docs ./develop/api
+git add develop/api
+
 cd items
 python rebuild.py ../play/resources/items.json
 cd ..
