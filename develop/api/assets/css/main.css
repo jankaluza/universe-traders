@@ -384,7 +384,7 @@ specific tabview, see the other sections below.
 }
 
 .apidocs .tabview.yui3-tabview-content { visibility: visible; }
-.apidocs .tabview .yui3-tabview-panel { background: #fff; }
+/* .apidocs .tabview .yui3-tabview-panel { background: #fff; } */
 
 /* -- Generic Content Styles ------------------------------------------------ */
 
@@ -783,5 +783,48 @@ kbd .cmd { font-family: Monaco, Helvetica; }
 
 .api-list-item .yui3-highlight {
     font-weight: bold;
+}
+
+.yui3-skin-sam #classdocs .yui3-tabview-panel {
+    background-color: transparent;
+}
+
+.yui3-skin-sam #classdocs .yui3-tabview-panel {
+    border: none;
+}
+
+.yui3-skin-sam .yui3-tabview .yui3-tab,
+.yui3-skin-sam .yui3-tabview .yui3-tab-selected,
+.yui3-skin-sam .yui3-tabview .yui3-tab-hover {
+    background: -moz-linear-gradient(center top , #F4F0EC 0%, #D6D2CE 100%) repeat scroll 0 0 transparent;
+    border-bottom: 1px solid #DEDCD9;
+    border-right: 1px solid #CDCBC8;
+    border-left: 1px solid #CDCBC8;
+    border-top: 1px solid #DADADA;
+    color: #333333;
+    text-decoration: none;
+}
+.yui3-skin-sam .yui3-tabview .yui3-tab-label,
+.yui3-skin-sam .yui3-tabview .yui3-tab-selected .yui3-tab-label {
+    border: none;
+    background: none;
+    font-size: 100%;
+    color: #000;
+}
+
+.yui3-skin-sam .yui3-tabview .yui3-tab-selected,
+.yui3-skin-sam .yui3-tabview .yui3-tab-hover {
+    background: none;
+    background-color: #fff;
+    border-bottom-color: #FFFFFF;
+    border-top: 2px solid #8193C9;
+    font-weight: bold;
+    color: #000;
+
+}
+
+.yui3-skin-sam .yui3-tabview-list {
+    border-color: #DFDFDF;
+    border-width: 0 0 1px; 
 }
 

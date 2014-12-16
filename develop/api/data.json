@@ -76,9 +76,116 @@
         {
             "file": "js/Universe.js",
             "line": 144,
-            "description": "Loads the map of the Universe.",
+            "description": "Loads the map of the Universe. Also calls this.load() when map is loaded.",
             "itemtype": "method",
             "name": "loadMap",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 153,
+            "description": "Moves the Ship (center of the screen) to the defined coordinates.",
+            "params": [
+                {
+                    "name": "mapX",
+                    "description": "X coordinate.",
+                    "type": "Number"
+                },
+                {
+                    "name": "mapY",
+                    "description": "Y coordinate.",
+                    "type": "Number"
+                }
+            ],
+            "itemtype": "method",
+            "name": "moveToMapPoint",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 175,
+            "description": "Moves the Ship (center of the screen) to the global coordinates (pixels).",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "X coordinate.",
+                    "type": "Number"
+                },
+                {
+                    "name": "x",
+                    "description": "Y coordinate.",
+                    "type": "Number"
+                }
+            ],
+            "itemtype": "method",
+            "name": "moveToGlobalPoint",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 195,
+            "description": "Moves the Ship (center of the screen) to the MapObject.",
+            "params": [
+                {
+                    "name": "object",
+                    "description": "MapObject to move to.",
+                    "type": "MapObject"
+                }
+            ],
+            "itemtype": "method",
+            "name": "moveToObject",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 208,
+            "description": "Handles 'click' event. Moves the ship (center of the screen) to coordinates\ndefined by click.",
+            "itemtype": "method",
+            "name": "click",
+            "access": "private",
+            "tagname": "",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 229,
+            "description": "Sets the current object which is under the Ship.",
+            "params": [
+                {
+                    "name": "object",
+                    "description": "MapObject under the ship or null.",
+                    "type": "MapObject"
+                }
+            ],
+            "itemtype": "method",
+            "name": "setCurrentObject",
+            "access": "private",
+            "tagname": "",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 256,
+            "description": "Updates the universe. This is the main looping method of the game called\non every tick.",
+            "params": [
+                {
+                    "name": "dt",
+                    "description": "Time elapsed since the previous execution of this method.",
+                    "type": "Number"
+                }
+            ],
+            "itemtype": "method",
+            "name": "update",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 361,
+            "description": "Called when all the objects on the map are loaded.",
+            "itemtype": "method",
+            "name": "objectsLoaded",
+            "access": "private",
+            "tagname": "",
             "class": "Universe"
         }
     ],
