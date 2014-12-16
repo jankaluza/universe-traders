@@ -1,0 +1,86 @@
+{
+    "project": {
+        "name": "Universe Traders",
+        "description": "Trade across the whole universe in your browser!",
+        "version": "0.1",
+        "url": "http://universe-traders.org"
+    },
+    "files": {
+        "js/Universe.js": {
+            "name": "js/Universe.js",
+            "modules": {},
+            "classes": {
+                "Universe": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "Universe": {
+            "name": "Universe",
+            "shortname": "Universe",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "js/Universe.js",
+            "line": 1,
+            "description": "Represents the universe as seen by the player. Controls the ship\nand planets movement.",
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/Universe.js",
+            "line": 43,
+            "description": "Stops the movement of the Ship. After calling this method, user can't move\nthe Ship anymore. Used for example when Dialog is showed.",
+            "itemtype": "method",
+            "name": "stopMovement",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 57,
+            "description": "Starts handling the Ship movement again.",
+            "itemtype": "method",
+            "name": "continueMovement",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 66,
+            "description": "Resets (reinitializes) the universe. Used when restarting the game.",
+            "itemtype": "method",
+            "name": "reset",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 92,
+            "description": "Saves the Universe (including the Ship and Objects) to localStorage.",
+            "itemtype": "method",
+            "name": "save",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 110,
+            "description": "Loads the Universe (including the Ship and Objects) from localStorage.\nCalls this.onGameLoaded() when finished.",
+            "itemtype": "method",
+            "name": "load",
+            "class": "Universe"
+        },
+        {
+            "file": "js/Universe.js",
+            "line": 144,
+            "description": "Loads the map of the Universe.",
+            "itemtype": "method",
+            "name": "loadMap",
+            "class": "Universe"
+        }
+    ],
+    "warnings": []
+}
