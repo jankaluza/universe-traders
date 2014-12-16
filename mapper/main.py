@@ -19,6 +19,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         QtCore.QObject.connect(self.dialog, QtCore.SIGNAL("currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)"), self.currentItemChanged)
         QtCore.QObject.connect(self.events, QtCore.SIGNAL("textEdited(const QString &)"), self.eventsChanged)
         QtCore.QObject.connect(self.avatar, QtCore.SIGNAL("textEdited(const QString &)"), self.avatarChanged)
+        QtCore.QObject.connect(self.object, QtCore.SIGNAL("textEdited(const QString &)"), self.objectChanged)
         QtCore.QObject.connect(self.once, QtCore.SIGNAL("stateChanged ( int )"), self.onceChanged)
         QtCore.QObject.connect(self.add, QtCore.SIGNAL('clicked()'), self.addDialog)
 
@@ -37,6 +38,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.data["dialog"]["New dialog"]["events"] = []
         self.data["dialog"]["New dialog"]["face"] = "resources/face0.png"
         self.data["dialog"]["New dialog"]["once"] = False
+        self.data["dialog"]["New dialog"]["object"] = ""
         self.data["dialog"]["New dialog"]["dialog"] = {"Question" : "Answer"}
 
     def itemAdded(self):
@@ -98,17 +100,27 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
             return
         t = unicode(text);
         self.data["dialog"][self.key]["events"] = t.split(";")
+        self.saveDialogs()
 
     def avatarChanged(self, text):
         if len(self.key) == 0:
             return
         t = unicode(text);
         self.data["dialog"][self.key]["face"] = t
+        self.saveDialogs()
+
+    def objectChanged(self, text):
+        if len(self.key) == 0:
+            return
+        t = unicode(text);
+        self.data["dialog"][self.key]["object"] = t
+        self.saveDialogs()
 
     def onceChanged(self, state):
         if len(self.key) == 0:
             return
         self.data["dialog"][self.key]["once"] = state == QtCore.Qt.Checked
+        self.saveDialogs()
 
     def itemClicked(self, item):
         self.dialog.itemChanged.disconnect(self.itemChanged)
@@ -128,6 +140,10 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
 
         self.events.setText(";".join(self.data["dialog"][key]["events"]))
         self.avatar.setText(self.data["dialog"][key]["face"])
+        if self.data["dialog"][key].has_key("object"):
+            self.object.setText(self.data["dialog"][key]["object"])
+        else:
+            self.object.setText("")
         self.once.setChecked(self.data["dialog"][key]["once"])
 
     def dumpItem(self, parent):

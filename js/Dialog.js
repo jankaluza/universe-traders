@@ -56,8 +56,14 @@ Dialog.prototype.executeCommands = function(root) {
         else if (args[0] == "remove_item") {
             this.inventory.removeItem(args[1]);
         }
-        else if (args[0] == "add_token") {
+        else if (args[0] == "add_token" || args[0] == "start_quest") {
             localStorage.setItem("dialog." + args[1], 1);
+        }
+        else if (args[0] == "finish_quest") {
+            localStorage.setItem("dialog." + args[1], 2);
+        }
+        else if (args[0] == "restart_quest") {
+            localStorage.removeItem("dialog." + args[1]);
         }
         else if (args[0] == "add_credit") {
             this.inventory.ship.credit += parseInt(args[1]);
@@ -88,8 +94,13 @@ Dialog.prototype.executeFilter = function(root) {
             args[0] = args[0].substring(1);
         }
 
-        if (args[0] == "has_token") {
+        if (args[0] == "has_token" || args[0] == "has_quest") {
             if ((localStorage.getItem("dialog." + args[1]) == "1") == neg) {
+                return false;
+            }
+        }
+        else if (args[0] == "finished_quest") {
+            if ((localStorage.getItem("dialog." + args[1]) == "2") == neg) {
                 return false;
             }
         }

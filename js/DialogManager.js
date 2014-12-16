@@ -10,6 +10,7 @@ function DialogManager(stage, inventory) {
     this.currentDialog = null;
     this.dialogs = {};
     this.eventToDialog = {};
+    this.objectToDialog = {};
 
     radio("objectTouched").subscribe(this.handleObjectTouched.bind(this));
     radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
@@ -21,6 +22,10 @@ DialogManager.prototype.parseDialogs = function(dialogs) {
         for (var index = 0; index < dialog.events.length; index++) {
             this.eventToDialog[dialog.events[index]] = key;
         }
+        if (!(dialog.object in this.objectToDialog)) {
+            this.objectToDialog[dialog.object] = [];
+        }
+        this.objectToDialog[dialog.object][this.objectToDialog[dialog.object].length] = key;
         this.dialogs[key] = new DialogObject(dialog.face, dialog.once, dialog.dialog);
     }
 };
@@ -40,17 +45,13 @@ DialogManager.prototype.handleDialogFinished = function() {
     radio("dialogFinished").broadcast();
 };
 
-DialogManager.prototype.executeDialog = function(name) {
-    if (!(name in this.eventToDialog)) {
-        return;
-    }
-    
-    var dialog = this.dialogs[this.eventToDialog[name]];
+DialogManager.prototype.executeDialog = function(name, eventResult) {
+    var dialog = this.dialogs[name];
 
     this.currentDialog = new Dialog(dialog.face, dialog.dialog, this.inventory);
     this.currentDialog.onDialogFinished = this.handleDialogFinished.bind(this);
     if (this.currentDialog.start()) {
-        if (dialog.once) {
+        if (dialog.once && eventResult) {
             if (localStorage.getItem("dialog." + name) == "1") {
                 return;
             }
@@ -66,11 +67,21 @@ DialogManager.prototype.executeDialog = function(name) {
 };
 
 DialogManager.prototype.handleObjectTouched = function(object) {
-    this.executeDialog(object.name + "_touched");
+    var name = object.name + "_touched";
+    if (!(name in this.eventToDialog)) {
+        return;
+    }
+
+    this.executeDialog(this.eventToDialog[name], true);
 };
 
 DialogManager.prototype.handleObjectLeft = function(object) {
-    this.executeDialog(object.name + "_left");
+    var name = object.name + "_left";
+    if (!(name in this.eventToDialog), true) {
+        return;
+    }
+
+    this.executeDialog(this.eventToDialog[name]);
 };
 
 if (typeof exports !== 'undefined') {

@@ -238,12 +238,11 @@ Main.prototype.assetsLoaded = function() {
     this.itemManager = new ItemManager();
     this.inventory = new Inventory(this.universe.ship, this.itemManager);
     this.inventory.onItemClicked = this.showItemInfo.bind(this, true);
-    this.planet = new Planet(this.universe.ship, this.itemManager);
+    this.dialogManager = new DialogManager(this.stage, this.inventory);
+    this.planet = new Planet(this.universe.ship, this.itemManager, this.dialogManager);
     this.planet.onItemClicked = this.showItemInfo.bind(this, false);
 
     this.map = new Map(this.universe);
-
-    this.dialogManager = new DialogManager(this.stage, this.inventory);
 
     this.universe.loadMap();
     this.itemManager.loadItems();

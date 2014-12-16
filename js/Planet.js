@@ -1,4 +1,4 @@
-function Planet(ship, itemManager) {
+function Planet(ship, itemManager, dialogManager) {
     var texture = PIXI.Texture.fromImage("resources/planet.png");
     PIXI.Sprite.call(this, texture);
     this.width = 448;
@@ -12,6 +12,7 @@ function Planet(ship, itemManager) {
 
     this.ship = ship;
     this.itemManager = itemManager;
+    this.dialogManager = dialogManager;
     this.planet = null;
 
     this.inventory = new Array(7);
@@ -26,14 +27,18 @@ Planet.prototype = Object.create(PIXI.Sprite.prototype);
 Planet.prototype.click = function(data) {
     var x = data.getLocalPosition(this).x / 64 >> 0;
     var y = data.getLocalPosition(this).y / 64 >> 0;
-    var itemSprite = this.inventory[x][y];
-    if (!itemSprite) {
+    var item = this.inventory[x][y];
+    if (!item) {
         return;
     }
 
-    var item = itemSprite.item;
+    if (typeof item == "string") {
+        this.dialogManager.executeDialog(item);
+        return;
+    }
+
     if (this.onItemClicked) {
-        this.onItemClicked(item, this.ship);
+        this.onItemClicked(item.item, this.ship);
     }
 };
 
@@ -136,6 +141,24 @@ Planet.prototype._addItem = function(id, x, y) {
     return true;
 };
 
+Planet.prototype.addDialogs = function() {
+    if (!this.dialogManager) {
+        return;
+    }
+
+    var dialogs = this.dialogManager.objectToDialog[this.planet.name];
+    for (var i = 0; i < dialogs.length; i++) {
+        var texture = PIXI.Texture.fromImage(this.dialogManager.dialogs[dialogs[i]].face);
+        var face = new PIXI.Sprite(texture);
+        face.position.x = 6 * 64;
+        face.position.y = i * 64;
+        face.width = 64;
+        face.height = 64;
+        this.addChild(face);
+        this.inventory[6][i] = dialogs[i];
+    }
+};
+
 Planet.prototype.setPlanet = function(planet) {
     this.planet = planet;
     if (this.planet) {
@@ -144,6 +167,7 @@ Planet.prototype.setPlanet = function(planet) {
         for (var i = 0; i < this.planet.items.length; i++) {
             this._addItem(this.planet.items[i]);
         }
+        this.addDialogs();
     }
     else {
         this.clear();
