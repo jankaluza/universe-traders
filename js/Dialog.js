@@ -185,6 +185,11 @@ Dialog.prototype.choose = function(choice) {
         }
         return;
     }
+
+    if (choice >= this.rootKeys.length) {
+        return;
+    }
+
     this.generate(this.root[this.rootKeys[choice]]);
 };
 
@@ -192,14 +197,9 @@ Dialog.prototype.click = function(data) {
     var x = data.getLocalPosition(this).x;
     var y = data.getLocalPosition(this).y;
     var choice = -1;
-    console.log(x + " " + y);
-    if (y > 70 && y < 105) {
-        choice = 0;
-    }
-    else if (y > 105 && y < 140) {
-        choice = 1;
-    }
-    else {
+
+    choice = ((y - 70) / 35) >> 0;
+    if (choice < 0 || choice > 3) {
         return;
     }
 

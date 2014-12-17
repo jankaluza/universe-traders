@@ -203,6 +203,7 @@ Main.prototype.restartGame = function() {
     localStorage.clear();
     this.universe.reset();
     this.inventory.reset();
+    this.dialogManager.reset();
 };
 
 Main.prototype.gameLoaded = function() {

@@ -42,10 +42,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.data["dialog"]["New dialog"]["dialog"] = {"Question" : "Answer"}
 
     def itemAdded(self):
-        it = QtGui.QTreeWidgetItem(self.item)
-        it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-        it.setExpanded(True);
-        it.setText(0, "Text")
+        self.createItem(self.item, "Text")
 
     def itemRemoved(self):
         if self.item.parent() == None:
@@ -68,19 +65,28 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
             self.dialogs.addItem(it)
         self.dialog.itemChanged.connect(self.itemChanged)
 
+    def createItem(self, rootItem, text, actions = None, filters = None):
+        it = QtGui.QTreeWidgetItem(rootItem)
+        it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+        it.setExpanded(True);
+
+        #label = QtGui.QLabel(text)
+        #label.setWordWrap(True)
+        #self.dialog.setItemWidget(it, 0, label)
+        it.setText(0, text)
+
+        if actions:
+            it.setText(2, '; '.join(actions))
+        if filters:
+            it.setText(1, '; '.join(filters))
+        return it
+
     def addItem(self, rootItem, dialog):
         if isinstance(dialog, unicode) or isinstance(dialog, str):
-            it = QtGui.QTreeWidgetItem(rootItem)
-            it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-            it.setExpanded(True);
-            it.setText(0, dialog)
+            self.createItem(rootItem, dialog)
             return;
         elif isinstance(dialog, list):
-            it = QtGui.QTreeWidgetItem(rootItem)
-            it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-            it.setExpanded(True);
-            it.setText(0, dialog[0])
-            it.setText(2, '; '.join(dialog[1:]))
+            self.createItem(rootItem, dialog[0], dialog[1:])
             return;
         elif dialog == None:
             return;
@@ -89,10 +95,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
             if key == "filter":
                 rootItem.setText(1, '; '.join(value))
                 continue
-            it = QtGui.QTreeWidgetItem(rootItem)
-            it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-            it.setText(0, key)
-            it.setExpanded(True);
+            it = self.createItem(rootItem, key)
             self.addItem(it, value)
 
     def eventsChanged(self, text):
@@ -129,10 +132,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.dialog.clear();
 
         for key2 in self.data["dialog"][key]['dialog'].keys():
-            it = QtGui.QTreeWidgetItem(self.dialog)
-            it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-            it.setText(0, key2)
-            it.setExpanded(True);
+            it = self.createItem(self.dialog, key2)
             self.addItem(it, self.data["dialog"][key]['dialog'][key2])
 
         self.dialog.resizeColumnToContents(0)

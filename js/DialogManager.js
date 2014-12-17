@@ -16,6 +16,13 @@ function DialogManager(stage, inventory) {
     radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
 }
 
+DialogManager.prototype.reset = function() {
+    if (this.currentDialog) {
+        this.stage.removeChild(this.currentDialog);
+        this.currentDialog = null;
+    }
+};
+
 DialogManager.prototype.parseDialogs = function(dialogs) {
     for (var key in dialogs) {
         var dialog = dialogs[key];
