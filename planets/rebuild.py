@@ -41,6 +41,9 @@ def rebuildPlanets():
     f = open(sys.argv[1])
     data = json.load(f)
     f.close()
+    f = open(sys.argv[2])
+    data2 = json.load(f)
+    f.close()
 
     nodes = {}
     centers = []
@@ -76,14 +79,27 @@ title: %s
         else:
             p += ".\n"
 
-        p += "### Prices\n"
-        p += "| Category | Price coeficient |\n"
-        p += "|----------|------------------|\n"
-        p += "| %s | %f |\n" % ("Engines", float(d['prices'][0]))
-        p += "| %s | %f |\n" % ("Fuel", float(d['prices'][1]))
-        p += "| %s | %f |\n" % ("Food", float(d['prices'][2]))
-        p += "| %s | %f |\n" % ("Ship improvements", float(d['prices'][3]))
-        p += "| %s | %f |\n" % ("Special food", float(d['prices'][4]))
+        if d['type'] != 1:
+            types = ["Engine", "Food", "Fuel", "Ship improvement", "Special food"]
+
+            p += "### People\n"
+
+            p += "### Items to buy\n"
+            p += "| Item | Category | Default price |\n"
+            p += "|----------|------------------|\n"
+            for key in d['items']:
+                item = data2['items'][str(key)]
+                iname = item["name"]
+                p += "| [%s](/items/%s) | %s | %d |\n" % (iname, iname.replace(" ", "_"), types[int(item["type"])], int(item['price']) * float(d['prices'][int(item["type"])]))
+
+            p += "### Prices\n"
+            p += "| Category | Price coeficient |\n"
+            p += "|----------|------------------|\n"
+            p += "| %s | %.3f |\n" % ("Engines", float(d['prices'][0]))
+            p += "| %s | %.3f |\n" % ("Fuel", float(d['prices'][1]))
+            p += "| %s | %.3f |\n" % ("Food", float(d['prices'][2]))
+            p += "| %s | %.3f |\n" % ("Ship improvements", float(d['prices'][3]))
+            p += "| %s | %.3f |\n" % ("Special food", float(d['prices'][4]))
 
         mkdir_p(name)
         planet = open(name + "/index.md", "w")

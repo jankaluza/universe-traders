@@ -14,9 +14,13 @@ cp -R docs ./develop/api
 git add develop/api
 
 cd items
+find -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 rm -R
 python rebuild.py ../play/resources/items.json
 cd ..
+git add items
 
 cd planets
-python rebuild.py ../play/resources/map.json
-cd ..
+find -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 rm -R
+python rebuild.py ../play/resources/map.json ../play/resources/items.json
+cd .. 
+git add planets

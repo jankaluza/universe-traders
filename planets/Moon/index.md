@@ -5,11 +5,16 @@ title: Moon
 
 ## Moon
 * **Type**: Planet orbiting Earth.
+### People
+### Items to buy
+| Item | Category | Default price |
+|----------|------------------|
+| [Basic Engine](/items/Basic_Engine) | Engine | 140 |
 ### Prices
 | Category | Price coeficient |
 |----------|------------------|
-| Engines | 0.700000 |
-| Fuel | 0.900000 |
-| Food | 1.100000 |
-| Ship improvements | 0.700000 |
-| Special food | 1.200000 |
+| Engines | 0.700 |
+| Fuel | 0.900 |
+| Food | 1.100 |
+| Ship improvements | 0.700 |
+| Special food | 1.200 |
