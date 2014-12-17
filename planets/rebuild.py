@@ -36,6 +36,20 @@ def get_children_list(ret, center, nodes, i):
         ret = get_children_list(ret, node.name, nodes, i + 1)
     return ret
 
+def get_quests(root):
+    if isinstance(root, list):
+        quests = []
+        for action in root:
+            if action.startswith("start_quest"):
+                quests += [action.split(" ")[1]]
+        return quests
+    elif isinstance(root, dict):
+        quests = []
+        for k,v in root.iteritems(root):
+            quests += get_quests(v)
+        return quests
+    return []
+
 def rebuildPlanets():
     global index
     f = open(sys.argv[1])
@@ -43,6 +57,9 @@ def rebuildPlanets():
     f.close()
     f = open(sys.argv[2])
     data2 = json.load(f)
+    f.close()
+    f = open(sys.argv[3])
+    data3 = json.load(f)
     f.close()
 
     nodes = {}
@@ -83,10 +100,24 @@ title: %s
             types = ["Engine", "Food", "Fuel", "Ship improvement", "Special food"]
 
             p += "### People\n"
+            p += "| Name | Quests started | Quests finished |\n"
+            p += "|----------|------------------|\n"
+            for key in data3['dialog']:
+                dialog = data3['dialog'][key]
+                if dialog["object"] != key:
+                    continue
+
+                person = key
+                quests = []
+                if person.find("_") != -1:
+                    person = person[person.find("_") + 1:]
+                print get_quests(dialog["dialog"])
+                
+                
 
             p += "### Items to buy\n"
             p += "| Item | Category | Default price |\n"
-            p += "|----------|------------------|\n"
+            p += "|----------|------|------------|\n"
             for key in d['items']:
                 item = data2['items'][str(key)]
                 iname = item["name"]
