@@ -35,7 +35,7 @@
     "classitems": [
         {
             "file": "js/Universe.js",
-            "line": 43,
+            "line": 45,
             "description": "Stops the movement of the Ship. After calling this method, user can't move\nthe Ship anymore. Used for example when Dialog is showed.",
             "itemtype": "method",
             "name": "stopMovement",
@@ -43,7 +43,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 57,
+            "line": 59,
             "description": "Starts handling the Ship movement again.",
             "itemtype": "method",
             "name": "continueMovement",
@@ -51,7 +51,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 66,
+            "line": 68,
             "description": "Resets (reinitializes) the universe. Used when restarting the game.",
             "itemtype": "method",
             "name": "reset",
@@ -59,7 +59,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 92,
+            "line": 94,
             "description": "Saves the Universe (including the Ship and Objects) to localStorage.",
             "itemtype": "method",
             "name": "save",
@@ -67,7 +67,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 110,
+            "line": 112,
             "description": "Loads the Universe (including the Ship and Objects) from localStorage.\nCalls this.onGameLoaded() when finished.",
             "itemtype": "method",
             "name": "load",
@@ -75,7 +75,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 144,
+            "line": 146,
             "description": "Loads the map of the Universe. Also calls this.load() when map is loaded.",
             "itemtype": "method",
             "name": "loadMap",
@@ -83,7 +83,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 153,
+            "line": 155,
             "description": "Moves the Ship (center of the screen) to the defined coordinates.",
             "params": [
                 {
@@ -103,7 +103,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 175,
+            "line": 177,
             "description": "Moves the Ship (center of the screen) to the global coordinates (pixels).",
             "params": [
                 {
@@ -123,7 +123,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 195,
+            "line": 197,
             "description": "Moves the Ship (center of the screen) to the MapObject.",
             "params": [
                 {
@@ -138,7 +138,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 208,
+            "line": 210,
             "description": "Handles 'click' event. Moves the ship (center of the screen) to coordinates\ndefined by click.",
             "itemtype": "method",
             "name": "click",
@@ -148,7 +148,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 229,
+            "line": 231,
             "description": "Sets the current object which is under the Ship.",
             "params": [
                 {
@@ -165,7 +165,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 256,
+            "line": 258,
             "description": "Updates the universe. This is the main looping method of the game called\non every tick.",
             "params": [
                 {
@@ -180,7 +180,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 361,
+            "line": 363,
             "description": "Called when all the objects on the map are loaded.",
             "itemtype": "method",
             "name": "objectsLoaded",

@@ -114,6 +114,8 @@ function Universe() {
 
     radio(&quot;dialogStarted&quot;).subscribe(this.stopMovement.bind(this));
     radio(&quot;dialogFinished&quot;).subscribe(this.continueMovement.bind(this));
+    radio(&quot;objectVisited&quot;).subscribe(this.stopMovement.bind(this));
+    radio(&quot;objectVisitFinished&quot;).subscribe(this.continueMovement.bind(this));
 
     this.reset();
 }
