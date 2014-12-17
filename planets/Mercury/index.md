@@ -6,8 +6,7 @@ title: Mercury
 ## Mercury
 * **Type**: Planet orbiting Sun.
 ### People
-| Name | Quests started | Quests finished |
-|----------|------------------|
+No people.
 ### Items to buy
 | Item | Category | Default price |
 |----------|------|------------|

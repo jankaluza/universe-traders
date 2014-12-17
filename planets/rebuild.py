@@ -100,29 +100,39 @@ title: %s
             types = ["Engine", "Food", "Fuel", "Ship improvement", "Special food"]
 
             p += "### People\n"
-            p += "| Name | Quests started | Quests finished |\n"
-            p += "|----------|------------------|\n"
+            x = ""
+            x += "| Name | Quests started | Quests finished |\n"
+            x += "|----------|------------------|\n"
+            somepeople = False
             for key in data3['dialog']:
                 dialog = data3['dialog'][key]
                 if dialog["object"] != name:
                     continue
 
+                somepeople = True
                 person = key
                 quests = []
                 if person.find("_") != -1:
                     person = person[person.find("_") + 1:]
                 quests_start = " ".join(get_dialog_args(dialog["dialog"], "start_quest"))
                 quests_finish = " ".join(get_dialog_args(dialog["dialog"], "finish_quest"))
-                p += "| %s | %s | %s |\n" % (person, quests_start, quests_finish)
+                x += "| %s | %s | %s |\n" % (person, quests_start, quests_finish)
+            if somepeople:
+                p += x
+            else:
+                p += "No people.\n"
                 
 
             p += "### Items to buy\n"
-            p += "| Item | Category | Default price |\n"
-            p += "|----------|------|------------|\n"
-            for key in d['items']:
-                item = data2['items'][str(key)]
-                iname = item["name"]
-                p += "| [%s](/items/%s) | %s | %d |\n" % (iname, iname.replace(" ", "_"), types[int(item["type"])], int(item['price']) * float(d['prices'][int(item["type"])]))
+            if len(d['items']) == 0:
+                p +=  "No items.\n"
+            else :
+                p += "| Item | Category | Default price |\n"
+                p += "|----------|------|------------|\n"
+                for key in d['items']:
+                    item = data2['items'][str(key)]
+                    iname = item["name"]
+                    p += "| [%s](/items/%s) | %s | %d |\n" % (iname, iname.replace(" ", "_"), types[int(item["type"])], int(item['price']) * float(d['prices'][int(item["type"])]))
 
             p += "### Prices\n"
             p += "| Category | Price coeficient |\n"

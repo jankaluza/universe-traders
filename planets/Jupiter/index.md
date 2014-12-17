@@ -6,11 +6,9 @@ title: Jupiter
 ## Jupiter
 * **Type**: Planet orbiting Sun.
 ### People
-| Name | Quests started | Quests finished |
-|----------|------------------|
+No people.
 ### Items to buy
-| Item | Category | Default price |
-|----------|------|------------|
+No items.
 ### Prices
 | Category | Price coeficient |
 |----------|------------------|
