@@ -21,6 +21,6 @@ git add items
 
 cd planets
 find -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 rm -R
-python rebuild.py ../play/resources/map.json ../play/resources/items.json
+python rebuild.py ../play/resources/map.json ../play/resources/items.json ../play/resources/dialogs.json
 cd .. 
 git add planets
