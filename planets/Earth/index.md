@@ -8,6 +8,7 @@ title: Earth
 ### People
 | Name | Quests started | Quests finished |
 |----------|------------------|
+| Zaira | wine_moon |  |
 ### Items to buy
 | Item | Category | Default price |
 |----------|------|------------|

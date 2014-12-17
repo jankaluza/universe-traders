@@ -36,17 +36,17 @@ def get_children_list(ret, center, nodes, i):
         ret = get_children_list(ret, node.name, nodes, i + 1)
     return ret
 
-def get_quests(root):
+def get_dialog_args(root, arg):
     if isinstance(root, list):
         quests = []
         for action in root:
-            if action.startswith("start_quest"):
+            if action.startswith(arg):
                 quests += [action.split(" ")[1]]
         return quests
     elif isinstance(root, dict):
         quests = []
-        for k,v in root.iteritems(root):
-            quests += get_quests(v)
+        for k,v in root.iteritems():
+            quests += get_dialog_args(v, arg)
         return quests
     return []
 
@@ -104,15 +104,16 @@ title: %s
             p += "|----------|------------------|\n"
             for key in data3['dialog']:
                 dialog = data3['dialog'][key]
-                if dialog["object"] != key:
+                if dialog["object"] != name:
                     continue
 
                 person = key
                 quests = []
                 if person.find("_") != -1:
                     person = person[person.find("_") + 1:]
-                print get_quests(dialog["dialog"])
-                
+                quests_start = " ".join(get_dialog_args(dialog["dialog"], "start_quest"))
+                quests_finish = " ".join(get_dialog_args(dialog["dialog"], "finish_quest"))
+                p += "| %s | %s | %s |\n" % (person, quests_start, quests_finish)
                 
 
             p += "### Items to buy\n"

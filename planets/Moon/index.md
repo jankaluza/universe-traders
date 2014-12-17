@@ -8,6 +8,7 @@ title: Moon
 ### People
 | Name | Quests started | Quests finished |
 |----------|------------------|
+| Cassius |  | wine_moon |
 ### Items to buy
 | Item | Category | Default price |
 |----------|------|------------|
