@@ -78,6 +78,16 @@
        <string>Extra food</string>
       </property>
      </row>
+     <row>
+      <property name="text">
+       <string>Machine</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Gun</string>
+      </property>
+     </row>
      <column>
       <property name="text">
        <string>Price</string>

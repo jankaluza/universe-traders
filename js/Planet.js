@@ -147,6 +147,10 @@ Planet.prototype.addDialogs = function() {
     }
 
     var dialogs = this.dialogManager.objectToDialog[this.planet.name];
+    if (!dialogs) {
+        return;
+    }
+
     for (var i = 0; i < dialogs.length; i++) {
         var texture = PIXI.Texture.fromImage(this.dialogManager.dialogs[dialogs[i]].face);
         var face = new PIXI.Sprite(texture);

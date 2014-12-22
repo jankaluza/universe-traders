@@ -374,6 +374,8 @@ class ObjectEditor(QtGui.QWidget, ui_ObjectEditor.Ui_ObjectEditor):
 
     def priceChanged(self, item):
         if self.n:
+            while (len(self.main.m.data["map"][self.n]["prices"]) <= item.row()):
+                self.main.m.data["map"][self.n]["prices"].append("1")
             self.main.m.data["map"][self.n]["prices"][item.row()] = unicode(item.text())
 
     def typeChanged(self, t):

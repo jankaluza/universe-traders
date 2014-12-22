@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ObjectEditor.ui'
 #
-# Created: Thu Dec 11 18:56:00 2014
+# Created: Mon Dec 22 15:25:01 2014
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -44,7 +44,7 @@ class Ui_ObjectEditor(object):
         self.prices.setCornerButtonEnabled(False)
         self.prices.setObjectName(_fromUtf8("prices"))
         self.prices.setColumnCount(1)
-        self.prices.setRowCount(5)
+        self.prices.setRowCount(7)
         item = QtGui.QTableWidgetItem()
         self.prices.setVerticalHeaderItem(0, item)
         item = QtGui.QTableWidgetItem()
@@ -55,6 +55,10 @@ class Ui_ObjectEditor(object):
         self.prices.setVerticalHeaderItem(3, item)
         item = QtGui.QTableWidgetItem()
         self.prices.setVerticalHeaderItem(4, item)
+        item = QtGui.QTableWidgetItem()
+        self.prices.setVerticalHeaderItem(5, item)
+        item = QtGui.QTableWidgetItem()
+        self.prices.setVerticalHeaderItem(6, item)
         item = QtGui.QTableWidgetItem()
         self.prices.setHorizontalHeaderItem(0, item)
         self.prices.horizontalHeader().setVisible(True)
@@ -170,6 +174,10 @@ class Ui_ObjectEditor(object):
         item.setText(_translate("ObjectEditor", "Ship imp.", None))
         item = self.prices.verticalHeaderItem(4)
         item.setText(_translate("ObjectEditor", "Extra food", None))
+        item = self.prices.verticalHeaderItem(5)
+        item.setText(_translate("ObjectEditor", "Machine", None))
+        item = self.prices.verticalHeaderItem(6)
+        item.setText(_translate("ObjectEditor", "Gun", None))
         item = self.prices.horizontalHeaderItem(0)
         item.setText(_translate("ObjectEditor", "Price", None))
         self.label_10.setText(_translate("ObjectEditor", "Orbit a:", None))
