@@ -178,6 +178,38 @@ exports['Dialog'] = {
         test.ok(ret);
         test.done();
     },
+    moreStructuredDialog: function(test) {
+        var data = {"Q1": {"A1": {"Q2": {"filter": ["!has_item 0 20"], "A2": ["Q3", "add_item 0 20"]}, "Q4": {"filter": ["has_item 0 20"], "A4": "Q5"}}}}
+        var dialog = new Dialog(null, data, this.inventory);
+        dialog.start();
+
+        test.ok(hasText(dialog, "Q1"));
+        test.ok(hasText(dialog, "A1"));
+
+        dialog.choose(0);
+        test.ok(hasText(dialog, "Q2"));
+        test.ok(hasText(dialog, "A2"));
+
+        dialog.choose(0);
+        test.ok(hasText(dialog, "Q3"));
+        test.ok(hasText(dialog, "Ask something else."));
+        test.ok(hasText(dialog, "Leave the conversation."));
+
+        dialog.choose(0);
+        test.ok(hasText(dialog, "Q1"));
+        test.ok(hasText(dialog, "A1"));
+
+        dialog.choose(0);
+        test.ok(hasText(dialog, "Q4"));
+        test.ok(hasText(dialog, "A4"));
+
+        dialog.choose(0);
+        test.ok(hasText(dialog, "Q5"));
+        test.ok(hasText(dialog, "Ask something else."));
+        test.ok(hasText(dialog, "Leave the conversation."));
+
+        test.done();
+    },
     hasItem: function(test) {
         var data = {"How are you?":
                         {"Fine!" : {"filter": ["has_item 0"], "That's great!" : "xxx"}}

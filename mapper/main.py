@@ -173,6 +173,17 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
                 else:
                     if isinstance(data[key], unicode):
                         data[key] = {data[key]: None}
+                        if isinstance(ret, unicode):
+                            data[key][ret] = None
+                        #else:
+                            #data[key][ret[0]] = ret[1:]
+                    elif isinstance(data[key], list):
+                        data[key] = {data[key][0] : data[key][1:]}
+                        if isinstance(ret, unicode):
+                            data[key][ret] = None
+                        #else:
+                            #data[key][ret[0]] = ret[1:]
+                    elif isinstance(ret, unicode):
                         data[key][ret] = None
                     else:
                         print data[key], ret
