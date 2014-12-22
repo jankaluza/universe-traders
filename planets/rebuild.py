@@ -37,18 +37,19 @@ def get_children_list(ret, center, nodes, i):
     return ret
 
 def get_dialog_args(root, arg):
+    quests = []
     if isinstance(root, list):
-        quests = []
         for action in root:
             if action.startswith(arg):
                 quests += [action.split(" ")[1]]
-        return quests
     elif isinstance(root, dict):
-        quests = []
         for k,v in root.iteritems():
             quests += get_dialog_args(v, arg)
-        return quests
-    return []
+
+    # remove duplicates and sort
+    quests = list(set(quests))
+    quests.sort()
+    return quests
 
 def rebuildPlanets():
     global index

@@ -9,7 +9,7 @@ title: Moon
 ### People
 | Name | Quests started | Quests finished |
 |----------|------------------|
-| Cassius |  | moon_water moon_water |
+| Cassius |  | moon_water |
 ### Items to buy
 | Item | Category | Default price |
 |----------|------|------------|
