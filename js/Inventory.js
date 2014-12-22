@@ -142,6 +142,18 @@ Inventory.prototype.removeItem = function(item) {
     }
 };
 
+Inventory.prototype.freeSlotsCount = function() {
+    var count = 0;
+    for (var x = 0; x < 7; x++) {
+        for (var y = 0; y < 7; y++) {
+            if (!this.inventory[x][y]) {
+                count += 1;
+            }
+        }
+    }
+    return count;
+};
+
 Inventory.prototype.addItem = function(id, x, y) {
     if (this.itemManager.getItem(id).type == Item.FOOD) {
         this.ship.food = 100;

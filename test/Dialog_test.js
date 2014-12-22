@@ -3,7 +3,7 @@ require("./TestCommon.js").prepareTest();
 function hasText(dialog, text) {
     for (var i = 0; i < dialog.children.length; i++) {
         var child = dialog.children[i];
-        if (child.text == text) {
+        if (child.text.lastIndexOf(text, 0) === 0) {
             return true;
         }
     }
@@ -93,6 +93,25 @@ exports['Dialog'] = {
         test.ok(hasText(dialog, "That's great!"));
         test.ok(this.inventory.hasItem(0));
         test.equal(this.inventory.itemCount(0), 5);
+
+        test.done();
+    },
+    addItemsNoSpace: function(test) {
+        var data = {"How are you?":
+                        {"Fine!" : ["That's great!", "add_item 0", "add_item 0 100"]}
+                   };
+        var dialog = new Dialog(null, data, this.inventory);
+        dialog.start();
+
+        test.ok(!this.inventory.hasItem(0));
+        test.equal(this.inventory.itemCount(0), 0);
+
+        dialog.choose(0);
+        test.ok(hasText(dialog, "You don't have free space on your ship"));
+        test.ok(!hasText(dialog, "Fine!"));
+        test.ok(!hasText(dialog, "That's great!"));
+        test.ok(!this.inventory.hasItem(0));
+        test.equal(this.inventory.itemCount(0), 0);
 
         test.done();
     },

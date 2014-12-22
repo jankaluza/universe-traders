@@ -47,7 +47,32 @@ Dialog.prototype.showSentence = function(i, sentence) {
     this.addChild(response);
 };
 
+Dialog.prototype.checkCommandsRestrictions = function(root) {
+    var count;
+    for (var i = 1; i < root.length; i++) {
+        var args = root[i].split(" ");
+        if (args[0] == "add_item") {
+            count = args.length == 3 ? parseInt(args[2], 10) : 1;
+            if (this.inventory.freeSlotsCount() < count) {
+                return "You don't have free space on your ship, you need at least " + count + " free slots.";
+            }
+        }
+        else if (args[0] == "remove_credit") {
+            if (this.inventory.ship.credit - parseInt(args[1]) < 0) {
+                return "You don't have enough credits, you need at least " + args[1] + " credits.";
+            }
+        }
+    }
+
+    return null;
+};
+
 Dialog.prototype.executeCommands = function(root) {
+    var error = this.checkCommandsRestrictions(root);
+    if (error) {
+        return error;
+    }
+
     var count, x;
     for (var i = 1; i < root.length; i++) {
         var args = root[i].split(" ");
