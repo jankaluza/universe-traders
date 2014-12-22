@@ -142,13 +142,8 @@ title: %s
             p += "### Prices\n"
             p += "| Category | Price coeficient |\n"
             p += "|----------|------------------|\n"
-            p += "| %s | %.3f |\n" % ("Engines", float(d['prices'][0]))
-            p += "| %s | %.3f |\n" % ("Fuel", float(d['prices'][1]))
-            p += "| %s | %.3f |\n" % ("Food", float(d['prices'][2]))
-            p += "| %s | %.3f |\n" % ("Ship improvements", float(d['prices'][3]))
-            p += "| %s | %.3f |\n" % ("Special food", float(d['prices'][4]))
-            p += "| %s | %.3f |\n" % ("Machines", float(d['prices'][5]))
-            p += "| %s | %.3f |\n" % ("Guns", float(d['prices'][6]))
+            for i in range(len(d["prices"])):
+                p += "| %s | %.3f |\n" % (types[i], float(d['prices'][i]))
 
         mkdir_p(name)
         planet = open(name + "/index.md", "w")
