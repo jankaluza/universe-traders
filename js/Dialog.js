@@ -79,7 +79,7 @@ Dialog.prototype.executeCommands = function(root) {
 };
 
 Dialog.prototype.executeFilter = function(root) {
-    if (typeof root == "string" || Array.isArray(root)) {
+    if (!root || typeof root == "string" || Array.isArray(root)) {
         return true;
     }
 

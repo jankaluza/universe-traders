@@ -171,7 +171,12 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
                 if isinstance(ret, dict):
                     data[key].update(ret)
                 else:
-                    data[key] = ret
+                    if isinstance(data[key], unicode):
+                        data[key] = {data[key]: None}
+                        data[key][ret] = None
+                    else:
+                        print data[key], ret
+                        data[key] = ret
             if isinstance(data[key], dict) and filters != "":
                 data[key]["filter"] = [x.strip(' ') for x in filters.split(";")]
             return data
