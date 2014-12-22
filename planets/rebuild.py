@@ -96,8 +96,13 @@ title: %s
         else:
             p += ".\n"
 
+        if "desc" in d and d["desc"] != "":
+            p += "* **Description**: "
+            p += d["desc"]
+            p += "\n"
+
         if d['type'] != 1:
-            types = ["Engine", "Food", "Fuel", "Ship improvement", "Special food"]
+            types = ["Engine", "Food", "Fuel", "Ship improvement", "Special food", "Machine", "Gun"]
 
             p += "### People\n"
             x = ""
@@ -142,6 +147,8 @@ title: %s
             p += "| %s | %.3f |\n" % ("Food", float(d['prices'][2]))
             p += "| %s | %.3f |\n" % ("Ship improvements", float(d['prices'][3]))
             p += "| %s | %.3f |\n" % ("Special food", float(d['prices'][4]))
+            p += "| %s | %.3f |\n" % ("Machines", float(d['prices'][5]))
+            p += "| %s | %.3f |\n" % ("Guns", float(d['prices'][6]))
 
         mkdir_p(name)
         planet = open(name + "/index.md", "w")

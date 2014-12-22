@@ -25,7 +25,7 @@ def rebuildItems():
     data = json.load(f)
     f.close()
 
-    types = ["Engine", "Food", "Fuel", "Ship improvement", "Special food"]
+    types = ["Engine", "Food", "Fuel", "Ship improvement", "Special food", "Machine", "Gun"]
 
     keys = data["items"].keys()
     keys.sort()
