@@ -48,13 +48,20 @@ Dialog.prototype.showSentence = function(i, sentence) {
 };
 
 Dialog.prototype.executeCommands = function(root) {
+    var count, x;
     for (var i = 1; i < root.length; i++) {
         var args = root[i].split(" ");
         if (args[0] == "add_item") {
-            this.inventory.addItem(parseInt(args[1]));
+            count = args.length == 3 ? parseInt(args[2], 10) : 1;
+            for (x = 0; x < count; x++) {
+                this.inventory.addItem(parseInt(args[1]));
+            }
         }
         else if (args[0] == "remove_item") {
-            this.inventory.removeItem(args[1]);
+            count = args.length == 3 ? parseInt(args[2], 10) : 1;
+            for (x = 0; x < count; x++) {
+                this.inventory.removeItem(args[1]);
+            }
         }
         else if (args[0] == "add_token" || args[0] == "start_quest") {
             localStorage.setItem("dialog." + args[1], 1);
@@ -87,6 +94,7 @@ Dialog.prototype.executeFilter = function(root) {
         return true;
     }
 
+    var count, x;
     for (var i = 0; i < root.filter.length; i++) {
         var args = root.filter[i].split(" ");
         var neg = args[0].charAt(0) == "!";
@@ -105,7 +113,11 @@ Dialog.prototype.executeFilter = function(root) {
             }
         }
         else if (args[0] == "has_item") {
-            if (this.inventory.hasItem(args[1]) == neg) {
+            count = args.length == 3 ? parseInt(args[2], 10) : 1;
+            if (count === 1 && this.inventory.hasItem(args[1]) == neg) {
+                return false;
+            }
+            else if ((this.inventory.itemCount(args[1]) == count) == neg) {
                 return false;
             }
         }
@@ -144,7 +156,7 @@ Dialog.prototype.generate = function(root) {
             continue;
         }
 
-        if (root[key] && !this.executeFilter(root[key])) {
+        if (!this.executeFilter(root[key])) {
             continue;
         }
 

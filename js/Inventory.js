@@ -101,6 +101,18 @@ Inventory.prototype.hasItem = function(id) {
     return false;
 };
 
+Inventory.prototype.itemCount = function(id) {
+    var counter = 0;
+    for (var x = 0; x < 7; x++) {
+        for (var y = 0; y < 7; y++) {
+            if (this.inventory[x][y] && this.inventory[x][y].item.id == id) {
+                counter += 1;
+            }
+        }
+    }
+    return counter;
+};
+
 Inventory.prototype.removeAll = function() {
     for (var x = 0; x < 7; x++) {
         for (var y = 0; y < 7; y++) {
