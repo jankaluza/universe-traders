@@ -24,6 +24,7 @@ exports.prepareTest = function() {
     global.PIXI = require("../bower_components/pixi.js/bin/pixi.js")
     global.radio = require("../bower_components/radio/radio.min.js")
     global.Ship = require("../js/Ship.js");
+    global.PlayerShip = require("../js/PlayerShip.js");
     global.Item = require("../js/Item.js");
     global.ItemSprite = require("../js/ItemSprite.js");
     global.ItemManager = require("../js/ItemManager.js");

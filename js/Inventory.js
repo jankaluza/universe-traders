@@ -50,8 +50,8 @@ Inventory.prototype.recountStats = function() {
         return;
     }
     this.ship.fuelPerPoint = 0;
-    this.ship.sanityPerPoint = Ship.SANITY_PER_POINT;
-    this.ship.foodPerPoint = Ship.FOOD_PER_POINT;
+    this.ship.sanityPerPoint = PlayerShip.SANITY_PER_POINT;
+    this.ship.foodPerPoint = PlayerShip.FOOD_PER_POINT;
     this.ship.speed = 0;
     var gotEngine = false;
 

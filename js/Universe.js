@@ -10,7 +10,7 @@ function Universe() {
     PIXI.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
 
     // Create ship
-    this.ship = new Ship();
+    this.ship = new PlayerShip();
     this.addChild(this.ship);
 
     this.panel = new Panel(this, this.ship);
@@ -236,20 +236,28 @@ Universe.prototype.click = function(data) {
 * @private
 */
 Universe.prototype.setCurrentObject = function(object) {
-    // This means object == this.currentObject
-    if (object && object.shipObject) {
+    if (!object && ! this.currentObject) {
         return;
     }
-    
+
+    // This means object == this.currentObject
+    if (object && object.shipObject && this.currentObject.type == MapObject.PLANET) {
+        return;
+    }
+
     if (this.currentObject) {
-        this.currentObject.shipObject = null;
+        if (!object || object.type == MapObject.PLANET) {
+            this.currentObject.shipObject = null;
+        }
         radio("objectLeft").broadcast(this.currentObject);
     }
 
     this.currentObject = object;
 
     if (object) {
-        object.shipObject = this;
+        if (object.type == MapObject.PLANET) {
+            object.shipObject = this;
+        }
         radio("objectTouched").broadcast(object);
     }
 
@@ -271,9 +279,7 @@ Universe.prototype.update = function(dt) {
         this.objManager.doOrbitalMovement();
 
         visitedObject = this.objManager.updateStaggedObjects();
-        if (visitedObject) {
-            this.setCurrentObject(visitedObject);
-        }
+        this.setCurrentObject(visitedObject);
     }
 
     this.statsTimer += dt;
@@ -338,7 +344,7 @@ Universe.prototype.update = function(dt) {
             this.panel.update();
             visitedObject = this.objManager.updateObjects();
             this.setCurrentObject(visitedObject);
-            if (!visitedObject || visitedObject.type == MapObject.STAR) {
+            if (!visitedObject || visitedObject.type != MapObject.PLANET) {
                 this.ship.moved();
             }
         }
@@ -369,6 +375,7 @@ Universe.prototype.update = function(dt) {
 Universe.prototype.objectsLoaded = function() {
     var visitedObject = this.objManager.updateObjects();
     this.setCurrentObject(visitedObject);
+    this.objManager.reset();
     this.load();
 };
 

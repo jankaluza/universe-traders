@@ -6,7 +6,7 @@ function isFloatEqual(one, two) {
 
 exports['Inventory'] = {
     setUp: function(done) {
-        this.ship = new Ship();
+        this.ship = new PlayerShip();
         this.itemManager = new ItemManager();
         this.inventory = new Inventory(this.ship, this.itemManager);
         done();
@@ -73,14 +73,14 @@ exports['Inventory'] = {
         this.inventory.addItem(0);
         test.ok(isFloatEqual(this.ship.speed, 0.1));
         test.ok(isFloatEqual(this.ship.fuelPerPoint, 0.2));
-        test.ok(isFloatEqual(this.ship.sanityPerPoint, Ship.SANITY_PER_POINT + 0.3));
-        test.ok(isFloatEqual(this.ship.foodPerPoint, Ship.FOOD_PER_POINT + 0.4));
+        test.ok(isFloatEqual(this.ship.sanityPerPoint, PlayerShip.SANITY_PER_POINT + 0.3));
+        test.ok(isFloatEqual(this.ship.foodPerPoint, PlayerShip.FOOD_PER_POINT + 0.4));
 
         this.inventory.addItem(1);
         test.ok(isFloatEqual(this.ship.speed, 0.5));
         test.ok(isFloatEqual(this.ship.fuelPerPoint, 0.5));
-        test.ok(isFloatEqual(this.ship.sanityPerPoint, Ship.SANITY_PER_POINT + 0.5));
-        test.ok(isFloatEqual(this.ship.foodPerPoint, Ship.FOOD_PER_POINT + 0.5));
+        test.ok(isFloatEqual(this.ship.sanityPerPoint, PlayerShip.SANITY_PER_POINT + 0.5));
+        test.ok(isFloatEqual(this.ship.foodPerPoint, PlayerShip.FOOD_PER_POINT + 0.5));
 
         test.done();
     },

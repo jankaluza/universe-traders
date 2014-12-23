@@ -8,6 +8,7 @@ function ObjectManager(universe) {
     this.boundToStaged = [];
     // Parent object of all objects on screen (currently Sun).
     this.centralObject = null;
+    this.ships = [];
 }
 
 ObjectManager.prototype.loadObjects = function() {
@@ -18,14 +19,20 @@ ObjectManager.prototype.loadObjects = function() {
         var key, object;
         for (key in evt.content.content.json.map) {
             object = evt.content.content.json.map[key];
-            var obj = new MapObject(key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed);
+            var obj = new MapObject(that, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed, object.waypoints);
             that.objects[that.objects.length] = obj;
             objects[key] = obj;
+            if (object.type >= MapObject.SHIP) {
+                that.ships[that.ships.length] = obj;
+            }
         }
 
         // Add parent->child relationship between objects to computer orbits
         for (key in evt.content.content.json.map) {
             object = evt.content.content.json.map[key];
+            if (object.type >= MapObject.SHIP) {
+                continue;
+            }
             var center = object.orbit_center;
             if (center !== "") {
                 objects[key].parentObject = objects[center];
@@ -44,9 +51,10 @@ ObjectManager.prototype.loadObjects = function() {
 
 ObjectManager.prototype.doOrbitalMovement = function() {
     if (this.centralObject) {
-//         this.centralObject.position.x = -(this.centralObject.mapX - this.left) * Universe.MAP_POINT_SIZE;
-//         this.centralObject.position.y = -(this.centralObject.mapY - this.top) * Universe.MAP_POINT_SIZE;
         this.centralObject.doOrbitalMovement(0, 0, 0, 0);
+    }
+    for (var index = 0; index < this.ships.length; index++) {
+        this.ships[index].doOrbitalMovement(0, 0, 0, 0);
     }
 };
 
@@ -111,7 +119,12 @@ ObjectManager.prototype.addToStage = function(obj) {
     }
     obj.staged = true;
     this.staged[this.staged.length] = obj;
-    this.universe.addChildAt(obj, 0);
+    if (obj.type >= MapObject.SHIP) {
+        this.universe.addChild(obj);
+    }
+    else {
+        this.universe.addChildAt(obj, 0);
+    }
 
 //     console.log("Added to stage: " + obj.name);
 

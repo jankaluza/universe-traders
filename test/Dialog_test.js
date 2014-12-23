@@ -13,7 +13,7 @@ function hasText(dialog, text) {
 exports['Dialog'] = {
     setUp: function(done) {
         localStorage.clear();
-        this.ship = new Ship();
+        this.ship = new PlayerShip();
         this.itemManager = new ItemManager();
         this.itemManager.addItem(new Item(0, "Item", Item.ENGINE, "resources/0.png", 100, 1, null, null, null));
         this.inventory = new Inventory(this.ship, this.itemManager);

@@ -2,7 +2,7 @@ require("./TestCommon.js").prepareTest();
 
 exports['DialogManager'] = {
     setUp: function(done) {
-        this.ship = new Ship();
+        this.ship = new PlayerShip();
         this.itemManager = new ItemManager();
         this.inventory = new Inventory(this.ship, this.itemManager);
         this.stage = new PIXI.Stage(0x000000, true);
@@ -20,7 +20,7 @@ exports['DialogManager'] = {
         done();
     },
     simpleDialog: function(test) {
-        var obj = new MapObject("Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [], [], 10, 10, 0.1);
+        var obj = new MapObject(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [], [], 10, 10, 0.1);
 
         var data = {"0": {"events": ["Earth_touched"], "dialog": {"A": {"B": "C"}}}};
         this.dialogManager.parseDialogs(data);
@@ -47,7 +47,7 @@ exports['DialogManager'] = {
         test.done();
     },
     onlyOnce: function(test) {
-        var obj = new MapObject("Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [], [], 10, 10, 0.1);
+        var obj = new MapObject(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [], [], 10, 10, 0.1);
 
         var data = {"0": {"events": ["Earth_touched"], "once": true, "dialog": {"A": {"B": "C"}}}};
         this.dialogManager.parseDialogs(data);
