@@ -8,7 +8,7 @@ exports['Planet'] = {
         this.itemManager.addItem(new Item(1, "Item", Item.ENGINE, "resources/1.png", 100, 1, null, null, null));
         this.itemManager.addItem(new Item(2, "Item", Item.FOOD, "resources/2.png", 100, 1, null, null, null));
         this.itemManager.addItem(new Item(3, "Item", Item.FUEL, "resources/3.png", 100, 1, null, null, null));
-        this.planet = new Planet(this.ship, this.itemManager);
+        this.planet = new PlanetInventory(this.ship, this.itemManager);
         done();
     },
     tearDown: function(done) {

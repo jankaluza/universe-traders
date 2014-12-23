@@ -33,6 +33,6 @@ exports.prepareTest = function() {
     global.DialogManager = require("../js/DialogManager.js");
     global.MapObject = require("../js/MapObject.js");
     global.Universe = require("../js/Universe.js");
-    global.Planet = require("../js/Planet.js");
+    global.PlanetInventory = require("../js/PlanetInventory.js");
     global.ItemInfo = require("../js/ItemInfo.js");
 }

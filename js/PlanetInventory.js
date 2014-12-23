@@ -163,7 +163,7 @@ PlanetInventory.prototype.addDialogs = function() {
     }
 };
 
-PlanetInventory.prototype.setPlanetInventory = function(planet) {
+PlanetInventory.prototype.setPlanet = function(planet) {
     this.planet = planet;
     if (this.planet) {
         this._addItem(2);
