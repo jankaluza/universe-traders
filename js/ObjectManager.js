@@ -113,7 +113,7 @@ ObjectManager.prototype.addToStage = function(obj) {
         this.staged[this.staged.length] = obj;
         obj.position.x = -(obj.mapX - this.left) * Universe.MAP_POINT_SIZE;
         obj.position.y = -(obj.mapY - this.top) * Universe.MAP_POINT_SIZE;
-        this.universe.addChild(obj);
+        this.universe.addChildAt(obj, 1);
         return;
     }
 
