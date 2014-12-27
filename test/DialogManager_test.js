@@ -20,7 +20,7 @@ exports['DialogManager'] = {
         done();
     },
     simpleDialog: function(test) {
-        var obj = new MapObject(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [], [], 10, 10, 0.1);
+        var obj = new CelestialBody(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [], [], 10, 10, 0.1);
 
         var data = {"0": {"events": ["Earth_touched"], "dialog": {"A": {"B": "C"}}}};
         this.dialogManager.parseDialogs(data);
@@ -47,7 +47,7 @@ exports['DialogManager'] = {
         test.done();
     },
     onlyOnce: function(test) {
-        var obj = new MapObject(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [], [], 10, 10, 0.1);
+        var obj = new CelestialBody(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [], [], 10, 10, 0.1);
 
         var data = {"0": {"events": ["Earth_touched"], "once": true, "dialog": {"A": {"B": "C"}}}};
         this.dialogManager.parseDialogs(data);

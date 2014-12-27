@@ -38,14 +38,14 @@ exports['ItemInfo'] = {
         test.done();
     },
     fromInventoryToPlanet: function(test) {
-        var obj = new MapObject(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
+        var obj = new CelestialBody(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
         this.planet.setPlanet(obj);
         var itemInfo = new ItemInfo(this.itemManager, this.ship, this.item, "drop", this.inventory, this.planet);
         test.ok(hasText(itemInfo, "Price: 67"));
         test.done();
     },
     fromPlanetToInventory: function(test) {
-        var obj = new MapObject(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
+        var obj = new CelestialBody(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
         this.planet.setPlanet(obj);
         this.ship.credit = 0;
         var itemInfo = new ItemInfo(this.itemManager, this.ship, this.item, "drop", this.planet, this.inventory);
@@ -56,7 +56,7 @@ exports['ItemInfo'] = {
     sell: function(test) {
         this.ship.credit = 0;
         this.inventory.addItem(0);
-        var obj = new MapObject(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
+        var obj = new CelestialBody(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
         this.planet.setPlanet(obj);
         var itemInfo = new ItemInfo(this.itemManager, this.ship, this.item, "drop", this.inventory, this.planet);
         test.ok(hasText(itemInfo, "drop"));
@@ -68,7 +68,7 @@ exports['ItemInfo'] = {
     },
     buy: function(test) {
         this.ship.credit = 90;
-        var obj = new MapObject(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
+        var obj = new CelestialBody(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
         this.planet.setPlanet(obj);
         var itemInfo = new ItemInfo(this.itemManager, this.ship, this.item, "drop", this.planet, this.inventory);
         test.ok(hasText(itemInfo, "drop"));
@@ -82,7 +82,7 @@ exports['ItemInfo'] = {
     drop: function(test) {
         this.ship.credit = 0;
         this.inventory.addItem(0);
-        var obj = new MapObject(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
+        var obj = new CelestialBody(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
         this.planet.setPlanet(obj);
         var itemInfo = new ItemInfo(this.itemManager, this.ship, this.item, "drop", this.inventory, null);
 

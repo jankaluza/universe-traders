@@ -16,10 +16,15 @@ ObjectManager.prototype.loadObjects = function() {
     var loader = new PIXI.JsonLoader("resources/map.json");
     loader.on('loaded', function(evt) {
         objects = {}; // tmp variable to map name:MapObject
-        var key, object;
+        var key, object, obj;
         for (key in evt.content.content.json.map) {
             object = evt.content.content.json.map[key];
-            var obj = new MapObject(that, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed, object.waypoints);
+            if (object.type >= MapObject.SHIP) {
+                obj = new IntelligentShip(that, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_speed, object.waypoints);
+            }
+            else {
+                obj = new CelestialBody(that, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed);
+            }
             that.objects[that.objects.length] = obj;
             objects[key] = obj;
             if (object.type >= MapObject.SHIP) {
@@ -80,32 +85,38 @@ ObjectManager.prototype.removeFromStage = function(obj) {
     this.staged.splice(this.staged.indexOf(obj), 1);
     obj.staged = false;
     this.universe.removeChild(obj);
-//     console.log("Removed from stage: " + obj.name);
 
-    // We are removing object which still has some stagged children, so
-    // this object is bound to them. Movate it to boundToStaged.
-    if (obj.staggedChildren !== 0) {
-        this.boundToStaged[this.boundToStaged.length] = obj;
-//         console.log("Added to boundToStaged: " + obj.name);
-    }
+    if (obj.type < MapObject.SHIP) {
+        // We are removing object which still has some stagged children, so
+        // this object is bound to them. Movate it to boundToStaged.
+        if (obj.staggedChildren !== 0) {
+            this.boundToStaged[this.boundToStaged.length] = obj;
+        }
 
-    // Decrease the "staggedChildren" of all parents of this object.
-    while (obj.parentObject) {
-        obj = obj.parentObject;
-        obj.staggedChildren -= 1;
-        // If this parent does not have any stagged children and is not
-        // stagged, we can remove it from boundToStaged, because there's
-        // no reason to keep it there.
-        if (obj.staggedChildren === 0 && !obj.staged) {
-//             console.log("Removed from boundToStaged: " + obj.name);
-            this.boundToStaged.splice(this.boundToStaged.indexOf(obj), 1);
+        // Decrease the "staggedChildren" of all parents of this object.
+        while (obj.parentObject) {
+            obj = obj.parentObject;
+            obj.staggedChildren -= 1;
+            // If this parent does not have any stagged children and is not
+            // stagged, we can remove it from boundToStaged, because there's
+            // no reason to keep it there.
+            if (obj.staggedChildren === 0 && !obj.staged) {
+                this.boundToStaged.splice(this.boundToStaged.indexOf(obj), 1);
+            }
         }
     }
-
-    
 };
 
 ObjectManager.prototype.addToStage = function(obj) {
+    if (obj.type >= MapObject.SHIP) {
+        obj.staged = true;
+        this.staged[this.staged.length] = obj;
+        obj.position.x = -(obj.mapX - this.left) * Universe.MAP_POINT_SIZE;
+        obj.position.y = -(obj.mapY - this.top) * Universe.MAP_POINT_SIZE;
+        this.universe.addChild(obj);
+        return;
+    }
+
     // We are adding object which has been in boundToStagged before, so we have
     // to remove it from boundToStagged.
     if (obj.staggedChildren !== 0) {
@@ -119,14 +130,7 @@ ObjectManager.prototype.addToStage = function(obj) {
     }
     obj.staged = true;
     this.staged[this.staged.length] = obj;
-    if (obj.type >= MapObject.SHIP) {
-        this.universe.addChild(obj);
-    }
-    else {
-        this.universe.addChildAt(obj, 0);
-    }
-
-//     console.log("Added to stage: " + obj.name);
+    this.universe.addChildAt(obj, 0);
 
     // Increase the staggedChildren counter of all parents.
     while (obj.parentObject) {
@@ -137,11 +141,8 @@ ObjectManager.prototype.addToStage = function(obj) {
             obj.position.x = -(obj.mapX - this.left) * Universe.MAP_POINT_SIZE;
             obj.position.y = -(obj.mapY - this.top) * Universe.MAP_POINT_SIZE;
             this.boundToStaged[this.boundToStaged.length] = obj;
-//             console.log("Added to boundToStaged: " + obj.name);
         }
     }
-
-    
 };
 
 ObjectManager.prototype.getObject = function(x, y) {

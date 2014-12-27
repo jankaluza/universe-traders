@@ -245,6 +245,7 @@ Universe.prototype.setCurrentObject = function(object) {
         return;
     }
 
+//     console.log("currentObjectChanged " + object.type);
     if (this.currentObject) {
         if (!object || object.type == MapObject.PLANET) {
             this.currentObject.shipObject = null;
