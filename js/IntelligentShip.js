@@ -44,6 +44,7 @@ IntelligentShip.prototype.computeWaypointMapPoint = function() {
         this.movingY = parseInt(args[1], 10);
     }
     else {
+        // TODO: Store objects in hasharray to speed up finding.
         var object = null;
         for (var index = 0; index < this.objManager.objects.length; index++) {
             if (this.objManager.objects[index].name == args[0]) {
@@ -51,20 +52,16 @@ IntelligentShip.prototype.computeWaypointMapPoint = function() {
                 break;
             }
         }
-//         console.log(object);
+
         this.movingX = object.mapX;
         this.movingY = object.mapY;
-//         console.log(object.name + " " + object.mapX + " " + object.mapY + " " + this.mapX + " " + this.mapY);
     }
 
     // compute global point where we want to end up
-//     var x = this.movingX * Universe.MAP_POINT_SIZE - this.tilePositionX;
-//     var y = this.movingY * Universe.MAP_POINT_SIZE - this.tilePositionY;
     var shipAngle = Math.atan2(this.movingY - this.mapY, this.movingX - this.mapX);
-    this.setNewRotation(shipAngle);
     this.xVel = 1.9 * Math.cos(shipAngle);
     this.yVel = 1.9 * Math.sin(shipAngle);
-//     console.log(this.xVel + " " + this.yVel);
+    this.setNewRotation(shipAngle);
 };
 
 IntelligentShip.prototype.setNextWaypoint = function() {
@@ -127,8 +124,13 @@ IntelligentShip.prototype.load = function() {
 };
 
 IntelligentShip.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, addY) {
-    this.computeWaypointMapPoint();
-    this.setNextWaypoint();
+    if (this.cycles > 10) {
+        this.computeWaypointMapPoint();
+        this.setNextWaypoint();
+        this.cycles = 0;
+    }
+
+    this.cycles += 1;
     this.addX += this.xVel;
     this.addY += this.yVel;
     this.position.x -= this.xVel;
@@ -139,13 +141,11 @@ IntelligentShip.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, a
         this.mapX += (this.addX / 15) >> 0;
         this.addX = this.addX % 15;
         this.mapX = this.mapX >> 0;
-//             console.log(this.mapX + " " + this.mapY);
     }
     if (this.addY > Universe.MAP_POINT_SIZE || this.addY < -Universe.MAP_POINT_SIZE) {
         this.mapY += (this.addY / 15) >> 0;
         this.addY = this.addY % 15;
         this.mapY = this.mapY >> 0;
-//             console.log(this.mapX + " " + this.mapY);
     }
     Ship.prototype.update.call(this);
 };
