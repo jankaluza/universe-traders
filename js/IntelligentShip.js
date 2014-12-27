@@ -1,5 +1,5 @@
 function IntelligentShip(objManager, name, type, texture, x, y, items, prices, speed, waypoints) {
-    Ship.call(this, "resources/ship.png", "resources/ship_moving.png");
+    Ship.call(this, texture, texture);
 
     this.objManager = objManager;
     this.collideWidth = this.width * 0.8;
@@ -26,16 +26,32 @@ function IntelligentShip(objManager, name, type, texture, x, y, items, prices, s
     this.addY = 0;  // Internal, counts increase of position.y per tick.
     this.cycles = 0;    // Internal counter.
     this.mapText = null;
+    this.disableMovement = false;
 
     while (this.prices.length != Item.LAST_CATEGORY) {
         this.prices[this.prices.length] = 1;
     }
+
+    radio("objectTouched").subscribe(this.handleObjectTouched.bind(this));
+    radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
 
     this.reset();
 }
 
 IntelligentShip.constructor = IntelligentShip;
 IntelligentShip.prototype = Object.create(Ship.prototype);
+
+IntelligentShip.prototype.handleObjectTouched = function(obj) {
+    if (obj.name == this.name) {
+        this.disableMovement = true;
+    }
+};
+
+IntelligentShip.prototype.handleObjectLeft = function(obj) {
+     if (obj.name == this.name) {
+        this.disableMovement = false;
+    }
+};
 
 IntelligentShip.prototype.computeWaypointMapPoint = function() {
     var args = this.waypoints[this.waypoint].split(" ");
@@ -124,6 +140,10 @@ IntelligentShip.prototype.load = function() {
 };
 
 IntelligentShip.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, addY) {
+    if (this.disableMovement) {
+        return;
+    }
+
     if (this.cycles > 10) {
         this.computeWaypointMapPoint();
         this.setNextWaypoint();

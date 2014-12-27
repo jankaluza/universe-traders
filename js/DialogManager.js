@@ -8,6 +8,7 @@ function DialogManager(stage, inventory) {
     this.stage = stage;
     this.inventory = inventory;
     this.currentDialog = null;
+    this.currentName = "";
     this.dialogs = {};
     this.eventToDialog = {};
     this.objectToDialog = {};
@@ -49,11 +50,20 @@ DialogManager.prototype.loadDialogs = function() {
 DialogManager.prototype.handleDialogFinished = function() {
     this.stage.removeChild(this.currentDialog);
     this.currentDialog = null;
+    this.currentName = "";
     radio("dialogFinished").broadcast();
 };
 
 DialogManager.prototype.executeDialog = function(name, eventResult) {
+    if (this.currentName == name) {
+        return;
+    }
+
     var dialog = this.dialogs[name];
+
+    if (this.currentDialog) {
+        this.handleDialogFinished(this.currentDialog);
+    }
 
     this.currentDialog = new Dialog(dialog.face, dialog.dialog, this.inventory);
     this.currentDialog.onDialogFinished = this.handleDialogFinished.bind(this);
@@ -85,6 +95,9 @@ DialogManager.prototype.handleObjectTouched = function(object) {
 DialogManager.prototype.handleObjectLeft = function(object) {
     var name = object.name + "_left";
     if (!(name in this.eventToDialog), true) {
+        if (this.currentDialog) {
+            this.handleDialogFinished(this.currentDialog);
+        }
         return;
     }
 
