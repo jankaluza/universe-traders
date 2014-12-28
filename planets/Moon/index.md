@@ -9,7 +9,7 @@ title: Moon
 ### People
 | Name | Quests started | Quests finished |
 |----------|------------------|
-| Cassius |  | moon_water |
+| Cassius | venus_guns | moon_water |
 ### Items to buy
 | Item | Category | Default price |
 |----------|------|------------|
@@ -23,4 +23,4 @@ title: Moon
 | Ship improvement | 1.000 |
 | Special food | 1.400 |
 | Machine | 1.200 |
-| Gun | 0.050 |
+| Gun | 0.010 |

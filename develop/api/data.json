@@ -165,7 +165,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 258,
+            "line": 267,
             "description": "Updates the universe. This is the main looping method of the game called\non every tick.",
             "params": [
                 {
@@ -180,7 +180,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 363,
+            "line": 370,
             "description": "Called when all the objects on the map are loaded.",
             "itemtype": "method",
             "name": "objectsLoaded",

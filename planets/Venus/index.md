@@ -9,7 +9,7 @@ title: Venus
 ### People
 | Name | Quests started | Quests finished |
 |----------|------------------|
-| Pearson |  |  |
+| Pearson |  | venus_guns |
 ### Items to buy
 No items.
 ### Prices
@@ -21,4 +21,4 @@ No items.
 | Ship improvement | 0.400 |
 | Special food | 1.600 |
 | Machine | 1.000 |
-| Gun | 0.050 |
+| Gun | 0.010 |

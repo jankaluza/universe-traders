@@ -26,4 +26,4 @@ title: Earth
 | Ship improvement | 0.900 |
 | Special food | 0.700 |
 | Machine | 0.800 |
-| Gun | 0.050 |
+| Gun | 0.010 |
