@@ -5,3 +5,4 @@ release
 *.kate-swp
 scratch
 docs/
+npm-debug.log

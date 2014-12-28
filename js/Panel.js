@@ -118,3 +118,9 @@ Panel.prototype.click = function(data) {
         }
     }
 };
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = Panel;
+    }
+}

@@ -11,45 +11,49 @@ function ObjectManager(universe) {
     this.ships = [];
 }
 
+ObjectManager.prototype.parseObjects = function(map) {
+    var objects = {}; // tmp variable to map name:MapObject
+    var key, object, obj;
+    for (key in map) {
+        object = map[key];
+        if (object.type >= MapObject.SHIP) {
+            obj = new IntelligentShip(this, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_speed, object.waypoints);
+        }
+        else {
+            obj = new CelestialBody(this, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed);
+        }
+        this.objects[this.objects.length] = obj;
+        objects[key] = obj;
+        if (object.type >= MapObject.SHIP) {
+            this.ships[this.ships.length] = obj;
+        }
+    }
+
+    // Add parent->child relationship between objects to computer orbits
+    for (key in map) {
+        object = map[key];
+        if (object.type >= MapObject.SHIP) {
+            continue;
+        }
+        var center = object.orbit_center;
+        if (center !== "") {
+            objects[key].parentObject = objects[center];
+            objects[center].childrenObjects[objects[center].childrenObjects.length] = objects[key];
+        }
+        else {
+            this.centralObject = objects[key];
+        }
+    }
+
+    this.updateObjects();
+    if (this.onObjectsLoaded) this.onObjectsLoaded();
+};
+
 ObjectManager.prototype.loadObjects = function() {
     var that = this;
     var loader = new PIXI.JsonLoader("resources/map.json");
     loader.on('loaded', function(evt) {
-        objects = {}; // tmp variable to map name:MapObject
-        var key, object, obj;
-        for (key in evt.content.content.json.map) {
-            object = evt.content.content.json.map[key];
-            if (object.type >= MapObject.SHIP) {
-                obj = new IntelligentShip(that, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_speed, object.waypoints);
-            }
-            else {
-                obj = new CelestialBody(that, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed);
-            }
-            that.objects[that.objects.length] = obj;
-            objects[key] = obj;
-            if (object.type >= MapObject.SHIP) {
-                that.ships[that.ships.length] = obj;
-            }
-        }
-
-        // Add parent->child relationship between objects to computer orbits
-        for (key in evt.content.content.json.map) {
-            object = evt.content.content.json.map[key];
-            if (object.type >= MapObject.SHIP) {
-                continue;
-            }
-            var center = object.orbit_center;
-            if (center !== "") {
-                objects[key].parentObject = objects[center];
-                objects[center].childrenObjects[objects[center].childrenObjects.length] = objects[key];
-            }
-            else {
-                that.centralObject = objects[key];
-            }
-        }
-
-        that.updateObjects();
-        if (that.onObjectsLoaded) that.onObjectsLoaded();
+        that.parseObjects(evt.content.content.json.map);
     });
     loader.load();
 };
@@ -252,3 +256,8 @@ ObjectManager.prototype.load = function() {
     }
 };
 
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = ObjectManager;
+    }
+}
