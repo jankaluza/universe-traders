@@ -8,7 +8,26 @@ module.exports = function(grunt) {
     uglify: {
       production: {
         files: {
-          'release/js/ut.js': 'js/*.js'
+          'release/js/ut.js': ["js/Universe.js",
+                "js/Ship.js",
+                "js/PlayerShip.js",
+                "js/IntelligentShip.js",
+                "js/Panel.js",
+                "js/MapObject.js",
+                "js/CelestialBody.js",
+                "js/ObjectManager.js",
+                "js/Inventory.js",
+                "js/PlanetInventory.js",
+                "js/Item.js",
+                "js/ItemManager.js",
+                "js/ItemSprite.js",
+                "js/ItemInfo.js",
+                "js/Map.js",
+                "js/AssetsLoader.js",
+                "js/Menu.js",
+                "js/DialogManager.js",
+                "js/Dialog.js",
+                "js/Main.js"]
         }
       }
     },
