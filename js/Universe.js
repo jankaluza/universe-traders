@@ -280,7 +280,9 @@ Universe.prototype.update = function(dt) {
         this.objManager.doOrbitalMovement();
 
         visitedObject = this.objManager.updateStaggedObjects();
-        this.setCurrentObject(visitedObject);
+        if (!this.stopMove) {
+            this.setCurrentObject(visitedObject);
+        }
     }
 
     this.statsTimer += dt;
