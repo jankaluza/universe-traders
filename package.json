@@ -10,6 +10,7 @@
     "grunt-contrib-nodeunit": "~0.4.1",
     "grunt-contrib-jshint": "latest",
     "grunt-contrib-yuidoc": "latest",
+    "grunt-exec": "latest",
     "matchdep": "~0.3.0",
     "jsdom": "~1.4.1",
     "canvas": "~1.1.6",

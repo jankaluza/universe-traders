@@ -63,12 +63,31 @@ module.exports = function(grunt) {
             browser: true,
             laxbreak: true
         }
+    },
+    exec: {
+        merge_to_pages: [
+            'git checkout gh-pages',
+            './sync-with-master.sh',
+            'git commit -a -m "sync with master"',
+            'git push',
+            'git checkout master'
+        ].join('&&'),
+        build_android: [
+            'cd phonegap',
+            'rm -rf www',
+            'cp -R ../release www',
+            'phonegap build android',
+            'adb install ./platforms/android/ant-build/CordovaApp-debug-unaligned.apk',
+            'cd ..'
+        ].join(';'),
     }
   });
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.registerTask('default', 'Default task', ['clean', 'uglify', 'copy', 'yuidoc']);
+  grunt.registerTask('publish', 'Publish', ['default', 'exec:merge_to_pages']);
+  grunt.registerTask('android', 'Build android', ['default', 'exec:build_android']);
   grunt.registerTask('test', 'Test', ['nodeunit', 'jshint']);
 
 };
