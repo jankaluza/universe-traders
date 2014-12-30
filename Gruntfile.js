@@ -77,7 +77,7 @@ module.exports = function(grunt) {
             'rm -rf www',
             'cp -R ../release www',
             'phonegap build android',
-            'adb install ./platforms/android/ant-build/CordovaApp-debug-unaligned.apk',
+            'adb install -r ./platforms/android/ant-build/CordovaApp-debug-unaligned.apk',
             'cd ..'
         ].join(';'),
     }
