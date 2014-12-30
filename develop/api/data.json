@@ -180,7 +180,7 @@
         },
         {
             "file": "js/Universe.js",
-            "line": 370,
+            "line": 372,
             "description": "Called when all the objects on the map are loaded.",
             "itemtype": "method",
             "name": "objectsLoaded",
