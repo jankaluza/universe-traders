@@ -216,7 +216,9 @@ Dialog.prototype.choose = function(choice) {
     console.log("choise " + choice);
     if (this.rootKeys.length === 0) {
         if (choice === 0) {
-            this.start();
+            if (!this.start()) {
+                this.onDialogFinished();
+            }
         }
         else {
             this.onDialogFinished();
