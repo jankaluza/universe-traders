@@ -47,6 +47,7 @@ Inventory.prototype.recountStats = function() {
         this.ship.sanityPerPoint = 0.0;
         this.ship.foodPerPoint = 0.0;
         this.ship.speed = 3;
+        this.ship.fuel = 100;
         return;
     }
     this.ship.fuelPerPoint = 0;
