@@ -14,7 +14,7 @@ Overlay.constructor = Overlay;
 Overlay.prototype = Object.create(PIXI.Graphics.prototype);
 
 Overlay.prototype.laserShot = function(from, to, time) {
-    var hit = (time * from.attack * (1 - to.defense)) >> 0
+    var hit = (time * from.attack * (1 - to.defense)) >> 0;
     to.fuel -= hit;
     to.fuel = to.fuel >> 0;
     if (to.fuel <= 0) {
