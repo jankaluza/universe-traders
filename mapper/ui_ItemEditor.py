@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ItemEditor.ui'
 #
-# Created: Mon Dec 22 15:25:09 2014
+# Created: Wed Dec 31 16:16:32 2014
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -39,6 +39,8 @@ class Ui_ItemEditor(object):
         item_0 = QtGui.QTreeWidgetItem(self.items)
         item_0 = QtGui.QTreeWidgetItem(self.items)
         item_0 = QtGui.QTreeWidgetItem(self.items)
+        item_0 = QtGui.QTreeWidgetItem(self.items)
+        item_0 = QtGui.QTreeWidgetItem(self.items)
         self.gridLayout.addWidget(self.items, 0, 0, 1, 1)
         self.buttonBox = QtGui.QDialogButtonBox(ItemEditor)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
@@ -68,5 +70,7 @@ class Ui_ItemEditor(object):
         self.items.topLevelItem(4).setText(0, _translate("ItemEditor", "Special food", None))
         self.items.topLevelItem(5).setText(0, _translate("ItemEditor", "Machine", None))
         self.items.topLevelItem(6).setText(0, _translate("ItemEditor", "Gun", None))
+        self.items.topLevelItem(7).setText(0, _translate("ItemEditor", "Ship weapon", None))
+        self.items.topLevelItem(8).setText(0, _translate("ItemEditor", "Ship shield", None))
         self.items.setSortingEnabled(__sortingEnabled)
 

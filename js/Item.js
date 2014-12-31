@@ -17,7 +17,9 @@ Item.SHIP_IMPROVEMENT = 3;
 Item.SPECIAL_FOOD = 4;
 Item.MACHINE = 5;
 Item.GUN = 6;
-Item.LAST_CATEGORY = 7;
+Item.SHIP_WEAPON = 7;
+Item.SHIP_SHIELD = 8;
+Item.LAST_CATEGORY = 9;
 
 Item.constructor = Item;
 // Item.prototype = Object.create(PIXI.Sprite.prototype);

@@ -359,6 +359,8 @@ class ObjectEditor(QtGui.QWidget, ui_ObjectEditor.Ui_ObjectEditor):
         QtCore.QObject.connect(self.editDialogs, QtCore.SIGNAL('clicked()'), self.editDialog)
         QtCore.QObject.connect(self.name, QtCore.SIGNAL("textEdited(const QString &)"), self.nameChanged)
         QtCore.QObject.connect(self.waypoints, QtCore.SIGNAL("textEdited(const QString &)"), self.waypointsChanged)
+        QtCore.QObject.connect(self.attack, QtCore.SIGNAL("textEdited(const QString &)"), self.attackChanged)
+        QtCore.QObject.connect(self.defense, QtCore.SIGNAL("textEdited(const QString &)"), self.defenseChanged)
         QtCore.QObject.connect(self.texture, QtCore.SIGNAL("textEdited(const QString &)"), self.textureChanged)
         QtCore.QObject.connect(self.center, QtCore.SIGNAL("textEdited(const QString &)"), self.centerChanged)
         QtCore.QObject.connect(self.x, QtCore.SIGNAL("valueChanged ( int )"), self.xChanged)
@@ -431,9 +433,19 @@ class ObjectEditor(QtGui.QWidget, ui_ObjectEditor.Ui_ObjectEditor):
             self.main.m.data["map"][unicode(name)] = self.main.m.data["map"][self.n]
             del self.main.m.data["map"][self.n]
         else:
-            self.main.m.data["map"][unicode(name)] = {"items":[], "type":0, "texture":"", "x":self.x.value(), "y":self.y.value(), "prices":[1,1,1,1,1], "desc":""}
+            self.main.m.data["map"][unicode(name)] = {"items":[], "type":0, "texture":"", "x":self.x.value(), "y":self.y.value(), "prices":[1,1,1,1,1,1,1], "desc":""}
         self.n = unicode(name)
         self.main.m.reloadTextures()
+
+    def attackChanged(self, attack):
+        if self.n:
+            w = float(unicode(attack))
+            self.main.m.data["map"][self.n]["attack"] = w
+
+    def defenseChanged(self, defense):
+        if self.n:
+            w = float(unicode(defense))
+            self.main.m.data["map"][self.n]["defense"] = w
 
     def waypointsChanged(self, waypoints):
         if self.n:
@@ -491,6 +503,10 @@ class ObjectEditor(QtGui.QWidget, ui_ObjectEditor.Ui_ObjectEditor):
             for i in range(0, len(obj["prices"])):
                 self.prices.item(i, 0).setText(str(obj["prices"][i]))
             self.waypoints.setText("; ".join(obj["waypoints"]))
+            if obj.has_key("attack"):
+                self.attack.setText(str(obj["attack"]))
+            if obj.has_key("defense"):
+                self.defense.setText(str(obj["defense"]))
 
             for item in obj["items"]:
                 it = QtGui.QListWidgetItem(self.main.items.data["items"][str(item)]["name"])
@@ -499,6 +515,8 @@ class ObjectEditor(QtGui.QWidget, ui_ObjectEditor.Ui_ObjectEditor):
         else:
             self.name.setText("")
             self.desc.setText("")
+            self.attack.setText("")
+            self.defense.setText("")
             self.texture.setText("")
             self.x.setValue(x)
             self.y.setValue(y)

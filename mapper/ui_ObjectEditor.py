@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ObjectEditor.ui'
 #
-# Created: Tue Dec 23 12:49:19 2014
+# Created: Wed Dec 31 16:16:22 2014
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -102,9 +102,21 @@ class Ui_ObjectEditor(object):
         self.waypointsBox.setObjectName(_fromUtf8("waypointsBox"))
         self.gridLayout_2 = QtGui.QGridLayout(self.waypointsBox)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
+        self.attack = QtGui.QLineEdit(self.waypointsBox)
+        self.attack.setObjectName(_fromUtf8("attack"))
+        self.gridLayout_2.addWidget(self.attack, 1, 1, 1, 1)
+        self.label_13 = QtGui.QLabel(self.waypointsBox)
+        self.label_13.setObjectName(_fromUtf8("label_13"))
+        self.gridLayout_2.addWidget(self.label_13, 1, 0, 1, 1)
+        self.defense = QtGui.QLineEdit(self.waypointsBox)
+        self.defense.setObjectName(_fromUtf8("defense"))
+        self.gridLayout_2.addWidget(self.defense, 2, 1, 1, 1)
         self.waypoints = QtGui.QLineEdit(self.waypointsBox)
         self.waypoints.setObjectName(_fromUtf8("waypoints"))
-        self.gridLayout_2.addWidget(self.waypoints, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.waypoints, 0, 0, 1, 2)
+        self.label_14 = QtGui.QLabel(self.waypointsBox)
+        self.label_14.setObjectName(_fromUtf8("label_14"))
+        self.gridLayout_2.addWidget(self.label_14, 2, 0, 1, 1)
         self.gridLayout_3.addWidget(self.waypointsBox, 6, 0, 1, 3)
         self.label_8 = QtGui.QLabel(ObjectEditor)
         self.label_8.setObjectName(_fromUtf8("label_8"))
@@ -132,7 +144,7 @@ class Ui_ObjectEditor(object):
         self.prices.setCornerButtonEnabled(False)
         self.prices.setObjectName(_fromUtf8("prices"))
         self.prices.setColumnCount(1)
-        self.prices.setRowCount(7)
+        self.prices.setRowCount(9)
         item = QtGui.QTableWidgetItem()
         self.prices.setVerticalHeaderItem(0, item)
         item = QtGui.QTableWidgetItem()
@@ -147,6 +159,10 @@ class Ui_ObjectEditor(object):
         self.prices.setVerticalHeaderItem(5, item)
         item = QtGui.QTableWidgetItem()
         self.prices.setVerticalHeaderItem(6, item)
+        item = QtGui.QTableWidgetItem()
+        self.prices.setVerticalHeaderItem(7, item)
+        item = QtGui.QTableWidgetItem()
+        self.prices.setVerticalHeaderItem(8, item)
         item = QtGui.QTableWidgetItem()
         self.prices.setHorizontalHeaderItem(0, item)
         self.prices.horizontalHeader().setVisible(True)
@@ -193,6 +209,8 @@ class Ui_ObjectEditor(object):
         self.label_12.setText(_translate("ObjectEditor", "Speed:", None))
         self.label_10.setText(_translate("ObjectEditor", "Elipse a:", None))
         self.waypointsBox.setTitle(_translate("ObjectEditor", "Waypoints", None))
+        self.label_13.setText(_translate("ObjectEditor", "Attack:", None))
+        self.label_14.setText(_translate("ObjectEditor", "Defense:", None))
         self.label_8.setText(_translate("ObjectEditor", "Desc:", None))
         self.label_5.setText(_translate("ObjectEditor", "Prices:", None))
         item = self.prices.verticalHeaderItem(0)
@@ -209,6 +227,10 @@ class Ui_ObjectEditor(object):
         item.setText(_translate("ObjectEditor", "Machine", None))
         item = self.prices.verticalHeaderItem(6)
         item.setText(_translate("ObjectEditor", "Gun", None))
+        item = self.prices.verticalHeaderItem(7)
+        item.setText(_translate("ObjectEditor", "Ship weapon", None))
+        item = self.prices.verticalHeaderItem(8)
+        item.setText(_translate("ObjectEditor", "Ship shield", None))
         item = self.prices.horizontalHeaderItem(0)
         item.setText(_translate("ObjectEditor", "Price", None))
         self.label_6.setText(_translate("ObjectEditor", "Items:", None))

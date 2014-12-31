@@ -84,6 +84,16 @@
        <string>Gun</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Ship weapon</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ship shield</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="1" column="0">

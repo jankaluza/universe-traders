@@ -1,6 +1,8 @@
-function IntelligentShip(objManager, name, type, texture, x, y, items, prices, speed, waypoints) {
+function IntelligentShip(objManager, name, type, texture, x, y, items, prices, speed, waypoints, attack, defense) {
     Ship.call(this, texture, texture);
 
+    this.attack = attack;
+    this.defense = defense;
     this.objManager = objManager;
     this.collideWidth = this.width * 0.8;
     this.collideHeight = this.height * 0.8;

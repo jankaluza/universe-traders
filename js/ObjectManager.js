@@ -17,7 +17,7 @@ ObjectManager.prototype.parseObjects = function(map) {
     for (key in map) {
         object = map[key];
         if (object.type >= MapObject.SHIP) {
-            obj = new IntelligentShip(this, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_speed, object.waypoints);
+            obj = new IntelligentShip(this, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_speed, object.waypoints, object.attack, object.defense);
         }
         else {
             obj = new CelestialBody(this, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed);

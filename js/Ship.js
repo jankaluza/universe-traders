@@ -7,7 +7,8 @@ function Ship(texture, movingTexture) {
     this.pivot.y = this.height / 2;
     this.position.x = Main.WIDTH / 2;
     this.position.y = Main.HEIGHT / 2;
-
+    this.attack = 0.1;
+    this.defense = 0.1;
     this.reset();
 }
 
@@ -67,8 +68,6 @@ Ship.prototype.reset = function() {
     this.newRotation = 0;
     this.speed = 0.9;
     this.fuel = 100;
-    this.attack = 0.1;
-    this.defense = 0.1;
 };
 
 Ship.prototype.save = function() {
