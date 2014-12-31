@@ -31,6 +31,7 @@ function IntelligentShip(objManager, name, type, texture, x, y, items, prices, s
     this.disableMovement = false;
     this.closeShips = [];
     this.shootTimer = (Math.random() * 100) >> 0;
+    this.respawnTimer = 0;
 
     while (this.prices.length != Item.LAST_CATEGORY) {
         this.prices[this.prices.length] = 1;
@@ -55,6 +56,13 @@ IntelligentShip.prototype.handleObjectLeft = function(obj) {
      if (obj.name == this.name) {
         this.disableMovement = false;
     }
+};
+
+IntelligentShip.prototype.destroy = function() {
+    this.respawnTimer = 1000;
+    this.mapX = 0;
+    this.mapY = 0;
+    radio("objectDestroyed").broadcast(this);
 };
 
 IntelligentShip.prototype.computeWaypointMapPoint = function() {
@@ -124,6 +132,7 @@ IntelligentShip.prototype.save = function() {
     localStorage.setItem(this.name + ".mapY", this.mapY);
     localStorage.setItem(this.name + ".addX", this.addX);
     localStorage.setItem(this.name + ".addY", this.addY);
+    localStorage.setItem(this.name + ".respawnTimer", this.respawnTimer);
 };
 
 IntelligentShip.prototype.load = function() {
@@ -141,6 +150,7 @@ IntelligentShip.prototype.load = function() {
     this.mapY = parseInt(localStorage.getItem(this.name + ".mapY"));
     this.addX = parseFloat(localStorage.getItem(this.name + ".addX"));
     this.addY = parseFloat(localStorage.getItem(this.name + ".addY"));
+    this.respawnTimer = parseInt(localStorage.getItem(this.name + ".respawnTimer"));
 };
 
 IntelligentShip.prototype.shootAt = function(obj) {
@@ -148,6 +158,13 @@ IntelligentShip.prototype.shootAt = function(obj) {
 };
 
 IntelligentShip.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, addY) {
+    if (this.respawnTimer !== 0) {
+        this.respawnTimer -= 1;
+        if (this.respawnTimer === 0) {
+            this.reset();
+        }
+    }
+
     if (this.staged && this.closeShips.length !== 0) {
         this.shootTimer += 1;
         if (this.shootTimer > 100) {

@@ -18,7 +18,7 @@ Overlay.prototype.laserShot = function(from, to, time) {
     to.fuel -= hit;
     to.fuel = to.fuel >> 0;
     if (to.fuel <= 0) {
-        radio("objectDestroyed").broadcast(to);
+        to.destroy();
     }
 
     var hitText = new PIXI.Text("-" + hit, {font: "24px Snippet", fill: "white", align: "left"});

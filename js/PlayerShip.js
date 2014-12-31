@@ -17,6 +17,10 @@ PlayerShip.prototype.timeout = function() {
     this.updateStats();
 };
 
+PlayerShip.prototype.destroy = function() {
+    
+}
+
 PlayerShip.prototype.updateStats = function() {
     if (this.fuel < 0) {
         if (this.onOutOfFuel) this.onOutOfFuel();
