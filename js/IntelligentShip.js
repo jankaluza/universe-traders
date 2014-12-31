@@ -27,6 +27,8 @@ function IntelligentShip(objManager, name, type, texture, x, y, items, prices, s
     this.cycles = 0;    // Internal counter.
     this.mapText = null;
     this.disableMovement = false;
+    this.closeShips = [];
+    this.shootTimer = (Math.random() * 100) >> 0;
 
     while (this.prices.length != Item.LAST_CATEGORY) {
         this.prices[this.prices.length] = 1;
@@ -108,6 +110,7 @@ IntelligentShip.prototype.reset = function() {
     this.addX = 0;
     this.addY = 0;
     this.cycles = 0;
+    this.closeShips = [];
 };
 
 IntelligentShip.prototype.save = function() {
@@ -139,7 +142,21 @@ IntelligentShip.prototype.load = function() {
     this.addY = parseFloat(localStorage.getItem(this.name + ".addY"));
 };
 
+IntelligentShip.prototype.shootAt = function(obj) {
+    console.log("SHOOT");
+    this.objManager.universe.overlay.laserShot(this, obj, 20);
+};
+
 IntelligentShip.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, addY) {
+    if (this.staged && this.closeShips.length !== 0) {
+        this.shootTimer += 1;
+        if (this.shootTimer > 100) {
+            var ship = this.closeShips[((Math.random() * this.closeShips.length) >> 0)];
+            this.shootAt(ship);
+            this.shootTimer = 0;
+        }
+    }
+
     if (this.disableMovement) {
         return;
     }

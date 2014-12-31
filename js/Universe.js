@@ -9,6 +9,8 @@ function Universe() {
     var texture = PIXI.Texture.fromImage("resources/universe.png");
     PIXI.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
 
+    this.overlay = new Overlay(this);
+
     // Create ship
     this.ship = new PlayerShip();
     this.addChild(this.ship);
@@ -367,6 +369,7 @@ Universe.prototype.update = function(dt) {
     }
 
     this.ship.update();
+    this.overlay.update();
 };
 
 /**

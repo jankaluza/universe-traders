@@ -109,6 +109,26 @@ ObjectManager.prototype.removeFromStage = function(obj) {
             }
         }
     }
+    else {
+        obj.closeShips.splice(0, obj.closeShips.length);
+        for (var i = 0; i < this.staged.length; i++) {
+            var o = this.staged[i];
+            if (o.type < MapObject.SHIP || o.name == obj.name) {
+                continue;
+            }
+
+            if (obj.type === o.type) {
+                continue;
+            }
+
+            for (var index = 0; index < o.closeShips.length; index++) {
+                if (o.closeShips[index].name == obj.name) {
+                    o.closeShips.splice(index, 1);
+                    break;
+                }
+            }
+        }
+    }
 };
 
 ObjectManager.prototype.addToStage = function(obj) {
@@ -118,6 +138,20 @@ ObjectManager.prototype.addToStage = function(obj) {
         obj.position.x = -(obj.mapX - this.left) * Universe.MAP_POINT_SIZE;
         obj.position.y = -(obj.mapY - this.top) * Universe.MAP_POINT_SIZE;
         this.universe.addChildAt(obj, this.universe.children.length - 1);
+
+        for (var i = 0; i < this.staged.length; i++) {
+            var o = this.staged[i];
+            if (o.type < MapObject.SHIP || o.name == obj.name) {
+                continue;
+            }
+
+            if (obj.type === o.type) {
+                continue;
+            }
+
+            o.closeShips[o.closeShips.length] = obj;
+            obj.closeShips[obj.closeShips.length] = o;
+        }
         return;
     }
 

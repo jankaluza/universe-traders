@@ -35,6 +35,7 @@ exports.prepareTest = function() {
     global.CelestialBody = require("../js/CelestialBody.js");
     global.IntelligentShip = require("../js/IntelligentShip.js");
     global.Panel = require("../js/Panel.js");
+    global.Overlay = require("../js/Overlay.js");
     global.Universe = require("../js/Universe.js");
     global.ObjectManager = require("../js/ObjectManager.js");
     global.PlanetInventory = require("../js/PlanetInventory.js");
