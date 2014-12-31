@@ -92,7 +92,6 @@ IntelligentShip.prototype.setNextWaypoint = function() {
         && this.movingY > (this.mapY - 3)
         && this.movingY < (this.mapY + 3)) {
         this.waypoint = (this.waypoint + 1) % this.waypoints.length;
-        console.log("Moving to " + this.waypoints[this.waypoint]);
         this.computeWaypointMapPoint();
     }
 };

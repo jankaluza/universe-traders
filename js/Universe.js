@@ -220,6 +220,13 @@ Universe.prototype.click = function(data) {
     if (this.stopMove) {
         return;
     }
+
+    var object = this.objManager.getObject(data.global.x, data.global.y);
+    if (object && object.type == MapObject.ENEMY_SHIP) {
+        this.overlay.laserShot(this.ship, object, 20);
+        return;
+    }
+
     // We have to use point reflection with the screen center to get the proper
     // point, because we are moving with the background which has to move the
     // opposite direction than the point where the mouse is to simulate ship
