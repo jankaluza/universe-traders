@@ -66,16 +66,21 @@ Ship.prototype.reset = function() {
     this.rotation = 0;
     this.newRotation = 0;
     this.speed = 0.9;
+    this.fuel = 100;
+    this.attack = 0.1;
+    this.defense = 0.1;
 };
 
 Ship.prototype.save = function() {
-    localStorage.setItem("ship.rotation", this.rotation);
-    localStorage.setItem("ship.newRotation", this.newRotation);
+    localStorage.setItem(this.name + ".rotation", this.rotation);
+    localStorage.setItem(this.name + ".newRotation", this.newRotation);
+    localStorage.setItem(this.name + ".fuel", this.fuel);
 };
 
 Ship.prototype.load = function() {
-    this.rotation = parseFloat(localStorage.getItem("ship.rotation"));
-    this.newRotation = parseFloat(localStorage.getItem("ship.newRotation"));
+    this.rotation = parseFloat(localStorage.getItem(this.name + ".rotation"));
+    this.newRotation = parseFloat(localStorage.getItem(this.name + ".newRotation"));
+    this.fuel = parseFloat(localStorage.getItem(this.name + ".fuel"));
 };
 
 if (typeof exports !== 'undefined') {

@@ -16,9 +16,18 @@ Overlay.prototype = Object.create(PIXI.Graphics.prototype);
 Overlay.prototype.laserShot = function(from, to, time) {
     this.shots[this.shots.length] = [from, to, time];
     if (!this.showed) {
-//         this.universe.addChildAt(this, 0);
         this.universe.addChild(this);
         this.showed = true;
+    }
+
+    to.fuel -= time * from.attack * (1 - to.defense);
+    to.fuel = to.fuel >> 0;
+    if (to.fuel <= 0) {
+        radio("objectDestroyed").broadcast(to);
+        console.log("objectDestroyed " + to.name)
+    }
+    else {
+        console.log("objectHit " + to.name + " " + to.fuel)
     }
 };
 

@@ -143,7 +143,6 @@ IntelligentShip.prototype.load = function() {
 };
 
 IntelligentShip.prototype.shootAt = function(obj) {
-    console.log("SHOOT");
     this.objManager.universe.overlay.laserShot(this, obj, 20);
 };
 

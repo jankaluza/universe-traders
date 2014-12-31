@@ -1,5 +1,6 @@
 function PlayerShip() {
     Ship.call(this, "resources/ship.png", "resources/ship_moving.png");
+    this.name = "ship";
 
     this.reset();
 }
@@ -82,7 +83,6 @@ PlayerShip.prototype.reset = function() {
 
 PlayerShip.prototype.save = function() {
     Ship.prototype.save.call(this);
-    localStorage.setItem("ship.fuel", this.fuel);
     localStorage.setItem("ship.food", this.food);
     localStorage.setItem("ship.sanity", this.sanity);
     localStorage.setItem("ship.credit", this.credit);
@@ -91,7 +91,6 @@ PlayerShip.prototype.save = function() {
 PlayerShip.prototype.load = function() {
     Ship.prototype.load.call(this);
 
-    this.fuel = parseFloat(localStorage.getItem("ship.fuel"));
     if (this.fuel === 0) {
         this.fuel = -1;
         this.fuelState = 1;

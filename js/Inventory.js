@@ -54,6 +54,8 @@ Inventory.prototype.recountStats = function() {
     this.ship.sanityPerPoint = PlayerShip.SANITY_PER_POINT;
     this.ship.foodPerPoint = PlayerShip.FOOD_PER_POINT;
     this.ship.speed = 0;
+    this.ship.attack = 0;
+    this.ship.defense = 0;
     var gotEngine = false;
 
     for (x = 0; x < 7; x++) {
@@ -71,6 +73,12 @@ Inventory.prototype.recountStats = function() {
                 }
                 if (item.food) {
                     this.ship.foodPerPoint += item.food;
+                }
+                if (item.defense) {
+                    this.ship.defense += item.defense;
+                }
+                if (item.attack) {
+                    this.ship.attack += item.attack;
                 }
                 if (item.type == Item.ENGINE) {
                     gotEngine = true;
