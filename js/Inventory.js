@@ -210,8 +210,10 @@ Inventory.prototype.itemsLoaded = function() {
 
 Inventory.prototype.reset = function() {
     this.removeAll();
-    this.addItem(0);
-    this.addItem(1);
+    this.addItem(0);  // Basic Engine
+    this.addItem(1);  // Basic Interia Damper
+    this.addItem(11); // Phaser
+    this.addItem(12); // Basic Shield
 };
 
 Inventory.prototype.save = function() {
