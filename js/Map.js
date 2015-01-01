@@ -37,6 +37,12 @@ Map.prototype.update = function() {
         if (obj.type == MapObject.PLANET) {
             this.lineStyle(2, 0x00FFFF, 1);
         }
+        else if (obj.type == MapObject.SHIP) {
+            this.lineStyle(2, 0x00FF00, 1);
+        }
+        else if (obj.type == MapObject.ENEMY_SHIP) {
+            this.lineStyle(2, 0xFF0000, 1);
+        }
         else {
             this.lineStyle(2, 0xFFFF00, 1);
         }
