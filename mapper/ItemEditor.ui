@@ -49,6 +49,16 @@
        <string>Sanity</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Attack</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Defense</string>
+      </property>
+     </column>
      <item>
       <property name="text">
        <string>Engine</string>

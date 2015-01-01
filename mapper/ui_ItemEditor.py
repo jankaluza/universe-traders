@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ItemEditor.ui'
 #
-# Created: Wed Dec 31 16:16:32 2014
+# Created: Thu Jan  1 18:00:12 2015
 #      by: PyQt4 UI code generator 4.10.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -61,6 +61,8 @@ class Ui_ItemEditor(object):
         self.items.headerItem().setText(3, _translate("ItemEditor", "Speed", None))
         self.items.headerItem().setText(4, _translate("ItemEditor", "Food", None))
         self.items.headerItem().setText(5, _translate("ItemEditor", "Sanity", None))
+        self.items.headerItem().setText(6, _translate("ItemEditor", "Attack", None))
+        self.items.headerItem().setText(7, _translate("ItemEditor", "Defense", None))
         __sortingEnabled = self.items.isSortingEnabled()
         self.items.setSortingEnabled(False)
         self.items.topLevelItem(0).setText(0, _translate("ItemEditor", "Engine", None))
