@@ -8,7 +8,7 @@ ItemManager.prototype.loadItems = function() {
     loader.on('loaded', function(evt) {
         for (var key in evt.content.content.json.items) {
             var item = evt.content.content.json.items[key];
-            var it = new Item(that.items.length, item.name, item.type, item.texture, item.price, item.speed, item.fuel, item.sanity, item.food);
+            var it = new Item(that.items.length, item.name, item.type, item.texture, item.price, item.speed, item.fuel, item.sanity, item.food, item.attack, item.defense);
             that.items[that.items.length] = it;
         }
         if (that.onItemsLoaded) that.onItemsLoaded();

@@ -56,6 +56,22 @@ function ItemInfo(itemManager, ship, item, action, from, to) {
         y += 25;
         this.addChild(food);
     }
+    if (item.attack) {
+        var attack = new PIXI.Text("Damage: +" + item.attack,
+                                  {font: "20px Snippet", fill: "lightgreen"});
+        attack.position.x = 70;
+        attack.position.y = y;
+        y += 25;
+        this.addChild(attack);
+    }
+    if (item.defense) {
+        var defense = new PIXI.Text("Defense: +" + item.defense,
+                                  {font: "20px Snippet", fill: "lightgreen"});
+        defense.position.x = 70;
+        defense.position.y = y;
+        y += 25;
+        this.addChild(defense);
+    }
 
     var _price = item.price;
     _price = this.from.correctPrice(item, _price, false);

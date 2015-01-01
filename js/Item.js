@@ -1,4 +1,4 @@
-function Item(id, name, type, texture, price, speed, fuel, sanity, food) {
+function Item(id, name, type, texture, price, speed, fuel, sanity, food, attack, defense) {
     this.id = id;
     this.texture = texture;
     this.name = name;
@@ -8,6 +8,8 @@ function Item(id, name, type, texture, price, speed, fuel, sanity, food) {
     this.price = price;
     this.sanity = sanity;
     this.food = food;
+    this.attack = attack;
+    this.defense = defense;
 }
 
 Item.ENGINE = 0;
