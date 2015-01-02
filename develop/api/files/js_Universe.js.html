@@ -89,6 +89,8 @@
                                 var texture = PIXI.Texture.fromImage(&quot;resources/universe.png&quot;);
                                 PIXI.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
                             
+                                this.overlay = new Overlay(this);
+                            
                                 // Create ship
                                 this.ship = new PlayerShip();
                                 this.addChild(this.ship);
@@ -298,6 +300,13 @@
                                 if (this.stopMove) {
                                     return;
                                 }
+                            
+                                var object = this.objManager.getObject(data.global.x, data.global.y);
+                                if (object &amp;&amp; object.type == MapObject.ENEMY_SHIP) {
+                                    this.overlay.laserShot(this.ship, object, 20);
+                                    return;
+                                }
+                            
                                 // We have to use point reflection with the screen center to get the proper
                                 // point, because we are moving with the background which has to move the
                                 // opposite direction than the point where the mouse is to simulate ship
@@ -447,6 +456,7 @@
                                 }
                             
                                 this.ship.update();
+                                this.overlay.update();
                             };
                             
                             /**
