@@ -79,7 +79,8 @@ Panel.prototype.update = function() {
 };
 
 Panel.prototype.handleObjectTouched = function(object) {
-    if (object.type == MapObject.STAR) {
+    if (object.type == MapObject.STAR
+        || (object.type == MapObject.SHIP && object.closeShips.length !== 0)) {
         this.handleObjectLeft(object);
         return;
     }
@@ -110,10 +111,8 @@ Panel.prototype.click = function(data) {
         }
     }
     else {
-        console.log("visit 1");
         if (this.object && this.onVisitObject && !this.disableVisit
             && this.ship.food > 0 && this.ship.sanity > 0) {
-            console.log("visit 2");
             this.onVisitObject(this.object);
         }
     }

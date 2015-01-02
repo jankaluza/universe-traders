@@ -47,7 +47,7 @@ IntelligentShip.constructor = IntelligentShip;
 IntelligentShip.prototype = Object.create(Ship.prototype);
 
 IntelligentShip.prototype.handleObjectTouched = function(obj) {
-    if (obj.name == this.name) {
+    if (obj.name == this.name && obj.closeShips.length === 0) {
         this.disableMovement = true;
     }
 };
