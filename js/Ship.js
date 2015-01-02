@@ -67,7 +67,7 @@ Ship.prototype.reset = function() {
     this.rotation = 0;
     this.newRotation = 0;
     this.speed = 0.9;
-    this.fuel = 100;
+    this.fuel = 1000;
 };
 
 Ship.prototype.save = function() {

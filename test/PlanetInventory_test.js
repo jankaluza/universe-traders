@@ -57,13 +57,13 @@ exports['PlanetInventory'] = {
         test.done();
     },
     correctPriceFoodFuel: function(test) {
-        this.ship.food = 50;
-        this.ship.fuel = 60
+        this.ship.food = 500;
+        this.ship.fuel = 600;
         var obj = new CelestialBody(null, "Earth", MapObject.PLANET, "resources/earth.png", 0, 0, [0, 1], [0.9], 10, 10, 0.1);
         this.planet.setPlanet(obj);
 
-        test.equal(this.planet.correctPrice(this.itemManager.getItem(2), 100, false), -5000);
-        test.equal(this.planet.correctPrice(this.itemManager.getItem(3), 100, false), -4000);
+        test.equal(this.planet.correctPrice(this.itemManager.getItem(2), 100, false), -50000);
+        test.equal(this.planet.correctPrice(this.itemManager.getItem(3), 100, false), -40000);
         test.done();
     }
 };

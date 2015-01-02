@@ -8,8 +8,8 @@ function PlayerShip() {
 PlayerShip.prototype = Object.create(Ship.prototype);
 PlayerShip.constructor = PlayerShip;
 
-PlayerShip.SANITY_PER_POINT = 0.1;
-PlayerShip.FOOD_PER_POINT = 0.2;
+PlayerShip.SANITY_PER_POINT = 1;
+PlayerShip.FOOD_PER_POINT = 2;
 
 PlayerShip.prototype.timeout = function() {
     this.food -= this.foodPerPoint;
@@ -19,18 +19,18 @@ PlayerShip.prototype.timeout = function() {
 
 PlayerShip.prototype.destroy = function() {
     
-}
+};
 
 PlayerShip.prototype.updateStats = function() {
     if (this.fuel < 0) {
         if (this.onOutOfFuel) this.onOutOfFuel();
         this.fuel = 0;
     }
-    else if (this.fuelState === 0 && this.fuel < 25) {
+    else if (this.fuelState === 0 && this.fuel < 250) {
         if (this.onLowFuel) this.onLowFuel();
         this.fuelState = 1;
     }
-    else if (this.fuelState == 1 && this.fuel > 25) {
+    else if (this.fuelState == 1 && this.fuel > 250) {
         if (this.onNormalFuel) this.onNormalFuel();
         this.fuelState = 0;
     }
@@ -39,11 +39,11 @@ PlayerShip.prototype.updateStats = function() {
         if (this.onOutOfFood) this.onOutOfFood();
         this.food = 0;
     }
-    else if (this.foodState === 0 && this.food < 25) {
+    else if (this.foodState === 0 && this.food < 250) {
         if (this.onLowFood) this.onLowFood();
         this.foodState = 1;
     }
-    else if (this.foodState == 1 && this.food > 25) {
+    else if (this.foodState == 1 && this.food > 250) {
         if (this.onNormalFood) this.onNormalFood();
         this.foodState = 0;
     }
@@ -52,11 +52,11 @@ PlayerShip.prototype.updateStats = function() {
         if (this.onOutOfSanity) this.onOutOfSanity();
         this.sanity = 0;
     }
-    else if (this.sanityState === 0 && this.sanity < 25) {
+    else if (this.sanityState === 0 && this.sanity < 250) {
         if (this.onLowSanity) this.onLowSanity();
         this.sanityState = 1;
     }
-    else if (this.sanityState == 1 && this.sanity > 25) {
+    else if (this.sanityState == 1 && this.sanity > 250) {
         if (this.onNormalSanity) this.onNormalSanity();
         this.sanityState = 0;
     }
@@ -69,14 +69,14 @@ PlayerShip.prototype.moved = function() {
 PlayerShip.prototype.reset = function() {
     Ship.prototype.reset.call(this);
 
-    this.fuel = 100;
-    this.fuelPerPoint = 1;
+    this.fuel = 1000;
+    this.fuelPerPoint = 5;
     this.fuelState = 0;
-    this.food = 100;
-    this.foodPerPoint = 0.2;
+    this.food = 1000;
+    this.foodPerPoint = 2;
     this.foodState = 0;
-    this.sanity = 100;
-    this.sanityPerPoint = 0.1;
+    this.sanity = 1000;
+    this.sanityPerPoint = 1;
     this.sanityState = 0;
     this.credit = 500;
 

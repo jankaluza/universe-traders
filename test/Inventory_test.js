@@ -49,7 +49,7 @@ exports['Inventory'] = {
 
         this.inventory.addItem(0);
         test.ok(!this.inventory.hasItem(0));
-        test.equal(this.ship.fuel, 100);
+        test.equal(this.ship.fuel, 1000);
         test.equal(this.ship.food, 0);
         test.done();
         
@@ -62,7 +62,7 @@ exports['Inventory'] = {
         this.inventory.addItem(0);
         test.ok(!this.inventory.hasItem(0));
         test.equal(this.ship.fuel, 0);
-        test.equal(this.ship.food, 100);
+        test.equal(this.ship.food, 1000);
         test.done();
         
     },

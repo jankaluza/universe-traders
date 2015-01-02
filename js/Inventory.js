@@ -165,12 +165,12 @@ Inventory.prototype.freeSlotsCount = function() {
 
 Inventory.prototype.addItem = function(id, x, y) {
     if (this.itemManager.getItem(id).type == Item.FOOD) {
-        this.ship.food = 100;
+        this.ship.food = 1000;
         return true;
     }
 
     if (this.itemManager.getItem(id).type == Item.FUEL) {
-        this.ship.fuel = 100;
+        this.ship.fuel = 1000;
         return true;
     }
 

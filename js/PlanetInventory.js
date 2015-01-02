@@ -45,10 +45,10 @@ PlanetInventory.prototype.click = function(data) {
 PlanetInventory.prototype.correctPrice = function(item, price, buy) {
     // For fuel and food, the price depends on the current state of fuel/food
     if (item.type == Item.FUEL) {
-        price *= 100 - this.ship.fuel;
+        price *= 1000 - this.ship.fuel;
     }
     else if (item.type == Item.FOOD) {
-        price *= 100 - this.ship.food;
+        price *= 1000 - this.ship.food;
     }
 
     // change the price according to current demand

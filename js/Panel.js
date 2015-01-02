@@ -67,15 +67,15 @@ Panel.prototype.enableVisiting = function() {
 
 Panel.prototype.updateCredit = function() {
     this.credit.setText(this.ship.credit);
-    this.fuel.width = 0.8 * this.ship.fuel;
-    this.food.width = 0.8 * this.ship.food;
-    this.sanity.width = 0.8 * this.ship.sanity;
+    this.fuel.width = 0.08 * this.ship.fuel;
+    this.food.width = 0.08 * this.ship.food;
+    this.sanity.width = 0.08 * this.ship.sanity;
 };
 
 Panel.prototype.update = function() {
-    this.fuel.width = 0.8 * this.ship.fuel;
-    this.food.width = 0.8 * this.ship.food;
-    this.sanity.width = 0.8 * this.ship.sanity;
+    this.fuel.width = 0.08 * this.ship.fuel;
+    this.food.width = 0.08 * this.ship.food;
+    this.sanity.width = 0.08 * this.ship.sanity;
 };
 
 Panel.prototype.handleObjectTouched = function(object) {
