@@ -30,6 +30,7 @@ module.exports = function(grunt) {
                 "js/DialogManager.js",
                 "js/Dialog.js",
                 "js/Statistics.js",
+                "js/Quests.js",
                 "js/Main.js"]
         }
       }

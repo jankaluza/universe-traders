@@ -195,6 +195,7 @@ Main.prototype.showMap = function() {
 Main.prototype.restartGame = function() {
     this.menu.hide();
     this.statistics.hide();
+    this.quests.hide();
     localStorage.clear();
     this.universe.reset();
     this.inventory.reset();
@@ -239,6 +240,7 @@ Main.prototype.assetsLoaded = function() {
 
     this.map = new Map(this.universe);
     this.statistics = new Statistics(this.universe.ship, this.stage);
+    this.quests = new Quests(this.stage);
 
     this.universe.loadMap();
     this.itemManager.loadItems();
