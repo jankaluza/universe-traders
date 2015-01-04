@@ -120,6 +120,7 @@ IntelligentShip.prototype.reset = function() {
     this.addY = 0;
     this.cycles = 0;
     this.closeShips = [];
+    this.disableMovement = false;
 };
 
 IntelligentShip.prototype.save = function() {
