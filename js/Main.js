@@ -39,6 +39,8 @@ function Main() {
     resize();
 
     this.loadAssets();
+
+    radio("restartGame").subscribe(this.restartGame.bind(this));
 }
 
 Main.prototype.update = function() {
@@ -116,7 +118,7 @@ Main.prototype.normalSanity = function() {
 };
 
 Main.prototype.visitObject = function(obj) {
-    this.universe.ship.sanity = 100;
+    this.universe.ship.sanity = 1000;
     if (this.planet.showed) {
         this.planet.setPlanet(null);
         this.stage.removeChild(this.planet);
@@ -176,13 +178,7 @@ Main.prototype.showItemInfo = function(fromInventory, item, ship) {
 };
 
 Main.prototype.showMenu = function() {
-    if (this.menu.showed) {
-        this.stage.removeChild(this.menu);
-    }
-    else {
-        this.stage.addChild(this.menu);
-    }
-    this.menu.showed = !this.menu.showed;
+    this.menu.toggle();
 };
 
 Main.prototype.showMap = function() {
@@ -197,9 +193,8 @@ Main.prototype.showMap = function() {
 };
 
 Main.prototype.restartGame = function() {
-    if (this.menu.showed) {
-        this.stage.removeChild(this.menu);
-    }
+    this.menu.hide();
+    this.statistics.hide();
     localStorage.clear();
     this.universe.reset();
     this.inventory.reset();
@@ -217,8 +212,7 @@ Main.prototype.loadAssets = function() {
 };
 
 Main.prototype.assetsLoaded = function() {
-    this.menu = new Menu();
-    this.menu.onRestart = this.restartGame.bind(this);
+    this.menu = new Menu(this.stage);
 
     this.universe = new Universe();
     this.universe.ship.onOutOfFuel = this.outOfFuel.bind(this);
@@ -244,6 +238,7 @@ Main.prototype.assetsLoaded = function() {
     this.planet.onItemClicked = this.showItemInfo.bind(this, false);
 
     this.map = new Map(this.universe);
+    this.statistics = new Statistics(this.universe.ship, this.stage);
 
     this.universe.loadMap();
     this.itemManager.loadItems();
