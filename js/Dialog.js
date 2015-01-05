@@ -48,7 +48,7 @@ Dialog.prototype.showSentence = function(i, sentence) {
 };
 
 Dialog.prototype.checkCommandsRestrictions = function(root) {
-    var count;
+    var count, found, y;
     for (var i = 1; i < root.length; i++) {
         var args = root[i].split(" ");
         if (args[0] == "add_item") {
@@ -62,6 +62,19 @@ Dialog.prototype.checkCommandsRestrictions = function(root) {
                 return "You don't have enough credits, you need at least " + args[1] + " credits.";
             }
         }
+        else if (args[0] == "start_quest") {
+            found = false;
+            for (y = 0; y < 10; y++) {
+                text = localStorage.getItem("quests." + y);
+                if (!text || text === "") {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                return "Sorry, you have too much quests in progress.";
+            }
+        }
     }
 
     return null;
@@ -73,7 +86,7 @@ Dialog.prototype.executeCommands = function(root) {
         return error;
     }
 
-    var count, x;
+    var count, x, text;
     for (var i = 1; i < root.length; i++) {
         var args = root[i].split(" ");
         if (args[0] == "add_item") {
@@ -88,14 +101,33 @@ Dialog.prototype.executeCommands = function(root) {
                 this.inventory.removeItem(args[1]);
             }
         }
-        else if (args[0] == "add_token" || args[0] == "start_quest") {
+        else if (args[0] == "add_token") {
             localStorage.setItem("dialog." + args[1], 1);
         }
+        else if (args[0] == "start_quest") {
+            for (x = 0; x < 10; x++) {
+                text = localStorage.getItem("quests." + x);
+                if (!text || text === "") {
+                    localStorage.setItem("quests." + x, args.slice(2).join(" "));
+                    localStorage.setItem("dialog." + args[1], x);
+                    break;
+                }
+            }
+        }
         else if (args[0] == "finish_quest") {
-            localStorage.setItem("dialog." + args[1], 2);
+            text = localStorage.getItem("dialog." + args[1]);
+            console.log("FINISH " + text);
+            if (text && text !== "") {
+                localStorage.removeItem("quests." + text);
+                localStorage.setItem("dialog." + args[1], -2);
+            }
         }
         else if (args[0] == "restart_quest") {
-            localStorage.removeItem("dialog." + args[1]);
+            text = localStorage.getItem("dialog." + args[1]);
+            if (text && text !== "") {
+                localStorage.removeItem("quests." + text);
+                localStorage.removeItem("dialog." + args[1]);
+            }
         }
         else if (args[0] == "add_credit") {
             this.inventory.ship.credit += parseInt(args[1]);
@@ -128,12 +160,13 @@ Dialog.prototype.executeFilter = function(root) {
         }
 
         if (args[0] == "has_token" || args[0] == "has_quest") {
-            if ((localStorage.getItem("dialog." + args[1]) == "1") == neg) {
+            x = localStorage.getItem("dialog." + args[1]);
+            if ((x !== null && x !== "" && x != "-2") == neg) {
                 return false;
             }
         }
         else if (args[0] == "finished_quest") {
-            if ((localStorage.getItem("dialog." + args[1]) == "2") == neg) {
+            if ((localStorage.getItem("dialog." + args[1]) == "-2") == neg) {
                 return false;
             }
         }
@@ -213,7 +246,7 @@ Dialog.prototype.generate = function(root) {
 };
 
 Dialog.prototype.choose = function(choice) {
-    console.log("choise " + choice);
+//     console.log("choise " + choice);
     if (this.rootKeys.length === 0) {
         if (choice === 0) {
             if (!this.start()) {
