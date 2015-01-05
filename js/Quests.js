@@ -1,11 +1,11 @@
 function Quests(stage) {
     PIXI.Graphics.call(this);
-    this.width = 448;
-    this.height = 448;
-    this.position.x = 224;
+    this.width = 560;
+    this.height = 560;
+    this.position.x = 112;
     this.position.y = 90;
     this.interactive = true;
-    this.hitArea = new PIXI.Rectangle(0, 0, 448, 448);
+    this.hitArea = new PIXI.Rectangle(0, 0, 560, 560);
 
     this.stg = stage;
     this.showed = false;
@@ -20,11 +20,11 @@ Quests.prototype.show = function() {
     this.clear();
 
     this.beginFill(0x000000, 1);
-    this.drawRect(0, 0, 448, 448);
+    this.drawRect(0, 0, 560, 560);
     this.endFill();
 
     this.lineStyle(2, 0x808080, 1);
-    this.drawRect(0, 0, 448, 448);
+    this.drawRect(0, 0, 560, 560);
 
     var txt;
     var y = 10;
@@ -41,10 +41,10 @@ Quests.prototype.show = function() {
     }
 
     this.lineStyle(2, 0x808080, 1);
-    this.drawRect(224, 400, 224, 48);
+    this.drawRect(336, 512, 224, 48);
     txt = new PIXI.Text("Close", {font: "24px Snippet", fill: "white", align: "center"});
-    txt.position.x = 300;
-    txt.position.y = 415;
+    txt.position.x = 420;
+    txt.position.y = 560 - 33;
     this.addChild(txt);
 
     if (!this.showed) {
