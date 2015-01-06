@@ -27,26 +27,26 @@ class Map(QtGui.QWidget):
 
         self.reloadTextures()
 
+    def setAttribute(self, obj, attr, value, overwrite = True):
+        if self.data["map"][obj].has_key(attr) and not overwrite:
+            return
+        self.data["map"][obj][attr] = value
+
     def reloadTextures(self):
         self.textures = {}
         for name, data in self.data["map"].iteritems():
             p = QtGui.QPixmap("../" + data["texture"])
             p = p.scaled(p.width() / 15 * self.PIXELS_PER_POINT, p.height() / 15 * self.PIXELS_PER_POINT)
             self.textures[name] = p
-            if not data.has_key("orbit_a"):
-                self.data["map"][name]["orbit_a"] = 0
-            if not data.has_key("orbit_b"):
-                self.data["map"][name]["orbit_b"] = 0
-            if not data.has_key("orbit_center"):
-                self.data["map"][name]["orbit_center"] = ""
-            if not data.has_key("orbit_speed"):
-                self.data["map"][name]["orbit_speed"] = 0
+            self.setAttribute(name, "orbit_a", 0, False)
+            self.setAttribute(name, "orbit_b", 0, False)
+            self.setAttribute(name, "orbit_speed", 0, False)
+            self.setAttribute(name, "orbit_center", "", False)
 
     def saveData(self):
         f = open("../resources/map.json", "w")
         f.write(json.dumps(self.data))
         f.close()
-        self.saveMap()
 
     def resizeEvent(self, event = None):
         self.left = self.x + self.width() / self.PIXELS_PER_POINT
@@ -107,28 +107,6 @@ class Map(QtGui.QWidget):
         self.drawMap(p)
         p.end()
 
-    def saveMap(self):
-        PIXELS_PER_POINT = 0.5
-        left = 800 + (448*2) / PIXELS_PER_POINT
-        top = 800 + (448) / PIXELS_PER_POINT
-        img = QtGui.QImage(448*2, 448, QtGui.QImage.Format_RGB32)
-        img.fill(QtCore.Qt.black);
-        p = QtGui.QPainter()
-        p.begin(img);
-
-        p.setPen(QtCore.Qt.red);
-        for name, data in self.data["map"].iteritems():
-            x = -(data["x"] - self.left) * PIXELS_PER_POINT
-            y = -(data["y"] - self.top) * PIXELS_PER_POINT
-
-            if data["orbit_center"] != "" and self.data["map"].has_key(data["orbit_center"]):
-                x = -(self.data["map"][data["orbit_center"]]["x"] - self.left) * PIXELS_PER_POINT
-                y = -(self.data["map"][data["orbit_center"]]["y"] - self.top) * PIXELS_PER_POINT
-                p.drawEllipse(QtCore.QPoint(x, y), data["orbit_a"] * PIXELS_PER_POINT, data["orbit_b"] * PIXELS_PER_POINT)
-
-        p.end();
-        img.save("../resources/map.png");
-
     def wheelEvent(self, event):
         if event.buttons() & QtCore.Qt.RightButton:
             if event.delta() > 0:
@@ -149,24 +127,12 @@ class Map(QtGui.QWidget):
         for name, data in self.data["map"].iteritems():
             x = -(data["x"] - self.left) * self.PIXELS_PER_POINT
             y = -(data["y"] - self.top) * self.PIXELS_PER_POINT
-            #x = -(dx - left) * P
-            #x / P = -dx + left
-            #-dx = x / P - left
-            #dx = - x / P + left
             t = self.textures[name]
             if x1 >= x - t.width() / 2 and x1 <= x + t.width() / 2 and y1 >= y - t.height() / 2 and y1 <= y + t.height() / 2:
                 return name
         return None
 
     def mousePressEvent(self, event):
-        #self.left = self.x + self.width() / self.PIXELS_PER_POINT
-        #self.top = self.y + self.height() / self.PIXELS_PER_POINT
-        #x = self.left -event.x() / self.PIXELS_PER_POINT
-        #y = self.top - event.y() / self.PIXELS_PER_POINT
-        #print x, y
-
-        #x = (self.left - event.x()) / self.PIXELS_PER_POINT
-        #y = (self.top - event.y()) / self.PIXELS_PER_POINT
         x = - event.x() / self.PIXELS_PER_POINT + self.left
         y = - event.y() / self.PIXELS_PER_POINT + self.top
 

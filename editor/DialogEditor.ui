@@ -6,16 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>714</width>
-    <height>429</height>
+    <width>996</width>
+    <height>680</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialogs</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="0">
-    <widget class="QLineEdit" name="events">
+   <item row="0" column="0" rowspan="2">
+    <widget class="QListWidget" name="dialogs">
      <property name="maximumSize">
       <size>
        <width>180</width>
@@ -24,14 +24,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Object:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" rowspan="8">
+   <item row="0" column="1" colspan="2">
     <widget class="QTreeWidget" name="dialog">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
@@ -71,14 +64,100 @@
      </column>
     </widget>
    </item>
+   <item row="1" column="1" rowspan="8">
+    <widget class="QTreeWidget" name="filters">
+     <property name="contextMenuPolicy">
+      <enum>Qt::ActionsContextMenu</enum>
+     </property>
+     <property name="dragEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::InternalMove</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::MoveAction</enum>
+     </property>
+     <column>
+      <property name="text">
+       <string>Filter</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Arguments</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="1" column="2" rowspan="8">
+    <widget class="QTreeWidget" name="actions">
+     <property name="contextMenuPolicy">
+      <enum>Qt::ActionsContextMenu</enum>
+     </property>
+     <property name="dragEnabled">
+      <bool>true</bool>
+     </property>
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::InternalMove</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::MoveAction</enum>
+     </property>
+     <column>
+      <property name="text">
+       <string>Action</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Arguments</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Object:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLineEdit" name="object">
+     <property name="maximumSize">
+      <size>
+       <width>180</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Events:</string>
+     </property>
+    </widget>
+   </item>
    <item row="5" column="0">
+    <widget class="QLineEdit" name="events">
+     <property name="maximumSize">
+      <size>
+       <width>180</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Avatar:</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="7" column="0">
     <widget class="QLineEdit" name="avatar">
      <property name="maximumSize">
       <size>
@@ -88,54 +167,27 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <widget class="QCheckBox" name="once">
      <property name="text">
       <string>Display just once</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="9" column="0">
     <widget class="QPushButton" name="add">
      <property name="text">
       <string>Add dialog</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Events:</string>
+   <item row="9" column="1" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QListWidget" name="dialogs">
-     <property name="maximumSize">
-      <size>
-       <width>180</width>
-       <height>16777215</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLineEdit" name="object">
-     <property name="maximumSize">
-      <size>
-       <width>180</width>
-       <height>16777215</height>
-      </size>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>

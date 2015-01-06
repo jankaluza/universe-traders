@@ -11,6 +11,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.loadDialogs()
         self.refresh();
         self.key = ""
+        self.item = None
         self.dialogs.itemClicked.connect(self.itemClicked)
         self.dialogs.itemChanged.connect(self.dialogItemChanged)
         QtCore.QObject.connect(self.dialog, QtCore.SIGNAL("currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)"), self.currentItemChanged)
@@ -27,6 +28,16 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         quitAction = QtGui.QAction("Remove item", self, triggered=self.itemRemoved)
         self.dialog.addAction(quitAction)
 
+        quitAction = QtGui.QAction("Add item", self, triggered=self.filterAdded)
+        self.filters.addAction(quitAction)
+        quitAction = QtGui.QAction("Remove item", self, triggered=self.filterRemoved)
+        self.filters.addAction(quitAction)
+
+        quitAction = QtGui.QAction("Add item", self, triggered=self.actionAdded)
+        self.actions.addAction(quitAction)
+        quitAction = QtGui.QAction("Remove item", self, triggered=self.actionRemoved)
+        self.actions.addAction(quitAction)
+
     def addDialog(self):
         it = QtGui.QListWidgetItem("New dialog")
         it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
@@ -37,6 +48,24 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.data["dialog"]["New dialog"]["once"] = False
         self.data["dialog"]["New dialog"]["object"] = ""
         self.data["dialog"]["New dialog"]["dialog"] = {"Question" : "Answer"}
+
+    def actionAdded(self):
+        it = QtGui.QTreeWidgetItem(self.actions)
+        it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+        it.setText(0, "action")
+        it.setText(1, "arg")
+
+    def filterAdded(self):
+        it = QtGui.QTreeWidgetItem(self.filters)
+        it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+        it.setText(0, "filter")
+        it.setText(1, "arg")
+
+    def filterRemoved(self):
+            self.filters.takeTopLevelItem(self.filters.indexOfTopLevelItem(self.filters.currentItem()))
+
+    def actionRemoved(self):
+            self.actions.takeTopLevelItem(self.actions.indexOfTopLevelItem(self.actions.currentItem()))
 
     def itemAdded(self):
         self.createItem(self.item, "Text")
@@ -49,7 +78,52 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.itemChanged(None)
 
     def currentItemChanged(self, item, old):
-        self.item = item;
+        if self.item:
+            self.dumpActionsFilters()
+            self.itemChanged(None)
+        self.item = item
+
+        self.actions.clear()
+        self.filters.clear()
+
+        if not item:
+            return
+
+        if item.actions:
+            for action in item.actions:
+                it = QtGui.QTreeWidgetItem(self.actions)
+                it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+                it.setText(0, action.split(" ")[0])
+                it.setText(1, " ".join(action.split(" ")[1:]))
+            self.actions.resizeColumnToContents(0)
+
+        if item.filters:
+            for filter in item.filters:
+                it = QtGui.QTreeWidgetItem(self.filters)
+                it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
+                it.setText(0, filter.split(" ")[0])
+                it.setText(1, " ".join(filter.split(" ")[1:]))
+            self.filters.resizeColumnToContents(0)
+
+    def dumpActionsFilters(self):
+        if not self.item:
+            return
+
+        self.item.actions = []
+        self.item.filters = []
+
+        for i in range(self.actions.topLevelItemCount()):
+            item = self.actions.topLevelItem(i)
+            self.item.actions.append(unicode(item.text(0)) + " " + unicode(item.text(1)))
+
+        for i in range(self.filters.topLevelItemCount()):
+            item = self.filters.topLevelItem(i)
+            self.item.filters.append(unicode(item.text(0)) + " " + unicode(item.text(1)))
+
+        if len(self.item.actions) == 0:
+            self.item.actions = None
+        if len(self.item.filters) == 0:
+            self.item.filters = None
 
     def refresh(self):
         self.dialog.itemChanged.disconnect(self.itemChanged)
@@ -73,9 +147,13 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         it.setText(0, text)
 
         if actions:
-            it.setText(2, '; '.join(actions))
+            it.setText(2, "YES")
+            #it.setData(2, QtCore.Qt.UserRole, -1);
         if filters:
-            it.setText(1, '; '.join(filters))
+            it.setText(1, "YES")
+            #it.setText(1, '; '.join(filters))
+        it.actions = actions
+        it.filters = filters
         return it
 
     def addItem(self, rootItem, dialog):
@@ -90,7 +168,8 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
 
         for key, value in dialog.iteritems():
             if key == "filter":
-                rootItem.setText(1, '; '.join(value))
+                rootItem.setText(1, "YES")
+                rootItem.filters = value
                 continue
             it = self.createItem(rootItem, key)
             self.addItem(it, value)
@@ -152,12 +231,12 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         # {A : {B : D, C : E}}
         data = {}
         key = unicode(parent.text(0))
-        filters = unicode(parent.text(1))
-        actions = unicode(parent.text(2))
+        filters = parent.filters
+        actions = parent.actions
 
         if parent.childCount() == 0 and parent.parent() != None:
-            if actions != "":
-                ret = [key] + actions.split(";")
+            if actions != "" and actions != None:
+                ret = [key] + actions
                 return [x.strip(' ') for x in ret]
             return key
         else:
@@ -185,8 +264,8 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
                     else:
                         print data[key], ret
                         data[key] = ret
-            if isinstance(data[key], dict) and filters != "":
-                data[key]["filter"] = [x.strip(' ') for x in filters.split(";")]
+            if isinstance(data[key], dict) and filters != "" and filters != None:
+                data[key]["filter"] = [x.strip(' ') for x in filters]
             return data
 
     def itemChanged(self, item):
