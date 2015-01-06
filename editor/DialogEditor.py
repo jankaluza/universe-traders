@@ -49,23 +49,47 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.data["dialog"]["New dialog"]["object"] = ""
         self.data["dialog"]["New dialog"]["dialog"] = {"Question" : "Answer"}
 
-    def actionAdded(self):
+    def createActionItem(self, action = "", arg = ""):
         it = QtGui.QTreeWidgetItem(self.actions)
         it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-        it.setText(0, "action")
-        it.setText(1, "arg")
+        it.setText(1, arg)
 
-    def filterAdded(self):
+        comboBox = QtGui.QComboBox()
+        comboBox.addItem("add_token")
+        comboBox.addItem("add_item")
+        comboBox.addItem("add_token")
+        comboBox.addItem("finish_quest")
+        comboBox.addItem("restart_quest")
+        comboBox.addItem("remove_credit")
+        comboBox.addItem("remove_item")
+        comboBox.addItem("start_quest")
+        comboBox.setCurrentIndex(comboBox.findText(action))
+        self.actions.setItemWidget(it, 0, comboBox)
+
+    def createFilterItem(self, action = "", arg = ""):
         it = QtGui.QTreeWidgetItem(self.filters)
         it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-        it.setText(0, "filter")
-        it.setText(1, "arg")
+        it.setText(1, arg)
+
+        comboBox = QtGui.QComboBox()
+        comboBox.addItem("finished_quest")
+        comboBox.addItem("has_token")
+        comboBox.addItem("has_item")
+        comboBox.addItem("has_quest")
+        comboBox.setCurrentIndex(comboBox.findText(action))
+        self.filters.setItemWidget(it, 0, comboBox)
+
+    def actionAdded(self):
+        self.createActionItem()
+
+    def filterAdded(self):
+        self.createFilterItem()
 
     def filterRemoved(self):
-            self.filters.takeTopLevelItem(self.filters.indexOfTopLevelItem(self.filters.currentItem()))
+        self.filters.takeTopLevelItem(self.filters.indexOfTopLevelItem(self.filters.currentItem()))
 
     def actionRemoved(self):
-            self.actions.takeTopLevelItem(self.actions.indexOfTopLevelItem(self.actions.currentItem()))
+        self.actions.takeTopLevelItem(self.actions.indexOfTopLevelItem(self.actions.currentItem()))
 
     def itemAdded(self):
         self.createItem(self.item, "Text")
@@ -91,18 +115,12 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
 
         if item.actions:
             for action in item.actions:
-                it = QtGui.QTreeWidgetItem(self.actions)
-                it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-                it.setText(0, action.split(" ")[0])
-                it.setText(1, " ".join(action.split(" ")[1:]))
+                self.createActionItem(action.split(" ")[0], " ".join(action.split(" ")[1:]))
             self.actions.resizeColumnToContents(0)
 
         if item.filters:
             for filter in item.filters:
-                it = QtGui.QTreeWidgetItem(self.filters)
-                it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
-                it.setText(0, filter.split(" ")[0])
-                it.setText(1, " ".join(filter.split(" ")[1:]))
+                self.createFilterItem(filter.split(" ")[0], " ".join(filter.split(" ")[1:]))
             self.filters.resizeColumnToContents(0)
 
     def dumpActionsFilters(self):
@@ -114,11 +132,11 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
 
         for i in range(self.actions.topLevelItemCount()):
             item = self.actions.topLevelItem(i)
-            self.item.actions.append(unicode(item.text(0)) + " " + unicode(item.text(1)))
+            self.item.actions.append(unicode(self.actions.itemWidget(item, 0).currentText()) + " " + unicode(item.text(1)))
 
         for i in range(self.filters.topLevelItemCount()):
             item = self.filters.topLevelItem(i)
-            self.item.filters.append(unicode(item.text(0)) + " " + unicode(item.text(1)))
+            self.item.filters.append(unicode(self.filters.itemWidget(item, 0).currentText()) + " " + unicode(item.text(1)))
 
         if len(self.item.actions) == 0:
             self.item.actions = None
