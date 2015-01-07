@@ -1,6 +1,7 @@
 from PyQt4 import QtGui, QtCore
 import ui_DialogEditor
 import json
+from ItemEditor import *
 
 class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
     def __init__(self, main, parent):
@@ -28,14 +29,18 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         quitAction = QtGui.QAction("Remove item", self, triggered=self.itemRemoved)
         self.dialog.addAction(quitAction)
 
-        quitAction = QtGui.QAction("Add item", self, triggered=self.filterAdded)
+        quitAction = QtGui.QAction("Add filter", self, triggered=self.filterAdded)
         self.filters.addAction(quitAction)
-        quitAction = QtGui.QAction("Remove item", self, triggered=self.filterRemoved)
+        quitAction = QtGui.QAction("Remove filter", self, triggered=self.filterRemoved)
+        self.filters.addAction(quitAction)
+        quitAction = QtGui.QAction("Choose item", self, triggered=self.filterChooseItem)
         self.filters.addAction(quitAction)
 
-        quitAction = QtGui.QAction("Add item", self, triggered=self.actionAdded)
+        quitAction = QtGui.QAction("Add action", self, triggered=self.actionAdded)
         self.actions.addAction(quitAction)
-        quitAction = QtGui.QAction("Remove item", self, triggered=self.actionRemoved)
+        quitAction = QtGui.QAction("Remove action", self, triggered=self.actionRemoved)
+        self.actions.addAction(quitAction)
+        quitAction = QtGui.QAction("Choose item", self, triggered=self.actionChooseItem)
         self.actions.addAction(quitAction)
 
     def addDialog(self):
@@ -84,6 +89,18 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
 
     def filterAdded(self):
         self.createFilterItem()
+
+    def actionChooseItem(self):
+        it = ItemEditor(self.main, self)
+        if it.exec_():
+            item = self.actions.currentItem()
+            item.setText(1, str(it.index))
+
+    def filterChooseItem(self):
+        it = ItemEditor(self.main, self)
+        if it.exec_():
+            item = self.filters.currentItem()
+            item.setText(1, str(it.index))
 
     def filterRemoved(self):
         self.filters.takeTopLevelItem(self.filters.indexOfTopLevelItem(self.filters.currentItem()))
