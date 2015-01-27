@@ -68,7 +68,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         comboBox = QtGui.QComboBox()
         comboBox.addItem("add_token")
         comboBox.addItem("add_item")
-        comboBox.addItem("add_token")
+        comboBox.addItem("add_credit")
         comboBox.addItem("finish_quest")
         comboBox.addItem("restart_quest")
         comboBox.addItem("remove_credit")
@@ -87,6 +87,10 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         comboBox.addItem("has_token")
         comboBox.addItem("has_item")
         comboBox.addItem("has_quest")
+        comboBox.addItem("!finished_quest")
+        comboBox.addItem("!has_token")
+        comboBox.addItem("!has_item")
+        comboBox.addItem("!has_quest")
         comboBox.setCurrentIndex(comboBox.findText(action))
         self.filters.setItemWidget(it, 0, comboBox)
 
@@ -245,8 +249,9 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
     def itemClicked(self, item):
         self.dialog.itemChanged.disconnect(self.itemChanged)
         key = unicode(item.text())
-        self.key = key;
-        self.dialog.clear();
+        self.key = key
+        self.item = None
+        self.dialog.clear()
 
         for key2 in self.data["dialog"][key]['dialog'].keys():
             it = self.createItem(self.dialog, key2)
@@ -310,12 +315,13 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
             return data
 
     def itemChanged(self, item):
+        print self.key, item
         dialog = {}
 
         for i in range(self.dialog.topLevelItemCount()):
             item = self.dialog.topLevelItem(i)
             dialog.update(self.dumpItem(item))
-
+    
         self.data["dialog"][self.key]['dialog'] = dialog
         self.saveDialogs()
 
