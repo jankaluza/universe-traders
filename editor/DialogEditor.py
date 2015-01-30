@@ -8,14 +8,12 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         super(DialogEditor, self).__init__(parent)
         self.setupUi(self)
         self.main = main
-        self.dialog.itemChanged.connect(self.itemChanged)
-        self.loadDialogs()
-        self.refresh();
         self.key = ""
         self.item = None
-        self.dialogs.itemClicked.connect(self.itemClicked)
-        self.dialogs.itemChanged.connect(self.dialogItemChanged)
-        QtCore.QObject.connect(self.dialog, QtCore.SIGNAL("currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)"), self.currentItemChanged)
+        self.dialog.itemChanged.connect(self.dialogLineEdited)
+        self.dialogs.itemClicked.connect(self.currentDialogChanged)
+        self.dialogs.itemChanged.connect(self.currentDialogRenamed)
+        QtCore.QObject.connect(self.dialog, QtCore.SIGNAL("currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)"), self.currentDialogLineChanged)
         QtCore.QObject.connect(self.events, QtCore.SIGNAL("textEdited(const QString &)"), self.eventsChanged)
         QtCore.QObject.connect(self.avatar, QtCore.SIGNAL("textEdited(const QString &)"), self.avatarChanged)
         QtCore.QObject.connect(self.object, QtCore.SIGNAL("textEdited(const QString &)"), self.objectChanged)
@@ -24,30 +22,33 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
 
         self.dialog.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
 
-        quitAction = QtGui.QAction("Add item", self, triggered=self.itemAdded)
-        self.dialog.addAction(quitAction)
-        quitAction = QtGui.QAction("Remove item", self, triggered=self.itemRemoved)
-        self.dialog.addAction(quitAction)
+        action = QtGui.QAction("Add item", self, triggered=self.itemAdded)
+        self.dialog.addAction(action)
+        action = QtGui.QAction("Remove item", self, triggered=self.itemRemoved)
+        self.dialog.addAction(action)
 
-        quitAction = QtGui.QAction("Add filter", self, triggered=self.filterAdded)
-        self.filters.addAction(quitAction)
-        quitAction = QtGui.QAction("Remove filter", self, triggered=self.filterRemoved)
-        self.filters.addAction(quitAction)
-        quitAction = QtGui.QAction("", self)
-        quitAction.setSeparator(True)
-        self.filters.addAction(quitAction)
-        quitAction = QtGui.QAction("Choose item", self, triggered=self.filterChooseItem)
-        self.filters.addAction(quitAction)
+        action = QtGui.QAction("Add filter", self, triggered=self.filterAdded)
+        self.filters.addAction(action)
+        action = QtGui.QAction("Remove filter", self, triggered=self.filterRemoved)
+        self.filters.addAction(action)
+        action = QtGui.QAction("", self)
+        action.setSeparator(True)
+        self.filters.addAction(action)
+        action = QtGui.QAction("Choose item", self, triggered=self.filterChooseItem)
+        self.filters.addAction(action)
 
-        quitAction = QtGui.QAction("Add action", self, triggered=self.actionAdded)
-        self.actions.addAction(quitAction)
-        quitAction = QtGui.QAction("Remove action", self, triggered=self.actionRemoved)
-        self.actions.addAction(quitAction)
-        quitAction = QtGui.QAction("", self)
-        quitAction.setSeparator(True)
-        self.actions.addAction(quitAction)
-        quitAction = QtGui.QAction("Choose item", self, triggered=self.actionChooseItem)
-        self.actions.addAction(quitAction)
+        action = QtGui.QAction("Add action", self, triggered=self.actionAdded)
+        self.actions.addAction(action)
+        action = QtGui.QAction("Remove action", self, triggered=self.actionRemoved)
+        self.actions.addAction(action)
+        action = QtGui.QAction("", self)
+        action.setSeparator(True)
+        self.actions.addAction(action)
+        action = QtGui.QAction("Choose item", self, triggered=self.actionChooseItem)
+        self.actions.addAction(action)
+
+        self.loadDialogs()
+        self.refresh();
 
     def addDialog(self):
         it = QtGui.QListWidgetItem("New dialog")
@@ -74,6 +75,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         comboBox.addItem("remove_credit")
         comboBox.addItem("remove_item")
         comboBox.addItem("start_quest")
+        comboBox.addItem("spawn_ship_copy")
         comboBox.setCurrentIndex(comboBox.findText(action))
         self.actions.setItemWidget(it, 0, comboBox)
 
@@ -126,12 +128,12 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
             self.dialog.takeTopLevelItem(self.dialog.indexOfTopLevelItem(self.item))
         else:
             self.item.parent().takeChild(self.item.parent().indexOfChild(self.item))
-        self.itemChanged(None)
+        self.dumpAndSaveDialogs()
 
-    def currentItemChanged(self, item, old):
+    def currentDialogLineChanged(self, item, old):
         if self.item:
             self.dumpActionsFilters()
-            self.itemChanged(None)
+            self.dumpAndSaveDialogs()
         self.item = item
 
         self.actions.clear()
@@ -171,7 +173,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
             self.item.filters = None
 
     def refresh(self):
-        self.dialog.itemChanged.disconnect(self.itemChanged)
+        self.dialog.itemChanged.disconnect(self.dialogLineEdited)
         self.dialogs.clear();
         self.dialog.clear();
 
@@ -179,7 +181,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
             it = QtGui.QListWidgetItem(k)
             it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
             self.dialogs.addItem(it)
-        self.dialog.itemChanged.connect(self.itemChanged)
+        self.dialog.itemChanged.connect(self.dialogLineEdited)
 
     def createItem(self, rootItem, text, actions = None, filters = None):
         it = QtGui.QTreeWidgetItem(rootItem)
@@ -246,8 +248,8 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.data["dialog"][self.key]["once"] = state == QtCore.Qt.Checked
         self.saveDialogs()
 
-    def itemClicked(self, item):
-        self.dialog.itemChanged.disconnect(self.itemChanged)
+    def currentDialogChanged(self, item):
+        self.dialog.itemChanged.disconnect(self.dialogLineEdited)
         key = unicode(item.text())
         self.key = key
         self.item = None
@@ -258,7 +260,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
             self.addItem(it, self.data["dialog"][key]['dialog'][key2])
 
         self.dialog.resizeColumnToContents(0)
-        self.dialog.itemChanged.connect(self.itemChanged)
+        self.dialog.itemChanged.connect(self.dialogLineEdited)
 
         self.events.setText(";".join(self.data["dialog"][key]["events"]))
         self.avatar.setText(self.data["dialog"][key]["face"])
@@ -314,18 +316,11 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
                 data[key]["filter"] = [x.strip(' ') for x in filters]
             return data
 
-    def itemChanged(self, item):
-        print self.key, item
-        dialog = {}
+    def dialogLineEdited(self, item):
+        print "dialog line edited"
+        self.dumpAndSaveDialogs()
 
-        for i in range(self.dialog.topLevelItemCount()):
-            item = self.dialog.topLevelItem(i)
-            dialog.update(self.dumpItem(item))
-    
-        self.data["dialog"][self.key]['dialog'] = dialog
-        self.saveDialogs()
-
-    def dialogItemChanged(self, item):
+    def currentDialogRenamed(self, item):
         key = unicode(item.text())
         self.data["dialog"][key] = self.data["dialog"][self.key]
         del self.data["dialog"][self.key]
@@ -336,6 +331,16 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         f = open("../resources/dialogs.json")
         self.data = json.load(f)
         f.close()
+
+    def dumpAndSaveDialogs(self):
+        dialog = {}
+
+        for i in range(self.dialog.topLevelItemCount()):
+            item = self.dialog.topLevelItem(i)
+            dialog.update(self.dumpItem(item))
+    
+        self.data["dialog"][self.key]['dialog'] = dialog
+        self.saveDialogs()
 
     def saveDialogs(self):
         f = open("../resources/dialogs.json", "w")
