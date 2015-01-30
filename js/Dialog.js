@@ -298,7 +298,7 @@ Dialog.prototype.choose = function(choice) {
         return;
     }
 
-    if (this.generate(this.root[this.rootKeys[choice]]) == false) {
+    if (this.generate(this.root[this.rootKeys[choice]]) === false) {
         this.onDialogFinished();
     }
 };

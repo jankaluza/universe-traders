@@ -71,19 +71,27 @@ IntelligentShip.prototype.destroy = function() {
 
 IntelligentShip.prototype.computeWaypointMapPoint = function() {
     var args = this.waypoints[this.waypoint].split(" ");
+    var object = null;
     if (args.length == 2) {
-        this.movingX = parseInt(args[0], 10);
-        this.movingY = parseInt(args[1], 10);
+        var x = args[0].split("+");
+        if (x.length == 2) {
+            object = this.objManager.getObjectByName(x[0]);
+            this.movingX = object.mapX + parseInt(x[1], 10);
+        }
+        else {
+            this.movingX = parseInt(x[0], 10);
+        }
+        var y = args[1].split("+");
+        if (y.length == 2) {
+            object = this.objManager.getObjectByName(y[0]);
+            this.movingY = object.mapY + parseInt(y[1], 10);
+        }
+        else {
+            this.movingY = parseInt(y[0], 10);
+        }
     }
     else {
-        // TODO: Store objects in hasharray to speed up finding.
-        var object = null;
-        for (var index = 0; index < this.objManager.objects.length; index++) {
-            if (this.objManager.objects[index].name == args[0]) {
-                object = this.objManager.objects[index];
-                break;
-            }
-        }
+        object = this.objManager.getObjectByName(args[0]);
 
         this.movingX = object.mapX;
         this.movingY = object.mapY;

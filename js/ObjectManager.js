@@ -218,6 +218,16 @@ ObjectManager.prototype.addToStage = function(obj) {
     }
 };
 
+ObjectManager.prototype.getObjectByName = function(name) {
+    for (var index = 0; index < this.objects.length; index++) {
+        if (this.objects[index].name == name) {
+            return this.objects[index];
+        }
+    }
+
+    return null;
+};
+
 ObjectManager.prototype.getObject = function(x, y, type) {
     for (var index = 0; index < this.staged.length; index++) {
         var obj = this.staged[index];
@@ -225,7 +235,7 @@ ObjectManager.prototype.getObject = function(x, y, type) {
             && x < (obj.position.x - (obj.width >> 1)) + obj.width
             && y > (obj.position.y - (obj.height >> 1))
             && y < (obj.position.y - (obj.height >> 1)) + obj.height
-            && (type == null || obj.type == type)) {
+            && (type === null || obj.type == type)) {
             return obj;
         }
     }
