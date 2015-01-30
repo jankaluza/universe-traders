@@ -218,13 +218,14 @@ ObjectManager.prototype.addToStage = function(obj) {
     }
 };
 
-ObjectManager.prototype.getObject = function(x, y) {
+ObjectManager.prototype.getObject = function(x, y, type) {
     for (var index = 0; index < this.staged.length; index++) {
         var obj = this.staged[index];
         if (x > (obj.position.x - (obj.width >> 1))
             && x < (obj.position.x - (obj.width >> 1)) + obj.width
             && y > (obj.position.y - (obj.height >> 1))
-            && y < (obj.position.y - (obj.height >> 1)) + obj.height) {
+            && y < (obj.position.y - (obj.height >> 1)) + obj.height
+            && (type == null || obj.type == type)) {
             return obj;
         }
     }

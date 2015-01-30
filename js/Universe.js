@@ -221,8 +221,8 @@ Universe.prototype.click = function(data) {
         return;
     }
 
-    var object = this.objManager.getObject(data.global.x, data.global.y);
-    if (object && object.type == MapObject.ENEMY_SHIP) {
+    var object = this.objManager.getObject(data.global.x, data.global.y, MapObject.ENEMY_SHIP);
+    if (object) {
         this.overlay.laserShot(this.ship, object, 20);
         return;
     }
