@@ -298,7 +298,9 @@ Dialog.prototype.choose = function(choice) {
         return;
     }
 
-    this.generate(this.root[this.rootKeys[choice]]);
+    if (this.generate(this.root[this.rootKeys[choice]]) == false) {
+        this.onDialogFinished();
+    }
 };
 
 Dialog.prototype.click = function(data) {
