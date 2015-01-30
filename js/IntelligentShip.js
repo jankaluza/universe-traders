@@ -64,7 +64,9 @@ IntelligentShip.prototype.destroy = function() {
     this.mapX = 0;
     this.mapY = 0;
     radio("objectDestroyed").broadcast(this);
-    this.objManager.removeShip(this);
+    if (this.respawnTimer === 0) {
+        this.objManager.removeShip(this);
+    }
 };
 
 IntelligentShip.prototype.computeWaypointMapPoint = function() {

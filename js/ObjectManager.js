@@ -35,6 +35,7 @@ ObjectManager.prototype.removeShip = function(ship) {
 ObjectManager.prototype.spawnShipCopy = function(name, new_name, x, y, waypoints, respawnTimer) {
     var obj = this.getShip(name);
     if (obj === null) {
+        console.log("WARNING: ship with name " + name + " not found");
         return;
     }
 

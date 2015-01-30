@@ -95,17 +95,14 @@ Dialog.prototype.parseWaypoints = function(arg) {
 
     var args = arg.substring(left + 1, right).split(" ");
     for (var i = 0; i < args.length; i++) {
-        var r = [];
         var a = parseInt(args[i], 10);
         if (isNaN(a)) {
-            r[r.length] = args[i];
+            ret[ret.length] = args[i];
         }
         else {
-            r[r.length] = a;
-            r[r.length] = parseInt(args[i + 1], 10);
+            ret[ret.length] = args[i] + " " + args[i + 1];
             i += 1;
         }
-        ret[ret.length] = r;
     }
 
     return ret;

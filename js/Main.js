@@ -234,7 +234,7 @@ Main.prototype.assetsLoaded = function() {
     this.itemManager = new ItemManager();
     this.inventory = new Inventory(this.universe.ship, this.itemManager);
     this.inventory.onItemClicked = this.showItemInfo.bind(this, true);
-    this.dialogManager = new DialogManager(this.stage, this.inventory);
+    this.dialogManager = new DialogManager(this.stage, this.inventory, this.universe.objManager);
     this.planet = new PlanetInventory(this.universe.ship, this.itemManager, this.dialogManager);
     this.planet.onItemClicked = this.showItemInfo.bind(this, false);
 
