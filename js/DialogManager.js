@@ -4,9 +4,10 @@ function DialogObject(face, once, dialog) {
     this.dialog = dialog;
 }
 
-function DialogManager(stage, inventory) {
+function DialogManager(stage, inventory, objManager) {
     this.stage = stage;
     this.inventory = inventory;
+    this.objManager = objManager;
     this.currentDialog = null;
     this.currentName = "";
     this.dialogs = {};
@@ -65,7 +66,7 @@ DialogManager.prototype.executeDialog = function(name, eventResult) {
         this.handleDialogFinished(this.currentDialog);
     }
 
-    this.currentDialog = new Dialog(dialog.face, dialog.dialog, this.inventory);
+    this.currentDialog = new Dialog(dialog.face, dialog.dialog, this.inventory, this.objManager);
     this.currentDialog.onDialogFinished = this.handleDialogFinished.bind(this);
     if (this.currentDialog.start()) {
         if (dialog.once && eventResult) {

@@ -1,6 +1,16 @@
 function Ship(texture, movingTexture) {
-    this.stayingTexture = PIXI.Texture.fromImage(texture);
-    this.flyingTexture = PIXI.Texture.fromImage(movingTexture);
+    if (typeof texture === "string") {
+        this.stayingTexture = PIXI.Texture.fromImage(texture);
+    }
+    else {
+        this.stayingTexture = texture;
+    }
+    if (typeof movingTexture === "string") {
+        this.flyingTexture = PIXI.Texture.fromImage(movingTexture);
+    }
+    else {
+        this.flyingTexture = movingTexture;
+    }
     PIXI.Sprite.call(this, this.stayingTexture);
 
     this.pivot.x = this.width / 2;

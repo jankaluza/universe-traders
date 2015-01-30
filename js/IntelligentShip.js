@@ -1,4 +1,4 @@
-function IntelligentShip(objManager, name, type, texture, x, y, items, prices, speed, waypoints, attack, defense) {
+function IntelligentShip(objManager, name, type, texture, x, y, items, prices, speed, waypoints, attack, defense, respawnTime) {
     Ship.call(this, texture, texture);
 
     this.attack = attack;
@@ -31,6 +31,7 @@ function IntelligentShip(objManager, name, type, texture, x, y, items, prices, s
     this.disableMovement = false;
     this.closeShips = [];
     this.shootTimer = (Math.random() * 100) >> 0;
+    this.respawnTime = respawnTime;
     this.respawnTimer = 0;
 
     while (this.prices.length != Item.LAST_CATEGORY) {
@@ -59,10 +60,11 @@ IntelligentShip.prototype.handleObjectLeft = function(obj) {
 };
 
 IntelligentShip.prototype.destroy = function() {
-    this.respawnTimer = 1000;
+    this.respawnTimer = this.respawnTime;
     this.mapX = 0;
     this.mapY = 0;
     radio("objectDestroyed").broadcast(this);
+    this.objManager.removeShip(this);
 };
 
 IntelligentShip.prototype.computeWaypointMapPoint = function() {

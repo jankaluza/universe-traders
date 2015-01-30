@@ -18,6 +18,8 @@ exports['Dialog'] = {
         this.itemManager.addItem(new Item(0, "Item", Item.ENGINE, "resources/0.png", 100, 1, null, null, null));
         this.inventory = new Inventory(this.ship, this.itemManager);
         this.dialogFinished = false;
+        this.universe = new Universe();
+        this.objManager = new ObjectManager(this.universe);
         done();
     },
     simpleDialog: function(test) {
@@ -25,7 +27,7 @@ exports['Dialog'] = {
                         {"Fine!" : "That's great!",
                         "Bad!" : "That's not great!"}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.onDialogFinished = function () { this.dialogFinished = true; }.bind(this);
         dialog.start();
 
@@ -60,11 +62,32 @@ exports['Dialog'] = {
         test.ok(this.dialogFinished);
         test.done();
     },
+    spawnShipCopy: function(test) {
+        var old_ship = new IntelligentShip(this.objManager, "old_name", MapObject.ENEMY_SHIP, "resources/ship.png", 500, 500, [], [], 1, "10 10 20 20", 1, 1, 0);
+        this.objManager.addShip(old_ship);
+        var data = {"How are you?":
+                        {"Fine!" : ["That's great!", "spawn_ship_copy old_name new_name 1010 1020 [1000 1001 earth moon 500 500]"]}
+                   };
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
+        dialog.start();
+        test.equal(this.objManager.ships.length, 1);
+
+        dialog.choose(0);
+        test.equal(this.objManager.ships.length, 2);
+
+        var new_ship = this.objManager.getShip("new_name");
+        test.ok(new_ship != null);
+        test.equal(new_ship.mapX, 1010);
+        test.equal(new_ship.mapY, 1020);
+        test.equal(new_ship.waypoints.toString(), [ [ 1000, 1001 ], ['earth'], [ 'moon' ], [ 500, 500 ] ].toString());
+
+        test.done();
+    },
     addItem: function(test) {
         var data = {"How are you?":
                         {"Fine!" : ["That's great!", "add_item 0"]}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(!this.inventory.hasItem(0));
@@ -81,7 +104,7 @@ exports['Dialog'] = {
         var data = {"How are you?":
                         {"Fine!" : ["That's great!", "add_item 0 5"]}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(!this.inventory.hasItem(0));
@@ -100,7 +123,7 @@ exports['Dialog'] = {
         var data = {"How are you?":
                         {"Fine!" : ["That's great!", "add_item 0", "add_item 0 100"]}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(!this.inventory.hasItem(0));
@@ -119,7 +142,7 @@ exports['Dialog'] = {
         var data = {"How are you?":
                         {"Fine!" : ["That's great!", "remove_item 0 3"]}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         this.inventory.addItem(0);
@@ -142,7 +165,7 @@ exports['Dialog'] = {
         var data = {"How are you?":
                         {"Fine!" : ["That's great!", "add_token xyz"]}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(localStorage.getItem("dialog.xyz") != "1");
@@ -152,7 +175,7 @@ exports['Dialog'] = {
     },
     filterNotIgnoredInQuestion: function(test) {
         var data = {"X":{"Y": {"filter": ["!has_token wine_moon"], "Z": "X"}}};
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
         dialog.choose(0);
 
@@ -161,7 +184,7 @@ exports['Dialog'] = {
     },
     filterWholeDialog: function(test) {
         var data = {"Question": {"Answer": "Text", "filter": ["has_token xyz"]}}
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         var ret = dialog.start();
 
         test.ok(!hasText(dialog, "Question"));
@@ -170,7 +193,7 @@ exports['Dialog'] = {
     },
     filterNotIgnoredInAnswer: function(test) {
         var data = {"Question": {"Answer": "Text", "filter": ["!has_token xyz"]}}
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         var ret = dialog.start();
 
         test.ok(hasText(dialog, "Question"));
@@ -180,7 +203,7 @@ exports['Dialog'] = {
     },
     moreStructuredDialog: function(test) {
         var data = {"Q1": {"A1": {"Q2": {"filter": ["!has_item 0 20"], "A2": ["Q3", "add_item 0 20"]}, "Q4": {"filter": ["has_item 0 20"], "A4": "Q5"}}}}
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(hasText(dialog, "Q1"));
@@ -214,7 +237,7 @@ exports['Dialog'] = {
         var data = {"How are you?":
                         {"Fine!" : {"filter": ["has_item 0"], "That's great!" : "xxx"}}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(hasText(dialog, "How are you?"));
@@ -235,7 +258,7 @@ exports['Dialog'] = {
         var data = {"How are you?":
                         {"Fine!" : {"filter": ["has_item 0 3"], "That's great!" : "xxx"}}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(hasText(dialog, "How are you?"));
@@ -264,7 +287,7 @@ exports['Dialog'] = {
         var data = {"How are you?":
                         {"Fine!" : {"That's great!" : null, "filter": ["!has_item 0"]}}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(hasText(dialog, "How are you?"));
@@ -286,7 +309,7 @@ exports['Dialog'] = {
         var data = {"How are you?":
                         {"Fine!" : {"filter": ["has_token xyz"], "That's great!" : "xxx"}}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(hasText(dialog, "How are you?"));
@@ -309,7 +332,7 @@ exports['Dialog'] = {
         var data = {"How are you?":
                         {"Fine!" : {"That's great!" : null, "filter": ["!has_token xyz"]}}
                    };
-        var dialog = new Dialog(null, data, this.inventory);
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
 
         test.ok(hasText(dialog, "How are you?"));

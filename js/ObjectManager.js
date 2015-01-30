@@ -11,13 +11,44 @@ function ObjectManager(universe) {
     this.ships = [];
 }
 
+ObjectManager.prototype.getShip = function(name) {
+    for (var index = 0; index < this.ships.length; index++) {
+        if (this.ships[index].name == name) {
+            return this.ships[index];
+        }
+    }
+
+    return null;
+};
+
+ObjectManager.prototype.addShip = function(ship) {
+    this.objects[this.objects.length] = ship;
+    this.ships[this.ships.length] = ship; 
+};
+
+ObjectManager.prototype.removeShip = function(ship) {
+    this.removeFromStage(ship);
+    this.objects.splice(this.objects.indexOf(ship), 1);
+    this.ships.splice(this.ships.indexOf(ship), 1);
+};
+
+ObjectManager.prototype.spawnShipCopy = function(name, new_name, x, y, waypoints, respawnTimer) {
+    var obj = this.getShip(name);
+    if (obj === null) {
+        return;
+    }
+
+    var new_obj = new IntelligentShip(this, new_name, obj.type, obj.texture, x, y, obj.items, obj.prices, obj.orbit_speed, waypoints, obj.attack, obj.defense, respawnTimer);
+    this.addShip(new_obj);
+};
+
 ObjectManager.prototype.parseObjects = function(map) {
     var objects = {}; // tmp variable to map name:MapObject
     var key, object, obj;
     for (key in map) {
         object = map[key];
         if (object.type >= MapObject.SHIP) {
-            obj = new IntelligentShip(this, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_speed, object.waypoints, object.attack, object.defense);
+            obj = new IntelligentShip(this, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_speed, object.waypoints, object.attack, object.defense, 1000);
         }
         else {
             obj = new CelestialBody(this, key, object.type, object.texture, object.x, object.y, object.items, object.prices, object.orbit_a, object.orbit_b, object.orbit_speed);

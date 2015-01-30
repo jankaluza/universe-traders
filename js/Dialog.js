@@ -1,4 +1,4 @@
-function Dialog(face, dialog, inventory) {
+function Dialog(face, dialog, inventory, objManager) {
     var texture = PIXI.Texture.fromImage("resources/dialog.png");
     PIXI.Sprite.call(this, texture);
 
@@ -21,6 +21,7 @@ function Dialog(face, dialog, inventory) {
     }
 
     this.inventory = inventory;
+    this.objManager = objManager;
     this.root = null;
     this.rootKeys = [];
     this.dialog = dialog;
@@ -80,6 +81,36 @@ Dialog.prototype.checkCommandsRestrictions = function(root) {
     return null;
 };
 
+Dialog.prototype.parseWaypoints = function(arg) {
+    var ret = [];
+    var left = arg.indexOf("[");
+    if (left == -1) {
+        return ret;
+    }
+
+    var right = arg.indexOf("]", left);
+    if (right == -1) {
+        return ret;
+    }
+
+    var args = arg.substring(left + 1, right).split(" ");
+    for (var i = 0; i < args.length; i++) {
+        var r = [];
+        var a = parseInt(args[i], 10);
+        if (isNaN(a)) {
+            r[r.length] = args[i];
+        }
+        else {
+            r[r.length] = a;
+            r[r.length] = parseInt(args[i + 1], 10);
+            i += 1;
+        }
+        ret[ret.length] = r;
+    }
+
+    return ret;
+};
+
 Dialog.prototype.executeCommands = function(root) {
     var error = this.checkCommandsRestrictions(root);
     if (error) {
@@ -136,6 +167,13 @@ Dialog.prototype.executeCommands = function(root) {
         else if (args[0] == "remove_credit") {
             this.inventory.ship.credit -= parseInt(args[1]);
             radio("creditChanged").broadcast();
+        }
+        else if (args[0] == "spawn_ship_copy") {
+            this.objManager.spawnShipCopy(args[1], args[2],
+                                          parseInt(args[3], 10),
+                                          parseInt(args[4], 10),
+                                          this.parseWaypoints(root[i]),
+                                          0);
         }
     }
 
