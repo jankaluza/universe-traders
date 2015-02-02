@@ -310,7 +310,6 @@ ObjectManager.prototype.reset = function() {
 
     this.staged.length = 0;
     this.boundToStaged.length = 0;
-    console.log("reset");
 };
 
 ObjectManager.prototype.save = function() {

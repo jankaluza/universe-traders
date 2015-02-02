@@ -184,6 +184,8 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.dialog.itemChanged.connect(self.dialogLineEdited)
 
     def createItem(self, rootItem, text, actions = None, filters = None):
+        if rootItem == None:
+            rootItem = self.dialog
         it = QtGui.QTreeWidgetItem(rootItem)
         it.setFlags(it.flags() | QtCore.Qt.ItemIsEditable)
         it.setExpanded(True);
@@ -255,9 +257,13 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         self.item = None
         self.dialog.clear()
 
-        for key2 in self.data["dialog"][key]['dialog'].keys():
-            it = self.createItem(self.dialog, key2)
-            self.addItem(it, self.data["dialog"][key]['dialog'][key2])
+        dialog = self.data["dialog"][key]['dialog']
+        if not isinstance(dialog, dict):
+            self.addItem(None, dialog)
+        else:
+            for key2 in dialog.keys():
+                it = self.createItem(self.dialog, key2)
+                self.addItem(it, dialog[key2])
 
         self.dialog.resizeColumnToContents(0)
         self.dialog.itemChanged.connect(self.dialogLineEdited)
@@ -282,7 +288,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
         filters = parent.filters
         actions = parent.actions
 
-        if parent.childCount() == 0 and parent.parent() != None:
+        if parent.childCount() == 0:
             if actions != "" and actions != None:
                 ret = [key] + actions
                 return [x.strip(' ') for x in ret]
@@ -318,6 +324,7 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
 
     def dialogLineEdited(self, item):
         print "dialog line edited"
+        self.dumpActionsFilters()
         self.dumpAndSaveDialogs()
 
     def currentDialogRenamed(self, item):
@@ -337,7 +344,19 @@ class DialogEditor(QtGui.QDialog, ui_DialogEditor.Ui_dialogEditor):
 
         for i in range(self.dialog.topLevelItemCount()):
             item = self.dialog.topLevelItem(i)
-            dialog.update(self.dumpItem(item))
+            x = self.dumpItem(item)
+            if isinstance(dialog, unicode):
+                d = {}
+                d[dialog] = {}
+                dialog = d
+            elif isinstance(dialog, list):
+                d = {}
+                d[dialog[0]] = d[1:]
+                dialog = d
+            if isinstance(x, dict):
+                dialog.update(x)
+            else:
+                dialog = x
     
         self.data["dialog"][self.key]['dialog'] = dialog
         self.saveDialogs()

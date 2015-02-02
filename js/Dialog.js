@@ -240,7 +240,7 @@ Dialog.prototype.generate = function(root) {
     if (typeof root == "string") {
         this.showNPCSentence(root);
         this.showDefaultSentences();
-        return;
+        return true;
     }
 
     var NPCShowed = false;

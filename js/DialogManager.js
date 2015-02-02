@@ -16,6 +16,7 @@ function DialogManager(stage, inventory, objManager) {
 
     radio("objectTouched").subscribe(this.handleObjectTouched.bind(this));
     radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
+    radio("objectDestroyed").subscribe(this.handleObjectDestroyed.bind(this));
 }
 
 DialogManager.prototype.reset = function() {
@@ -86,6 +87,15 @@ DialogManager.prototype.executeDialog = function(name, eventResult) {
 
 DialogManager.prototype.handleObjectTouched = function(object) {
     var name = object.name + "_touched";
+    if (!(name in this.eventToDialog)) {
+        return;
+    }
+
+    this.executeDialog(this.eventToDialog[name], true);
+};
+
+DialogManager.prototype.handleObjectDestroyed = function(object) {
+    var name = object.name + "_destroyed";
     if (!(name in this.eventToDialog)) {
         return;
     }

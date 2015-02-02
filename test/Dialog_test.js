@@ -173,6 +173,14 @@ exports['Dialog'] = {
         test.ok(localStorage.getItem("dialog.xyz") == "1");
         test.done();
     },
+    addTokenFirstNPCSentence: function(test) {
+        var data = ["How are you?", "add_token xyz"];
+        var dialog = new Dialog(null, data, this.inventory, this.objManager);
+        test.ok(localStorage.getItem("dialog.xyz") != "1");
+        test.ok(dialog.start());
+        test.ok(localStorage.getItem("dialog.xyz") == "1");
+        test.done();
+    },
     filterNotIgnoredInQuestion: function(test) {
         var data = {"X":{"Y": {"filter": ["!has_token wine_moon"], "Z": "X"}}};
         var dialog = new Dialog(null, data, this.inventory, this.objManager);
