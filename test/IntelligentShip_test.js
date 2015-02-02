@@ -66,5 +66,43 @@ exports['IntelligentShip'] = {
         test.ok(firstPoint);
         test.ok(secondPoint);
         test.done();
+    },
+    moveBetweenPlanets: function(test) {
+        this.ship.waypoints = ["Sun", "Mercury"];
+        var sun = this.objManager.getObjectByName("Sun");
+        var mercury = this.objManager.getObjectByName("Mercury");
+        var firstPoint = false;
+        var secondPoint = false;
+        for (var i = 0; i < 1000; i++) {
+            this.ship.doOrbitalMovement(0, 0, 0, 0);
+            if (Math.abs(this.ship.mapX - sun.mapX) < 3 && Math.abs(this.ship.mapY - sun.mapY) < 3) {
+                firstPoint = true;
+            }
+            if (Math.abs(this.ship.mapX - mercury.mapX) < 3 && Math.abs(this.ship.mapY - mercury.mapY) < 3) {
+                secondPoint = true;
+            }
+        }
+        test.ok(firstPoint);
+        test.ok(secondPoint);
+        test.done();
+    },
+    moveBetweenPlanetsOffset: function(test) {
+        this.ship.waypoints = ["Sun+10 Sun+10", "Mercury+20 Mercury+20"];
+        var sun = this.objManager.getObjectByName("Sun");
+        var mercury = this.objManager.getObjectByName("Mercury");
+        var firstPoint = false;
+        var secondPoint = false;
+        for (var i = 0; i < 2000; i++) {
+            this.ship.doOrbitalMovement(0, 0, 0, 0);
+            if (Math.abs(this.ship.mapX - (sun.mapX + 10)) < 3 && Math.abs(this.ship.mapY - (sun.mapY + 10)) < 3) {
+                firstPoint = true;
+            }
+            if (Math.abs(this.ship.mapX - (mercury.mapX + 20)) < 3 && Math.abs(this.ship.mapY - (mercury.mapY + 20)) < 3) {
+                secondPoint = true;
+            }
+        }
+        test.ok(firstPoint);
+        test.ok(secondPoint);
+        test.done();
     }
 };
