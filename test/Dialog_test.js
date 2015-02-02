@@ -66,7 +66,7 @@ exports['Dialog'] = {
         var old_ship = new IntelligentShip(this.objManager, "old_name", MapObject.ENEMY_SHIP, "resources/ship.png", 500, 500, [], [], 1, "10 10 20 20", 1, 1, 0);
         this.objManager.addShip(old_ship);
         var data = {"How are you?":
-                        {"Fine!" : ["That's great!", "spawn_ship_copy old_name new_name 1010 1020 [1000 1001 earth moon 500 500]"]}
+                        {"Fine!" : ["That's great!", "spawn_ship_copy old_name new_name 1010 1020 [1000 1001 earth moon 500 500 earth+3 earth+5]"]}
                    };
         var dialog = new Dialog(null, data, this.inventory, this.objManager);
         dialog.start();
@@ -79,7 +79,7 @@ exports['Dialog'] = {
         test.ok(new_ship != null);
         test.equal(new_ship.mapX, 1010);
         test.equal(new_ship.mapY, 1020);
-        test.equal(new_ship.waypoints.toString(), [ "1000 1001", 'earth', 'moon', "500 500"].toString());
+        test.equal(new_ship.waypoints.toString(), [ "1000 1001", 'earth', 'moon', "500 500", "earth+3 earth+5"].toString());
 
         test.done();
     },

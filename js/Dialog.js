@@ -96,7 +96,7 @@ Dialog.prototype.parseWaypoints = function(arg) {
     var args = arg.substring(left + 1, right).split(" ");
     for (var i = 0; i < args.length; i++) {
         var a = parseInt(args[i], 10);
-        if (isNaN(a)) {
+        if (isNaN(a) && args[i].indexOf("+") == -1) {
             ret[ret.length] = args[i];
         }
         else {
