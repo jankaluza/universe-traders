@@ -92,6 +92,10 @@ title: %s
             p += "Planet"
         elif  d['type'] == 1:
             p += "Star"
+        elif d['type'] == 2:
+            p += "Friendly ship"
+        elif d['type'] == 3:
+            p += "Enemy ship"
         if d['orbit_center'] != "":
             p += " orbiting " + d['orbit_center'] + ".\n"
         else:
@@ -103,7 +107,9 @@ title: %s
             p += "\n"
 
         if d['type'] != 1:
-            types = ["Engine", "Food", "Fuel", "Ship improvement", "Special food", "Machine", "Gun"]
+            types = ["Engine", "Food", "Fuel", "Ship improvement", "Special food", "Machine", "Gun", "Ship weapon", "Ship shield"]
+            while len(types) != len(d["prices"]):
+                d["prices"].append(1)
 
             p += "### People\n"
             x = ""

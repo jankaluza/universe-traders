@@ -1,16 +1,14 @@
 ---
 layout: default
-title: Mercury
+title: Ship
 ---
 
-## Mercury
-* **Type**: Planet orbiting Sun.
+## Ship
+* **Type**: Friendly ship.
 ### People
 No people.
 ### Items to buy
-| Item | Category | Default price |
-|----------|------|------------|
-| [Basic Engine](/items/Basic_Engine) | Engine | 200 |
+No items.
 ### Prices
 | Category | Price coeficient |
 |----------|------------------|

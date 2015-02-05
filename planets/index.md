@@ -14,4 +14,8 @@ title: Planets
   * [Saturn](/planets/Saturn)
   * [Uranus](/planets/Uranus)
   * [Venus](/planets/Venus)
+* [x2](/planets/x2)
+* [x3](/planets/x3)
 * [Ship](/planets/Ship)
+* [x4](/planets/x4)
+* [x5](/planets/x5)

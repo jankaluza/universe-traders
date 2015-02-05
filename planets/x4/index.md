@@ -1,16 +1,14 @@
 ---
 layout: default
-title: Mercury
+title: x4
 ---
 
-## Mercury
-* **Type**: Planet orbiting Sun.
+## x4
+* **Type**: Enemy ship.
 ### People
 No people.
 ### Items to buy
-| Item | Category | Default price |
-|----------|------|------------|
-| [Basic Engine](/items/Basic_Engine) | Engine | 200 |
+No items.
 ### Prices
 | Category | Price coeficient |
 |----------|------------------|

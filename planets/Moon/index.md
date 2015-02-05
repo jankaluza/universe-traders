@@ -24,3 +24,5 @@ title: Moon
 | Special food | 1.400 |
 | Machine | 1.200 |
 | Gun | 0.010 |
+| Ship weapon | 1.000 |
+| Ship shield | 1.000 |

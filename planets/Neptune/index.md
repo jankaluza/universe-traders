@@ -17,3 +17,7 @@ No items.
 | Fuel | 1.000 |
 | Ship improvement | 1.000 |
 | Special food | 1.000 |
+| Machine | 1.000 |
+| Gun | 1.000 |
+| Ship weapon | 1.000 |
+| Ship shield | 1.000 |

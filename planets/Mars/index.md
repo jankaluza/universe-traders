@@ -1,16 +1,16 @@
 ---
 layout: default
-title: Mercury
+title: Mars
 ---
 
-## Mercury
+## Mars
 * **Type**: Planet orbiting Sun.
 ### People
 No people.
 ### Items to buy
 | Item | Category | Default price |
 |----------|------|------------|
-| [Basic Engine](/items/Basic_Engine) | Engine | 200 |
+| [Mars sand worm](/items/Mars_sand_worm) | Special food | 50 |
 ### Prices
 | Category | Price coeficient |
 |----------|------------------|

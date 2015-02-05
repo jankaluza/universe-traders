@@ -1,16 +1,14 @@
 ---
 layout: default
-title: Mercury
+title: Uranus
 ---
 
-## Mercury
+## Uranus
 * **Type**: Planet orbiting Sun.
 ### People
 No people.
 ### Items to buy
-| Item | Category | Default price |
-|----------|------|------------|
-| [Basic Engine](/items/Basic_Engine) | Engine | 200 |
+No items.
 ### Prices
 | Category | Price coeficient |
 |----------|------------------|
