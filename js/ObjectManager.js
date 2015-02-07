@@ -225,6 +225,10 @@ ObjectManager.prototype.getObjectByName = function(name) {
         }
     }
 
+    if (name == "Player") {
+        return this.universe;
+    }
+
     return null;
 };
 
@@ -248,6 +252,9 @@ ObjectManager.prototype.updateObjects = function() {
     this.right = ((this.universe.tilePositionX) / Universe.MAP_POINT_SIZE) >> 0;
     this.top = ((this.universe.tilePositionY + Main.HEIGHT) / Universe.MAP_POINT_SIZE) >> 0;
     this.bottom = ((this.universe.tilePositionY) / Universe.MAP_POINT_SIZE) >> 0;
+    // TODO: This is hacky, rewrite it into Universe class.
+    this.universe.mapX = this.left + (this.right - this.left) / 2;
+    this.universe.mapY = this.top + (this.bottom - this.top) / 2;
     var visitedObject = null;
 
     for (var index = 0; index < this.objects.length; index++) {

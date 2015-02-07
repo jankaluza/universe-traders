@@ -104,5 +104,24 @@ exports['IntelligentShip'] = {
         test.ok(firstPoint);
         test.ok(secondPoint);
         test.done();
+    },
+    moveBetweenPlanetsPlayerOffset: function(test) {
+        this.ship.setWaypoints(["Sun+10 Sun+10", "Player+20 Player+20"]);
+        var sun = this.objManager.getObjectByName("Sun");
+        var player = this.objManager.getObjectByName("Player");
+        var firstPoint = false;
+        var secondPoint = false;
+        for (var i = 0; i < 2000; i++) {
+            this.ship.doOrbitalMovement(0, 0, 0, 0);
+            if (Math.abs(this.ship.mapX - (sun.mapX + 10)) < 3 && Math.abs(this.ship.mapY - (sun.mapY + 10)) < 3) {
+                firstPoint = true;
+            }
+            if (Math.abs(this.ship.mapX - (player.mapX + 20)) < 3 && Math.abs(this.ship.mapY - (player.mapY + 20)) < 3) {
+                secondPoint = true;
+            }
+        }
+        test.ok(firstPoint);
+        test.ok(secondPoint);
+        test.done();
     }
 };

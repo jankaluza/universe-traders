@@ -30,6 +30,9 @@ function Universe() {
     this.currentObject = null;
     this.objectToMove = null;
 
+    this.mapX = 0;
+    this.mapY = 0;
+
     radio("dialogStarted").subscribe(this.stopMovement.bind(this));
     radio("dialogFinished").subscribe(this.continueMovement.bind(this));
     radio("objectVisited").subscribe(this.stopMovement.bind(this));
