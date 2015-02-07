@@ -166,8 +166,10 @@ PlanetInventory.prototype.addDialogs = function() {
 PlanetInventory.prototype.setPlanet = function(planet) {
     this.planet = planet;
     if (this.planet) {
-        this._addItem(2);
-        this._addItem(3);
+        if (this.planet.type == MapObject.PLANET) {
+            this._addItem(2);
+            this._addItem(3);
+        }
         for (var i = 0; i < this.planet.items.length; i++) {
             this._addItem(this.planet.items[i]);
         }
