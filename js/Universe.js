@@ -27,6 +27,7 @@ function Universe() {
     this.stopMove = false;
     this.orbitTimer = 0;
     this.statsTimer = 0;
+    this.shootTimer = 0;
     this.currentObject = null;
     this.objectToMove = null;
 
@@ -226,7 +227,10 @@ Universe.prototype.click = function(data) {
 
     var object = this.objManager.getObject(data.global.x, data.global.y, MapObject.ENEMY_SHIP);
     if (object) {
-        this.overlay.laserShot(this.ship, object, 20);
+        if (this.shootTimer > 2000) {
+            this.shootTimer = 0;
+            this.overlay.laserShot(this.ship, object, 20);
+        }
         return;
     }
 
@@ -298,6 +302,7 @@ Universe.prototype.update = function(dt) {
     }
 
     this.statsTimer += dt;
+    this.shootTimer += dt;
     if (this.statsTimer > 1000) {
         this.statsTimer = 0;
         this.ship.timeout();
