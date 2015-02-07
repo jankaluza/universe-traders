@@ -10,6 +10,7 @@ module.exports = function(grunt) {
         files: {
           'release/js/ut.js': [
                 "js/Overlay.js",
+                "js/Waypoints.js",
                 "js/Universe.js",
                 "js/Ship.js",
                 "js/PlayerShip.js",

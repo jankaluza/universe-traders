@@ -17,10 +17,6 @@ function IntelligentShip(objManager, name, type, texture, x, y, items, prices, s
     this.prices = prices; // List of floats - prices on this planet per ItemType.
     this.demand = {};      // ItemType:demand. Increasee == buy, decrease == sell.
     this.speed = speed;   // Speed of the Object.
-    this.waypoints = waypoints;
-    this.waypoint = 0;
-    this.movingX = 0;
-    this.movingY = 0;
     this.xVel = 0;
     this.yVel = 0;
 
@@ -38,6 +34,8 @@ function IntelligentShip(objManager, name, type, texture, x, y, items, prices, s
         this.prices[this.prices.length] = 1;
     }
 
+    this.setWaypoints(waypoints);
+
     radio("objectTouched").subscribe(this.handleObjectTouched.bind(this));
     radio("objectLeft").subscribe(this.handleObjectLeft.bind(this));
 
@@ -46,6 +44,17 @@ function IntelligentShip(objManager, name, type, texture, x, y, items, prices, s
 
 IntelligentShip.constructor = IntelligentShip;
 IntelligentShip.prototype = Object.create(Ship.prototype);
+
+IntelligentShip.prototype.setWaypoints = function(waypoints) {
+    if (typeof waypoints == "string") {
+        waypoints = new Waypoints(this.objManager, waypoints);
+    }
+    else if (Array.isArray(waypoints)) {
+        waypoints = new Waypoints(this.objManager, waypoints);
+    }
+    this.waypoints = waypoints;
+    this.waypoints.setObject(this);
+};
 
 IntelligentShip.prototype.handleObjectTouched = function(obj) {
     if (obj.name == this.name && obj.closeShips.length === 0) {
@@ -69,53 +78,10 @@ IntelligentShip.prototype.destroy = function() {
     }
 };
 
-IntelligentShip.prototype.computeWaypointMapPoint = function() {
-    var args = this.waypoints[this.waypoint].split(" ");
-    var object = null;
-    if (args.length == 2) {
-        var x = args[0].split("+");
-        if (x.length == 2) {
-            object = this.objManager.getObjectByName(x[0]);
-            this.movingX = object.mapX + parseInt(x[1], 10);
-        }
-        else {
-            this.movingX = parseInt(x[0], 10);
-        }
-        var y = args[1].split("+");
-        if (y.length == 2) {
-            object = this.objManager.getObjectByName(y[0]);
-            this.movingY = object.mapY + parseInt(y[1], 10);
-        }
-        else {
-            this.movingY = parseInt(y[0], 10);
-        }
-    }
-    else {
-        object = this.objManager.getObjectByName(args[0]);
-
-        this.movingX = object.mapX;
-        this.movingY = object.mapY;
-    }
-
-    // compute global point where we want to end up
-    var shipAngle = Math.atan2(this.movingY - this.mapY, this.movingX - this.mapX);
-    this.xVel = 1.9 * Math.cos(shipAngle);
-    this.yVel = 1.9 * Math.sin(shipAngle);
-    this.setNewRotation(shipAngle);
-};
-
-IntelligentShip.prototype.setNextWaypoint = function() {
-    if (this.waypoints.length === 0) {
-        return;
-    }
-    
-    if (this.movingX > (this.mapX - 3)
-        && this.movingX < (this.mapX + 3)
-        && this.movingY > (this.mapY - 3)
-        && this.movingY < (this.mapY + 3)) {
-        this.waypoint = (this.waypoint + 1) % this.waypoints.length;
-        this.computeWaypointMapPoint();
-    }
+IntelligentShip.prototype.moveInAngle = function(angle) {
+    this.xVel = 1.9 * Math.cos(angle);
+    this.yVel = 1.9 * Math.sin(angle);
+    this.setNewRotation(angle);
 };
 
 IntelligentShip.prototype.recountPosition = function() {
@@ -192,8 +158,12 @@ IntelligentShip.prototype.doOrbitalMovement = function(addMapX, addMapY, addX, a
     }
 
     if (this.cycles > 10) {
-        this.computeWaypointMapPoint();
-        this.setNextWaypoint();
+        if (this.waypoints.isMovingFinished()) {
+            this.moveInAngle(this.waypoints.moveToNextPoint());
+        }
+        else {
+            this.moveInAngle(this.waypoints.refreshCurrentPoint());
+        }
         this.cycles = 0;
     }
 

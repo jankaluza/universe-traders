@@ -81,33 +81,6 @@ Dialog.prototype.checkCommandsRestrictions = function(root) {
     return null;
 };
 
-Dialog.prototype.parseWaypoints = function(arg) {
-    var ret = [];
-    var left = arg.indexOf("[");
-    if (left == -1) {
-        return ret;
-    }
-
-    var right = arg.indexOf("]", left);
-    if (right == -1) {
-        return ret;
-    }
-
-    var args = arg.substring(left + 1, right).split(" ");
-    for (var i = 0; i < args.length; i++) {
-        var a = parseInt(args[i], 10);
-        if (isNaN(a) && args[i].indexOf("+") == -1) {
-            ret[ret.length] = args[i];
-        }
-        else {
-            ret[ret.length] = args[i] + " " + args[i + 1];
-            i += 1;
-        }
-    }
-
-    return ret;
-};
-
 Dialog.prototype.executeCommands = function(root) {
     var error = this.checkCommandsRestrictions(root);
     if (error) {
@@ -169,7 +142,7 @@ Dialog.prototype.executeCommands = function(root) {
             this.objManager.spawnShipCopy(args[1], args[2],
                                           parseInt(args[3], 10),
                                           parseInt(args[4], 10),
-                                          this.parseWaypoints(root[i]),
+                                          new Waypoints(this.objManager, root[i]),
                                           0);
         }
     }

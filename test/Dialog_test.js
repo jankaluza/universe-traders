@@ -79,7 +79,7 @@ exports['Dialog'] = {
         test.ok(new_ship != null);
         test.equal(new_ship.mapX, 1010);
         test.equal(new_ship.mapY, 1020);
-        test.equal(new_ship.waypoints.toString(), [ "1000 1001", 'earth', 'moon', "500 500", "earth+3 earth+5"].toString());
+        test.equal(new_ship.waypoints.waypoints.toString(), [ "1000 1001", 'earth', 'moon', "500 500", "earth+3 earth+5"].toString());
 
         test.done();
     },

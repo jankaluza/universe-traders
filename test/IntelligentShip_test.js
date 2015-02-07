@@ -51,7 +51,7 @@ exports['IntelligentShip'] = {
         done();
     },
     moveBetweenPoints: function(test) {
-        this.ship.waypoints = ["1000 1000", "1014 1009"];
+        this.ship.setWaypoints(["1000 1000", "1014 1009"]);
         var firstPoint = false;
         var secondPoint = false;
         for (var i = 0; i < 1000; i++) {
@@ -68,7 +68,7 @@ exports['IntelligentShip'] = {
         test.done();
     },
     moveBetweenPlanets: function(test) {
-        this.ship.waypoints = ["Sun", "Mercury"];
+        this.ship.setWaypoints(["Sun", "Mercury"]);
         var sun = this.objManager.getObjectByName("Sun");
         var mercury = this.objManager.getObjectByName("Mercury");
         var firstPoint = false;
@@ -87,7 +87,7 @@ exports['IntelligentShip'] = {
         test.done();
     },
     moveBetweenPlanetsOffset: function(test) {
-        this.ship.waypoints = ["Sun+10 Sun+10", "Mercury+20 Mercury+20"];
+        this.ship.setWaypoints(["Sun+10 Sun+10", "Mercury+20 Mercury+20"]);
         var sun = this.objManager.getObjectByName("Sun");
         var mercury = this.objManager.getObjectByName("Mercury");
         var firstPoint = false;
