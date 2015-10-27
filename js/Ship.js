@@ -37,7 +37,7 @@ Ship.prototype.setNewRotation = function(rotation) {
     //     this.shipRotate = true;
     // }
 
-    this.setTexture(this.flyingTexture);
+    this.texture = this.flyingTexture;
 };
 
 Ship.prototype.update = function() {

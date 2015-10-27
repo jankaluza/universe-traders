@@ -7,7 +7,7 @@
 */
 function Universe() {
     var texture = PIXI.Texture.fromImage("resources/universe.png");
-    PIXI.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
+    PIXI.extras.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
 
     this.overlay = new Overlay(this);
 
@@ -43,7 +43,7 @@ function Universe() {
 }
 
 Universe.constructor = Universe;
-Universe.prototype = Object.create(PIXI.TilingSprite.prototype);
+Universe.prototype = Object.create(PIXI.extras.TilingSprite.prototype);
 
 // Map is divided into 15x15 px squares
 Universe.MAP_POINT_SIZE = 15;
@@ -370,7 +370,7 @@ Universe.prototype.update = function(dt) {
         }
 
         if (this.xVel === 0 && this.yVel === 0) {
-            this.ship.setTexture(this.ship.stayingTexture);
+            this.ship.texture = this.ship.stayingTexture;
         }
 
         if (this.objectToMove) {

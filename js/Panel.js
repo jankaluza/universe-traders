@@ -66,7 +66,7 @@ Panel.prototype.enableVisiting = function() {
 };
 
 Panel.prototype.updateCredit = function() {
-    this.credit.setText(this.ship.credit);
+    this.credit.text = this.ship.credit;
     this.fuel.width = 0.08 * this.ship.fuel;
     this.food.width = 0.08 * this.ship.food;
     this.sanity.width = 0.08 * this.ship.sanity;
@@ -86,11 +86,11 @@ Panel.prototype.handleObjectTouched = function(object) {
     }
 
     this.object = object;
-    this.visit.setText("Visit " + object.name);
+    this.visit.text = "Visit " + object.name;
 };
 
 Panel.prototype.handleObjectLeft = function(object) {
-    this.visit.setText("");
+    this.visit.text = "";
     this.object = null;
 };
 
