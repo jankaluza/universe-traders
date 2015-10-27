@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/Waypoints.js - Universe Traders</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/stylesheet.css">
+</head>
+<body style="width: 100%" class="yui3-skin-sam">
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/hanzz/libtransport">View on GitHub</a>
+
+          <h1 id="project_title">Universe Traders</h1>
+          <h2 id="project_tagline">Trade across the whole universe in your browser!</h2>
+
+            <section id="menu">
+            <a class="menuitem" href="/">About</a>
+            <a class="menuitem" href="/play">Play</a>
+            <a class="menuitem" href="/develop">Develop</a>
+            <a class="menuitem" href="/planets">Planets</a>
+            <a class="menuitem" href="/items">Items</a>
+            </section>
+        </header>
+    </div>
+<div id="main_content_wrap" class="outer" style="width:100%">
+<!--     <section id="main_content" class="inner" style="width:100%"> -->
+        <div id="bd" class="yui3-g">
+
+            <div class="yui3-u-1-4">
+                <div id="docs-sidebar" class="sidebar apidocs">
+                    <div id="api-list">
+                        <h2 class="off-left">Classes</h2>
+                        <div id="api-tabview" class="tabview">
+                    
+                                <input type="search" id="api-filter" placeholder="Type to filter class">
+                    
+                            <div id="api-tabview-panel">
+                                <ul id="api-classes">
+                                    <li><a href="../classes/Universe.html">Universe</a></li>
+                                    <li><a href="../classes/Waypoints.html">Waypoints</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui3-u-3-4">
+                    <div id="api-options">
+                        Show:
+                        <label for="api-show-inherited">
+                            <input type="checkbox" id="api-show-inherited" checked>
+                            Inherited
+                        </label>
+                
+                        <label for="api-show-protected">
+                            <input type="checkbox" id="api-show-protected">
+                            Protected
+                        </label>
+                
+                        <label for="api-show-private">
+                            <input type="checkbox" id="api-show-private">
+                            Private
+                        </label>
+                        <label for="api-show-deprecated">
+                            <input type="checkbox" id="api-show-deprecated">
+                            Deprecated
+                        </label>
+                
+                    </div>
+                
+                <div class="apidocs">
+                    <div id="docs-main">
+                        <div class="content">
+                            <h1 class="file-heading">File: js/Waypoints.js</h1>
+                            
+                            <div class="file">
+                                <pre class="code prettyprint linenums">
+                            /**
+                            * Represents list of waypoints. This list is used to move the MapObject (For
+                            * example IntelligentShip) on the universe map. The object must be set using setObject()
+                            * method.
+                            *
+                            * Following are the examples of valid waypoints in their string representation:
+                            * 
+                            * * &quot;[10 10 40 40]&quot; - Moves the object between MapPoints x=10, y=10 and x=40, y=40
+                            * * &quot;[10 10 Mars 30 30]&quot; - Moves the object between MapPoint x=10, y=10, MapObject
+                            * called Mars and MapPoint x=30, y=30
+                            * * &quot;[10 10 Mars+2 Mars+3]&quot; - Moves the object between MapPoint x=10, y=10 and MapPoint
+                            * x=Mars.x+2, y=Mars.y+3
+                            * 
+                            * @class Waypoints
+                            * @param {ObjectManager} objManager ObjectManager.
+                            * @param {String|Array} waypoints List of waypoints.
+                            * @constructor
+                            */
+                            function Waypoints(objManager, waypoints) {
+                                this.waypoints = [];
+                                this.obj = null;
+                                this.movingX = 0;
+                                this.movingY = 0;
+                                this.waypoint = 0;
+                                this.objManager = objManager;
+                                this.setWaypoints(waypoints);
+                            }
+                            
+                            Waypoints.constructor = Waypoints;
+                            
+                            Waypoints.prototype.setWaypoints = function(arg) {
+                                if (Array.isArray(arg)) {
+                                    this.waypoints = arg;
+                                    return;
+                                }
+                            
+                                this.waypoints = [];
+                                var left = arg.indexOf(&quot;[&quot;);
+                                if (left == -1) {
+                                    return;
+                                }
+                            
+                                var right = arg.indexOf(&quot;]&quot;, left);
+                                if (right == -1) {
+                                    return;
+                                }
+                            
+                                var args = arg.substring(left + 1, right).split(&quot; &quot;);
+                                for (var i = 0; i &lt; args.length; i++) {
+                                    var a = parseInt(args[i], 10);
+                                    if (isNaN(a) &amp;&amp; args[i].indexOf(&quot;+&quot;) == -1) {
+                                        this.waypoints[this.waypoints.length] = args[i];
+                                    }
+                                    else {
+                                        this.waypoints[this.waypoints.length] = args[i] + &quot; &quot; + args[i + 1];
+                                        i += 1;
+                                    }
+                                }
+                            };
+                            
+                            /**
+                            * Set object with which the waypoints should be associated.
+                            *
+                            * @method setObject
+                            */
+                            Waypoints.prototype.setObject = function(obj) {
+                                this.obj = obj;
+                            };
+                            
+                            /**
+                            * Returns True if the moving to the current waypoint has been finished.
+                            *
+                            * @method isMovingFinished
+                            * @return {Boolean} True if the moving to the current waypoint has been finished.
+                            */
+                            Waypoints.prototype.isMovingFinished = function() {
+                                if (this.waypoints.length === 0) {
+                                    return false;
+                                }
+                                
+                                return (this.movingX &gt; (this.obj.mapX - 3)
+                                    &amp;&amp; this.movingX &lt; (this.obj.mapX + 3)
+                                    &amp;&amp; this.movingY &gt; (this.obj.mapY - 3)
+                                    &amp;&amp; this.movingY &lt; (this.obj.mapY + 3));
+                            };
+                            
+                            /**
+                            * Refreshes current waypoint. This is needed for dynamic waypoints like Planet
+                            * to recompute its position and the angle used by the MapObject
+                            * associated with this Waypoints list.
+                            *
+                            * @method refreshCurrentPoint
+                            * @return {Float} angle to which the object should move to reach the next
+                            * waypoint.
+                            */
+                            Waypoints.prototype.refreshCurrentPoint = function() {
+                                var args = this.waypoints[this.waypoint].split(&quot; &quot;);
+                                var object = null;
+                            
+                                // Handle &quot;x y&quot; or &quot;Object+x Object+y&quot;
+                                if (args.length == 2) {
+                                    var x = args[0].split(&quot;+&quot;);
+                                    if (x.length == 2) {
+                                        object = this.objManager.getObjectByName(x[0]);
+                                        this.movingX = object.mapX + parseInt(x[1], 10);
+                                    }
+                                    else {
+                                        this.movingX = parseInt(x[0], 10);
+                                    }
+                            
+                                    var y = args[1].split(&quot;+&quot;);
+                                    if (y.length == 2) {
+                                        object = this.objManager.getObjectByName(y[0]);
+                                        this.movingY = object.mapY + parseInt(y[1], 10);
+                                    }
+                                    else {
+                                        this.movingY = parseInt(y[0], 10);
+                                    }
+                                }
+                                // Handle &quot;Object&quot;
+                                else {
+                                    object = this.objManager.getObjectByName(args[0]);
+                            
+                                    this.movingX = object.mapX;
+                                    this.movingY = object.mapY;
+                                }
+                            
+                                // compute the angle to the global point where we want to end up
+                                var angle = Math.atan2(this.movingY - this.obj.mapY, this.movingX - this.obj.mapX);
+                                return angle;
+                            };
+                            
+                            /**
+                            * Move to the next waypoint.
+                            *
+                            * @method moveToNextPoint
+                            * @return {Float} angle to which the object should move to reach the next
+                            * waypoint.
+                            */
+                            Waypoints.prototype.moveToNextPoint = function() {
+                                this.waypoint = (this.waypoint + 1) % this.waypoints.length;
+                                return this.refreshCurrentPoint();
+                            };
+                            
+                            if (typeof exports !== &#x27;undefined&#x27;) {
+                                if (typeof module !== &#x27;undefined&#x27; &amp;&amp; module.exports) {
+                                    exports = module.exports = Waypoints;
+                                }
+                            }
+                            
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--     </section> -->
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Universe Traders maintained by <a href="https://github.com/hanzz">Jan Kaluza - HanzZ</a></p>
+      </footer>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-57191511-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script> 
+
+  </body>
+</html>
+

@@ -41,6 +41,7 @@
                             <div id="api-tabview-panel">
                                 <ul id="api-classes">
                                     <li><a href="../classes/Universe.html">Universe</a></li>
+                                    <li><a href="../classes/Waypoints.html">Waypoints</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -87,7 +88,7 @@
                             */
                             function Universe() {
                                 var texture = PIXI.Texture.fromImage(&quot;resources/universe.png&quot;);
-                                PIXI.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
+                                PIXI.extras.TilingSprite.call(this, texture, Main.WIDTH, Main.HEIGHT);
                             
                                 this.overlay = new Overlay(this);
                             
@@ -107,8 +108,12 @@
                                 this.stopMove = false;
                                 this.orbitTimer = 0;
                                 this.statsTimer = 0;
+                                this.shootTimer = 0;
                                 this.currentObject = null;
                                 this.objectToMove = null;
+                            
+                                this.mapX = 0;
+                                this.mapY = 0;
                             
                                 radio(&quot;dialogStarted&quot;).subscribe(this.stopMovement.bind(this));
                                 radio(&quot;dialogFinished&quot;).subscribe(this.continueMovement.bind(this));
@@ -119,7 +124,7 @@
                             }
                             
                             Universe.constructor = Universe;
-                            Universe.prototype = Object.create(PIXI.TilingSprite.prototype);
+                            Universe.prototype = Object.create(PIXI.extras.TilingSprite.prototype);
                             
                             // Map is divided into 15x15 px squares
                             Universe.MAP_POINT_SIZE = 15;
@@ -303,7 +308,10 @@
                             
                                 var object = this.objManager.getObject(data.global.x, data.global.y, MapObject.ENEMY_SHIP);
                                 if (object) {
-                                    this.overlay.laserShot(this.ship, object, 20);
+                                    if (this.shootTimer &gt; 2000) {
+                                        this.shootTimer = 0;
+                                        this.overlay.laserShot(this.ship, object, 20);
+                                    }
                                     return;
                                 }
                             
@@ -375,6 +383,7 @@
                                 }
                             
                                 this.statsTimer += dt;
+                                this.shootTimer += dt;
                                 if (this.statsTimer &gt; 1000) {
                                     this.statsTimer = 0;
                                     this.ship.timeout();
@@ -442,7 +451,7 @@
                                     }
                             
                                     if (this.xVel === 0 &amp;&amp; this.yVel === 0) {
-                                        this.ship.setTexture(this.ship.stayingTexture);
+                                        this.ship.texture = this.ship.stayingTexture;
                                     }
                             
                                     if (this.objectToMove) {

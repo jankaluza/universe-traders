@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Waypoints - Universe Traders</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/stylesheet.css">
+</head>
+<body style="width: 100%" class="yui3-skin-sam">
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/hanzz/libtransport">View on GitHub</a>
+
+          <h1 id="project_title">Universe Traders</h1>
+          <h2 id="project_tagline">Trade across the whole universe in your browser!</h2>
+
+            <section id="menu">
+            <a class="menuitem" href="/">About</a>
+            <a class="menuitem" href="/play">Play</a>
+            <a class="menuitem" href="/develop">Develop</a>
+            <a class="menuitem" href="/planets">Planets</a>
+            <a class="menuitem" href="/items">Items</a>
+            </section>
+        </header>
+    </div>
+<div id="main_content_wrap" class="outer" style="width:100%">
+<!--     <section id="main_content" class="inner" style="width:100%"> -->
+        <div id="bd" class="yui3-g">
+
+            <div class="yui3-u-1-4">
+                <div id="docs-sidebar" class="sidebar apidocs">
+                    <div id="api-list">
+                        <h2 class="off-left">Classes</h2>
+                        <div id="api-tabview" class="tabview">
+                    
+                                <input type="search" id="api-filter" placeholder="Type to filter class">
+                    
+                            <div id="api-tabview-panel">
+                                <ul id="api-classes">
+                                    <li><a href="../classes/Universe.html">Universe</a></li>
+                                    <li><a href="../classes/Waypoints.html">Waypoints</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui3-u-3-4">
+                    <div id="api-options">
+                        Show:
+                        <label for="api-show-inherited">
+                            <input type="checkbox" id="api-show-inherited" checked>
+                            Inherited
+                        </label>
+                
+                        <label for="api-show-protected">
+                            <input type="checkbox" id="api-show-protected">
+                            Protected
+                        </label>
+                
+                        <label for="api-show-private">
+                            <input type="checkbox" id="api-show-private">
+                            Private
+                        </label>
+                        <label for="api-show-deprecated">
+                            <input type="checkbox" id="api-show-deprecated">
+                            Deprecated
+                        </label>
+                
+                    </div>
+                
+                <div class="apidocs">
+                    <div id="docs-main">
+                        <div class="content">
+                            <h1>Waypoints Class</h1>
+                            <div class="box meta">
+                            
+                            
+                                    <div class="foundat">
+                                        Defined in: <a href="../files/js_Waypoints.js.html#l1"><code>js&#x2F;Waypoints.js:1</code></a>
+                                    </div>
+                            
+                            
+                            </div>
+                            
+                            
+                            <div class="box intro">
+                                <p>Represents list of waypoints. This list is used to move the MapObject (For
+                            example IntelligentShip) on the universe map. The object must be set using setObject()
+                            method.</p>
+                            <p>Following are the examples of valid waypoints in their string representation:</p>
+                            <ul>
+                            <li>&quot;[10 10 40 40]&quot; - Moves the object between MapPoints x=10, y=10 and x=40, y=40</li>
+                            <li>&quot;[10 10 Mars 30 30]&quot; - Moves the object between MapPoint x=10, y=10, MapObject
+                            called Mars and MapPoint x=30, y=30</li>
+                            <li>&quot;[10 10 Mars+2 Mars+3]&quot; - Moves the object between MapPoint x=10, y=10 and MapPoint
+                            x=Mars.x+2, y=Mars.y+3</li>
+                            </ul>
+                            
+                            </div>
+                            
+                                <div class="constructor">
+                                    <h2>Constructor</h2>
+                                    <div id="method_Waypoints" class="method item">
+                                        <h3 class="name"><code>Waypoints</code></h3>
+                                    
+                                            <div class="args">
+                                                <span class="paren">(</span><ul class="args-list inline commas">
+                                                    <li class="arg">
+                                                            <code>objManager</code>
+                                                    </li>
+                                                    <li class="arg">
+                                                            <code>waypoints</code>
+                                                    </li>
+                                                </ul><span class="paren">)</span>
+                                            </div>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                        <div class="meta">
+                                                    <p>
+                                                    Defined in
+                                            <a href="../files/js_Waypoints.js.html#l1"><code>js&#x2F;Waypoints.js:1</code></a>
+                                            </p>
+                                    
+                                    
+                                    
+                                        </div>
+                                    
+                                        <div class="description">
+                                            
+                                        </div>
+                                    
+                                            <div class="params">
+                                                <h4>Parameters:</h4>
+                                    
+                                                <ul class="params-list">
+                                                    <li class="param">
+                                                            <code class="param-name">objManager</code>
+                                                            <span class="type">ObjectManager</span>
+                                    
+                                    
+                                                        <div class="param-description">
+                                                            <p>ObjectManager.</p>
+                                    
+                                                        </div>
+                                    
+                                                    </li>
+                                                    <li class="param">
+                                                            <code class="param-name">waypoints</code>
+                                                            <span class="type">String | Array</span>
+                                    
+                                    
+                                                        <div class="param-description">
+                                                            <p>List of waypoints.</p>
+                                    
+                                                        </div>
+                                    
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                    
+                                    
+                                    </div>
+                                </div>
+                            
+                            <div id="classdocs" class="tabview">
+                                <ul class="api-class-tabs">
+                                    <li class="api-class-tab index"><a href="#index">Index</a></li>
+                            
+                                        <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+                                </ul>
+                            
+                                <div>
+                                    <div id="index" class="api-class-tabpanel index">
+                                        <h2 class="off-left">Item Index</h2>
+                            
+                                            <div class="index-section methods">
+                                                <h3>Methods</h3>
+                            
+                                                <ul class="index-list methods">
+                                                        <li class="index-item method">
+                                                            <a href="#method_isMovingFinished">isMovingFinished</a>
+                            
+                                                        </li>
+                                                        <li class="index-item method">
+                                                            <a href="#method_moveToNextPoint">moveToNextPoint</a>
+                            
+                                                        </li>
+                                                        <li class="index-item method">
+                                                            <a href="#method_refreshCurrentPoint">refreshCurrentPoint</a>
+                            
+                                                        </li>
+                                                        <li class="index-item method">
+                                                            <a href="#method_setObject">setObject</a>
+                            
+                                                        </li>
+                                                </ul>
+                                            </div>
+                            
+                            
+                            
+                                    </div>
+                            
+                                        <div id="methods" class="api-class-tabpanel">
+                                            <h2 class="off-left">Methods</h2>
+                            
+                                                <div id="method_isMovingFinished" class="method item">
+                                                    <h3 class="name"><code>isMovingFinished</code></h3>
+                                                
+                                                        <span class="paren">()</span>
+                                                
+                                                        <span class="returns-inline">
+                                                            <span class="type">Boolean</span>
+                                                        </span>
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                    <div class="meta">
+                                                                <p>
+                                                                Defined in
+                                                        <a href="../files/js_Waypoints.js.html#l70"><code>js&#x2F;Waypoints.js:70</code></a>
+                                                        </p>
+                                                
+                                                
+                                                
+                                                    </div>
+                                                
+                                                    <div class="description">
+                                                        <p>Returns True if the moving to the current waypoint has been finished.</p>
+                                                
+                                                    </div>
+                                                
+                                                
+                                                        <div class="returns">
+                                                            <h4>Returns:</h4>
+                                                
+                                                            <div class="returns-description">
+                                                                        <span class="type">Boolean</span>:
+                                                                    <p>True if the moving to the current waypoint has been finished.</p>
+                                                
+                                                            </div>
+                                                        </div>
+                                                
+                                                </div>
+                                                <div id="method_moveToNextPoint" class="method item">
+                                                    <h3 class="name"><code>moveToNextPoint</code></h3>
+                                                
+                                                        <span class="paren">()</span>
+                                                
+                                                        <span class="returns-inline">
+                                                            <span class="type">Float</span>
+                                                        </span>
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                    <div class="meta">
+                                                                <p>
+                                                                Defined in
+                                                        <a href="../files/js_Waypoints.js.html#l133"><code>js&#x2F;Waypoints.js:133</code></a>
+                                                        </p>
+                                                
+                                                
+                                                
+                                                    </div>
+                                                
+                                                    <div class="description">
+                                                        <p>Move to the next waypoint.</p>
+                                                
+                                                    </div>
+                                                
+                                                
+                                                        <div class="returns">
+                                                            <h4>Returns:</h4>
+                                                
+                                                            <div class="returns-description">
+                                                                        <span class="type">Float</span>:
+                                                                    <p>angle to which the object should move to reach the next
+                                                waypoint.</p>
+                                                
+                                                            </div>
+                                                        </div>
+                                                
+                                                </div>
+                                                <div id="method_refreshCurrentPoint" class="method item">
+                                                    <h3 class="name"><code>refreshCurrentPoint</code></h3>
+                                                
+                                                        <span class="paren">()</span>
+                                                
+                                                        <span class="returns-inline">
+                                                            <span class="type">Float</span>
+                                                        </span>
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                    <div class="meta">
+                                                                <p>
+                                                                Defined in
+                                                        <a href="../files/js_Waypoints.js.html#l87"><code>js&#x2F;Waypoints.js:87</code></a>
+                                                        </p>
+                                                
+                                                
+                                                
+                                                    </div>
+                                                
+                                                    <div class="description">
+                                                        <p>Refreshes current waypoint. This is needed for dynamic waypoints like Planet
+                                                to recompute its position and the angle used by the MapObject
+                                                associated with this Waypoints list.</p>
+                                                
+                                                    </div>
+                                                
+                                                
+                                                        <div class="returns">
+                                                            <h4>Returns:</h4>
+                                                
+                                                            <div class="returns-description">
+                                                                        <span class="type">Float</span>:
+                                                                    <p>angle to which the object should move to reach the next
+                                                waypoint.</p>
+                                                
+                                                            </div>
+                                                        </div>
+                                                
+                                                </div>
+                                                <div id="method_setObject" class="method item">
+                                                    <h3 class="name"><code>setObject</code></h3>
+                                                
+                                                        <span class="paren">()</span>
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                    <div class="meta">
+                                                                <p>
+                                                                Defined in
+                                                        <a href="../files/js_Waypoints.js.html#l61"><code>js&#x2F;Waypoints.js:61</code></a>
+                                                        </p>
+                                                
+                                                
+                                                
+                                                    </div>
+                                                
+                                                    <div class="description">
+                                                        <p>Set object with which the waypoints should be associated.</p>
+                                                
+                                                    </div>
+                                                
+                                                
+                                                
+                                                </div>
+                                        </div>
+                            
+                            
+                            
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--     </section> -->
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Universe Traders maintained by <a href="https://github.com/hanzz">Jan Kaluza - HanzZ</a></p>
+      </footer>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-57191511-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script> 
+
+  </body>
+</html>
+
